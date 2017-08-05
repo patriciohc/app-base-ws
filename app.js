@@ -3,9 +3,9 @@
 * 04/08/2017
 * Archivo javascript principal para la ejecución del servidor de la aplicación.
 */
+const express = require('express');
+const bodyParser = require('body-parser');
 
-
-var express = require('express');
 var app = express();
 //const config = require('./api/config');
 //var jwt = require('jwt-simple');
@@ -21,21 +21,22 @@ app.use(express.static(rootPath+"/www"));
 // var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
 
-SwaggerExpress.create(configSwagger, function(err, swaggerExpress) {
-  if (err) { throw err; }
+//app.use(methodOverride());
+// websockets
+var server = require("http").Server(app);
+//var io = require("socket.io")(server);
+//require('./controllerWs')(io);
 
-  // install middleware
-  swaggerExpress.register(app);
+const api = require('./routers');
 
-  var port = process.env.PORT || 8080; // 443;
-  // app.listen(port, function(){
-  //     console.log("servidor corrienton en puerto: " + port);
-  // });
-  // https
-  httpsServer.listen(port, function(){
-      console.log("servidor corriendo en puerto: " + port);
-  });
+// Middlewares
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
+app.use('/api', api);
+
+
+const port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
+server.listen(port, () =>{
+    console.log("servidor corriendo en http://localhost: " + port);
 });
-
-//module.exports = app; // for testing
