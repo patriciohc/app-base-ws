@@ -1,9 +1,9 @@
 'use strict'
 
-const unidad = require('../models').unidad;
+const cliente = require('../models').cliente;
 
-function getUnidad(req, res) {
-    unidad.findById(req.params.id)
+function getCliente(req, res) {
+    cliente.findById(req.params.id)
     .then(function(result) {
         if (!result) {
             return res.status(404).send({err: "not found"});
@@ -16,8 +16,8 @@ function getUnidad(req, res) {
     });
 }
 
-function getListaUnidad(req, res) {
-    unidad.findAll()
+function getListaCliente(req, res) {
+    cliente.findAll()
     .then(function(result){
         return res.status(200).send(result);
     })
@@ -26,9 +26,8 @@ function getListaUnidad(req, res) {
     })
 }
 
-function createUnidad(req, res) {
-    console.log(req.body);
-    unidad.create(req.body)
+function createCliente(req, res) {
+    cliente.create(req.body)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
     })
@@ -43,8 +42,8 @@ function updateCliente(req, res) {
 }
 
 module.exports = {
-    getUnidad,
-    getListaUnidad,
-    createUnidad,
+    getCliente,
+    getListaCliente,
+    createCliente,
     updateCliente,
 }

@@ -1,7 +1,7 @@
 'use strict';
 /*
 * 04/08/2017
-* Archivo javascript principal para la ejecución del servidor de la aplicación.
+* Archivo javascript principal para la ejecución del servidor
 */
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,10 +9,14 @@ const bodyParser = require('body-parser');
 var app = express();
 //const config = require('./api/config');
 //var jwt = require('jwt-simple');
+const rootPath = __dirname;
 
-var rootPath = __dirname;
 app.use(express.static(rootPath+"/www"));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
+const api = require('./routers');
+app.use('/api', api);
 /************ https ************/
 // var fs = require('fs');
 // var https = require('https');
@@ -21,22 +25,12 @@ app.use(express.static(rootPath+"/www"));
 // var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
 
-//app.use(methodOverride());
 // websockets
 var server = require("http").Server(app);
 //var io = require("socket.io")(server);
 //require('./controllerWs')(io);
 
-const api = require('./routers');
-
-// Middlewares
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.use('/api', api);
-
-
-const port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 server.listen(port, () =>{
     console.log("servidor corriendo en http://localhost: " + port);
 });

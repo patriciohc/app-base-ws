@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/patriciohc/app-base-ws/issues"
   },
-  "homepage": "https://github.com/patriciohc/app-base-ws#readme"
+  "homepage": "https://github.com/patriciohc/app-base-ws#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mysql": "^2.14.1"
+  }
 }
