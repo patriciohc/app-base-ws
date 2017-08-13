@@ -47,6 +47,20 @@ class Model {
         });
     }
 
+    insertBulk(array, values) {
+        var sql = `INSERT INTO ${this.model} (${columns}) VALUES ?`;
+        console.log(sql);
+        return new Promise((resolve, reject) => {
+            db.conecction.query(sql, [values],  function(err, result){
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(result);
+                }
+            })
+        });
+    }
+
     findOne(query) {
         var sql = utils.getSqlFind(this.model, query, this.name, 1);
         console.log(sql);
