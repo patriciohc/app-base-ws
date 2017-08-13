@@ -4,6 +4,7 @@ const express = require('express');
 const api = express.Router();
 const cliente = require('./controllers/cliente');
 const unidad = require('./controllers/unidad');
+const usuario = require('./controllers/usuario');
 //const middleware = require('../middleware');
 
 // user
@@ -31,6 +32,24 @@ const unidad = require('./controllers/unidad');
 api.get('/unidad/:id', unidad.getUnidad);
 
 /**
+* @api {get} /unidad/:id Obtitene unidad
+* @apiName GetUnidad
+* @apiGroup Unidad
+* @apiParam {Number} id identificador unico
+* @apiSuccess {Unidad} obejto unidad
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     Unidad
+* @apiError UserNotFound The id of the User was not found.
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "error"
+*     }
+*/
+api.get('/unidad/', unidad.getListaUnidad);
+
+/**
 * @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
 * pasados por query.
 *
@@ -56,7 +75,7 @@ api.get('/unidad/:id', unidad.getUnidad);
 *       "error": "error"
 *     }
 */
-//api.put('/unidad', controllers.getListaUnidad);
+api.put('/unidad', unidad.getListaUnidad);
 
 /**
 * @api {post} /unidad
@@ -121,5 +140,35 @@ api.get('/cliente/', cliente.getListaCliente);
 api.post('/cliente', cliente.createCliente);
 
 //api.put('/cliente', controllers.updateCliente);
+
+
+/**
+* Usuario de la app
+*/
+
+/**
+* @api {post} /login/
+* @apiGroup usuario
+* @apiParam {string} email
+* @apiParam {string} password
+* @apiSuccess {Usuario} obejto de tipo cliente
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.get('/login/', usuario.login);
+
+/**
+* @api {post} /cliente/ Crea usuario
+* @apiGroup usuario
+* @apiParam {Usuario} objeto de tipo cliente
+* @apiSuccess {number} id de objeto insertado
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*
+*/
+api.post('/usuario', usuario.createUsuario);
+
 
 module.exports = api;

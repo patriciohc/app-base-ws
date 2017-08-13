@@ -5,6 +5,7 @@
 */
 const express = require('express');
 const bodyParser = require('body-parser');
+var cors = require('cors');
 
 var app = express();
 //const config = require('./api/config');
@@ -14,6 +15,7 @@ const rootPath = __dirname;
 app.use(express.static(rootPath+"/www"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors())
 
 const api = require('./routers');
 app.use('/api', api);
