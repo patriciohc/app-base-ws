@@ -3,12 +3,17 @@
 const usuario = require('../models').usuario;
 
 function login(req, res) {
-    usuario.findById(req.params.email)
+    usuario.findOne({where:{correo_electronico: req.body.correo_electronico}})
     .then(function(result) {
         if (!result) {
-            return res.status(404).send({err: "not found"});
+            return res.status(404).send({message: "not found"});
         } else {
-            return res.status(200).send(result);
+            if (req.body.password == result.password) {
+                return res.status(200).send(result);
+            } else {
+                return res.status(401).send({message: "usuario no autorizado"});
+            }
+
         }
     })
     .catch(function(err) {
@@ -16,7 +21,7 @@ function login(req, res) {
     });
 }
 
-function createUsuario(req, res) {
+function create(req, res) {
     usuario.create(req.body)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
@@ -24,15 +29,14 @@ function createUsuario(req, res) {
     .catch(function(err) {
         return res.status(500).send({err: err})
     })
-
 }
 
-function updateUsuario(req, res) {
+function update(req, res) {
 
 }
 
 module.exports = {
     login,
-    createUsuario,
-    updateUsuario,
+    create,
+    update,
 }

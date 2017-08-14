@@ -3,6 +3,7 @@
 var cliente = require('../models/cliente');
 var unidad = require('../models/unidad');
 var usuario = require('../models/usuario');
+var poligono = require('../models/poligono');
 
 cliente.sync()
 .then(function (result) {
@@ -10,6 +11,9 @@ cliente.sync()
 })
 .then(function (result) {
     return usuario.sync();
+})
+.then(function (result) {
+    return poligono.sync();
 })
 .then(function (result) {
     return unidad.addRelation('unidad', 'id_cliente', 'cliente');
@@ -21,5 +25,6 @@ cliente.sync()
 module.exports = {
     cliente,
     unidad,
-    usuario
+    usuario,
+    poligono
 }

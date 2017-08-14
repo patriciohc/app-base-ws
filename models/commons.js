@@ -50,19 +50,31 @@ function getSqlInsert(object, model, table) {
 }
 
 function getSqlFind(model, query, table, limit) {
-    var p = query.where;
-    var and = "", sql;
-    for (var i = 0; i < model.length; i++) {
-        var column = model[i].name;
-        if (p[column]) {
-            and += `${column} = ${p[column]} AND ` ;
-        }
-    }
-    if (and != "") {
-        var where = and.substring(0, values.length - 5);
+    var where = getWhere(query.where, model);
+    if (where != "") {
         return `SELECT * FROM ${table} ${where} limit ${limit}`;
     } else {
         return `SELECT * FROM ${table} limit ${limit}`;
+    }
+}
+
+/**
+* @param{Object} where - es un objeto de tipo {condicion1:value1, condicion2:value2 ...}
+* @return{string} cadena sql
+*/
+function getWhere(where, model) {
+    var and = "";
+    for (var i = 0; i < model.length; i++) {
+        var column = model[i].name;
+        if (where[column]) {
+            and += `${column} = ${where[column]} AND ` ;
+        }
+    }
+    if (and != "") {
+        var sqlWhere = and.substring(0, values.length - 5);
+        return sqlWhere;
+    } else {
+        return "";
     }
 }
 

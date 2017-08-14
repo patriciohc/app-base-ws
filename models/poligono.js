@@ -3,6 +3,12 @@
 * Poligono que conrresponde a un establecimiento
 *
 */
+const fs = require('fs');
+const tj = require('togeojson');
+const DOMParser = require('xmldom').DOMParser;
+
+const DIR_KML = "./kml/"
+
 var Model = require('./model');
 // nombre de la tabla en db
 const name = "poligono";
@@ -35,35 +41,42 @@ function sync () {
  * @param {Position[]} puntos array de posiciones lat, lng
  * @returns {Promise}
  */
-function create (idUnidad, puntos) {
+function create (idUnidad, kml) {
+    var stringxml = fs.readFileSync(DIR_KML + kml, 'utf8');
+    var kml = new DOMParser().parseFromString(stringxml);
+    var converted = tj.kml(kml);
+    if (!converted.features || !converted.features.length || converted.features.length == 0) {
+        return;
+    }
+    var tmp = converted.features[0];
+    if (!tmp.geometry || !tmp.geometry.coordinates) {
+        return;
+    }
+    var cordenadas = tmp.geometry.coordinates[0];
+    console.log(cordenadas);
     var values = [];
-    for (let i = 0; i < puntos.length; i ++) {
+    for (let i = 0; i < cordenadas.length; i ++) {
+        var cordenada = cordenadas[i];
         values.push([
             idUnidad,
-            puntos[i].lat,
-            puntos[i].lng
+            cordenada[0],
+            cordenada[1]
         ]);
     }
     return poligono.insertBulk(values, 'id_unidad, lat, lng');
 }
 
-function findOne (query) {
+function findOne (idUnidad) {
     return unidad.findOne(query);
 }
 
-function findAll (query) {
-    return unidad.findAll(query);
-}
-
-function findById (id) {
-    return unidad.findById(id);
+function deleteU (idUnidad) {
+    return unidad.delte({id_unidad: idUnidad});
 }
 
 module.exports = {
     sync,
     create,
     findOne,
-    findById,
-    findAll,
-    addRelation: unidad.addRelation,
+    deleteU
 }

@@ -1,8 +1,9 @@
 'use strict'
 
 const unidad = require('../models').unidad;
+const poligono = require('../models').poligono;
 
-function getUnidad(req, res) {
+function get(req, res) {
     unidad.findById(req.params.id)
     .then(function(result) {
         if (!result) {
@@ -16,7 +17,7 @@ function getUnidad(req, res) {
     });
 }
 
-function getListaUnidad(req, res) {
+function getLista(req, res) {
     unidad.findAll()
     .then(function(result){
         return res.status(200).send(result);
@@ -26,9 +27,20 @@ function getListaUnidad(req, res) {
     })
 }
 
-function createUnidad(req, res) {
+function create(req, res) {
+    console.log(req.file);
     console.log(req.body);
-    unidad.create(req.body)
+    var u = req.body;
+    if (req.file) {
+        u.file_kml = req.file.filename;
+    }
+
+    unidad.create(u)
+    .then(function(result) {
+        if (req.file) {
+            return poligono.create(result.insertId, u.file_kml);
+        }
+    })
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
     })
@@ -38,13 +50,13 @@ function createUnidad(req, res) {
 
 }
 
-function updateCliente(req, res) {
+function update(req, res) {
 
 }
 
 module.exports = {
-    getUnidad,
-    getListaUnidad,
-    createUnidad,
-    updateCliente,
+    get,
+    getLista,
+    create,
+    update,
 }

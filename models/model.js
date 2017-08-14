@@ -120,6 +120,29 @@ class Model {
         });
     }
 
+    delete(where) {
+        var sqlWhere = utils.getWhere(where, this.model);
+        var sql = `DELETE FROM ${this.name} WHERE ${where};`;
+        console.log(sql);
+        return new Promise((resolve, reject) => {
+            if (sqlWhere) {
+                db.conecction.query(sql, function(err, result){
+                    if (err) {
+                        return reject(err);
+                    } else {
+                        if (result.length == 0) {
+                            return resolve();
+                        } else {
+                            return resolve(result);
+                        }
+                    }
+                })
+            } else {
+                return resolve({});
+            }
+        });
+    }
+
     addRelation(tableSrc, fieldSrc, tableRef) {
         var sql =
         `ALTER TABLE ${tableSrc}

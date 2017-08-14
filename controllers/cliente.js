@@ -2,7 +2,7 @@
 
 const cliente = require('../models').cliente;
 
-function getCliente(req, res) {
+function get(req, res) {
     cliente.findById(req.params.id)
     .then(function(result) {
         if (!result) {
@@ -16,7 +16,7 @@ function getCliente(req, res) {
     });
 }
 
-function getListaCliente(req, res) {
+function getLista(req, res) {
     cliente.findAll()
     .then(function(result){
         return res.status(200).send(result);
@@ -26,7 +26,7 @@ function getListaCliente(req, res) {
     })
 }
 
-function createCliente(req, res) {
+function create(req, res) {
     cliente.create(req.body)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
@@ -37,13 +37,13 @@ function createCliente(req, res) {
 
 }
 
-function updateCliente(req, res) {
+function update(req, res) {
 
 }
 
 module.exports = {
-    getCliente,
-    getListaCliente,
-    createCliente,
-    updateCliente,
+    get,
+    getLista,
+    create,
+    update,
 }

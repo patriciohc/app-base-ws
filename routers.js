@@ -5,13 +5,29 @@ const api = express.Router();
 const cliente = require('./controllers/cliente');
 const unidad = require('./controllers/unidad');
 const usuario = require('./controllers/usuario');
+const poligono = require('./controllers/poligono');
+const multer  = require('multer');
+
+var upload = multer({ dest: './kml' });
 //const middleware = require('../middleware');
 
-// user
-// api.get('/usuario/', controllers.getListaUsuarios);
-// api.get('/usuario/:id', controllers.getUsuario);
-// api.post('/usuario/', controllers.crearUsaurio);
-// api.post('/usuario/:id', controllers.actualizarUsaurio);
+/**
+* @api {get} /unidad/:id Obtitene unidad
+* @apiName GetUnidad
+* @apiGroup Unidad
+* @apiParam {Number} id identificador unico
+* @apiSuccess {Unidad} obejto unidad
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     Unidad
+* @apiError UserNotFound The id of the User was not found.
+* @apiErrorExample Error-Response:
+*     HTTP/1.1 404 Not Found
+*     {
+*       "error": "error"
+*     }
+*/
+api.get('/unidad/:id', unidad.get);
 
 /**
 * @api {get} /unidad/:id Obtitene unidad
@@ -29,79 +45,52 @@ const usuario = require('./controllers/usuario');
 *       "error": "error"
 *     }
 */
-api.get('/unidad/:id', unidad.getUnidad);
+api.get('/unidad/', unidad.getLista);
 
 /**
-* @api {get} /unidad/:id Obtitene unidad
-* @apiName GetUnidad
-* @apiGroup Unidad
-* @apiParam {Number} id identificador unico
-* @apiSuccess {Unidad} obejto unidad
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     Unidad
-* @apiError UserNotFound The id of the User was not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "error"
-*     }
-*/
-api.get('/unidad/', unidad.getListaUnidad);
-
-/**
-* @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
+* @api {put} /unidad/ Obtitene lista de unidades, en base a los parametros
 * pasados por query.
 *
 * @apiName GetUnidad
 * @apiGroup Unidad
-*
 * @apiParam {Float} lat latitud de la ubicacion
 * @apiParam {Float} lng longitud de la ubicacion
 * @apiParam {String} estado
 * @apiParam {String} Municipio
 *
 * @apiSuccess {Unidad} lista de objetos unidad
-*
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     [Unidad]
-*
-* @apiError UserNotFound The id of the User was not found.
-*
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "error"
-*     }
 */
-api.put('/unidad', unidad.getListaUnidad);
+api.put('/unidad', unidad.getLista);
 
 /**
 * @api {post} /unidad
 * @apiGroup Unidad
 * @apiParam {unidad} objeto de tipo unidad
 * @apiSuccess {number} id de la unidad creada
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
-*
-* @apiError UserNotFound The id of the User was not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "error"
-*     }
 */
-api.post('/unidad', unidad.createUnidad);
+api.post('/unidad/', upload.single('file_kml'), unidad.create);
 
 //api.put('/unidad', controllers.updateUnidad);
+
+/**
+* Poligono
+*
+* @api {put} /unidad/ Obtitene lista de unidades, en base a los parametros
+* pasados por query.
+*
+* @apiName GetUnidad
+* @apiGroup Unidad
+* @apiParam {File} mkl archivo con poligono
+* @apiParam {Number} id_unidad
+*
+* @apiSuccess {Boolean}
+*/
+api.put('/poligono', poligono.update);
 
 
 /**
 * Cliente
 */
-
 /**
 * @api {get} /cliente/:id
 * @apiGroup Cliente
@@ -111,7 +100,7 @@ api.post('/unidad', unidad.createUnidad);
 *     HTTP/1.1 200 OK
 *     id
 */
-api.get('/cliente/:id', cliente.getCliente);
+api.get('/cliente/:id', cliente.get);
 
 /**
 * @api {get} /cliente
@@ -121,7 +110,7 @@ api.get('/cliente/:id', cliente.getCliente);
 *     HTTP/1.1 200 OK
 *     []
 */
-api.get('/cliente/', cliente.getListaCliente);
+api.get('/cliente/', cliente.getLista);
 
 /**
 * @api {post} /cliente/ Crea unidad
@@ -137,7 +126,7 @@ api.get('/cliente/', cliente.getListaCliente);
 *     id
 *
 */
-api.post('/cliente', cliente.createCliente);
+api.post('/cliente', cliente.create);
 
 //api.put('/cliente', controllers.updateCliente);
 
@@ -152,11 +141,8 @@ api.post('/cliente', cliente.createCliente);
 * @apiParam {string} email
 * @apiParam {string} password
 * @apiSuccess {Usuario} obejto de tipo cliente
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
 */
-api.get('/login/', usuario.login);
+api.post('/login/', usuario.login);
 
 /**
 * @api {post} /cliente/ Crea usuario
@@ -168,7 +154,7 @@ api.get('/login/', usuario.login);
 *     id
 *
 */
-api.post('/usuario', usuario.createUsuario);
+api.post('/usuario', usuario.create);
 
 
 module.exports = api;

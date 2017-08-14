@@ -45,8 +45,11 @@ const columns = [
         name: "estatus",
         type: "TINYINT"
     }, {
-        name: "id_cliente",
+        name: "id_cliente", // dueño establecimiento
         type: "INT NOT NULL"
+    }, {
+        name: "file_kml",
+        type: "VARCHAR(250)"
     }
 ]
 
