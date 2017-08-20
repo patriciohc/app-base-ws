@@ -65,7 +65,7 @@ api.put('/unidad', unidad.getLista);
 /**
 * @api {post} /unidad
 * @apiGroup Unidad
-* @apiParam {unidad} objeto de tipo unidad
+* @apiParam {Unidad} objeto de tipo unidad
 * @apiSuccess {number} id de la unidad creada
 */
 api.post('/unidad/', upload.single('file_kml'), unidad.create);
@@ -138,7 +138,7 @@ api.post('/cliente', cliente.create);
 /**
 * @api {post} /login/
 * @apiGroup usuario
-* @apiParam {string} email
+* @apiParam {string} correo_electronico
 * @apiParam {string} password
 * @apiSuccess {Usuario} obejto de tipo cliente
 */

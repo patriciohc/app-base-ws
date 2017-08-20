@@ -33,7 +33,7 @@ var server = require("http").Server(app);
 //var io = require("socket.io")(server);
 //require('./controllerWs')(io);
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8088;
 server.listen(port, () =>{
     console.log("servidor corriendo en http://localhost: " + port);
 });

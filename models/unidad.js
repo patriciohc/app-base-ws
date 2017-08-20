@@ -4,6 +4,7 @@
 *
 */
 var Model = require('./model');
+var Poligono = require('./poligono');
 // nombre de la tabla en db
 const name = "unidad";
 // columnas en db
@@ -64,7 +65,29 @@ function create (obj) {
 }
 
 function findOne (query) {
-    return unidad.findOne(query);
+    var unidad;
+    unidad.findOne(query)
+    .then(function (result) {
+        unidad = result;
+        return Poligono.findOne(result.id);
+    })
+    .then(function (result) {
+
+    })
+    .catch(function () {
+
+    });
+}
+
+/**
+* Regresa todas las unidades que se encuentran a una determinada distancia de lat, lng
+* @param {float} lat - latitud
+* @param {float} lng - longitud
+* @param {float} distancia - distancia
+* @return {array} array de tipo Unidad
+*/
+function findPorDistancia (lat, lng, distancia) {
+
 }
 
 function findAll (query) {

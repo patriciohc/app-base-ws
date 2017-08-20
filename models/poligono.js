@@ -36,9 +36,9 @@ function sync () {
 }
 
 /**
- * guardaa nuevo poligono
+ * guarda nuevo poligono
  * @param {string} idUnidad id de la unidad al que pertenece el poligono
- * @param {Position[]} puntos array de posiciones lat, lng
+ * @param {string} kml nombre de kml del poligono
  * @returns {Promise}
  */
 function create (idUnidad, kml) {
@@ -53,9 +53,8 @@ function create (idUnidad, kml) {
         return;
     }
     var cordenadas = tmp.geometry.coordinates[0];
-    console.log(cordenadas);
     var values = [];
-    for (let i = 0; i < cordenadas.length; i ++) {
+    for (let i = 0; i < cordenadas.length; i++) {
         var cordenada = cordenadas[i];
         values.push([
             idUnidad,
@@ -63,11 +62,16 @@ function create (idUnidad, kml) {
             cordenada[1]
         ]);
     }
-    return poligono.insertBulk(values, 'id_unidad, lat, lng');
+    return poligono.insertBulk('id_unidad, lat, lng', values);
 }
 
+/**
+ * retorna todos los puntos que pertenecen al poligono de la unidad
+ * @param {string} idUnidad id de la unidad al que pertenece el poligono
+ * @returns {Promise}
+ */
 function findOne (idUnidad) {
-    return unidad.findOne(query);
+    poligono.findAll({where:{id_unidad: idUnidad}});
 }
 
 function deleteU (idUnidad) {

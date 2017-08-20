@@ -52,7 +52,7 @@ function getSqlInsert(object, model, table) {
 function getSqlFind(model, query, table, limit) {
     var where = getWhere(query.where, model);
     if (where != "") {
-        return `SELECT * FROM ${table} ${where} limit ${limit}`;
+        return `SELECT * FROM ${table} WHERE ${where} limit ${limit}`;
     } else {
         return `SELECT * FROM ${table} limit ${limit}`;
     }
@@ -67,20 +67,38 @@ function getWhere(where, model) {
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
         if (where[column]) {
-            and += `${column} = ${where[column]} AND ` ;
+            and += `${column} = '${where[column]}' AND ` ;
         }
     }
     if (and != "") {
-        var sqlWhere = and.substring(0, values.length - 5);
+        var sqlWhere = and.substring(0, and.length - 5);
         return sqlWhere;
     } else {
         return "";
     }
 }
 
+function getSelect (select, model) {
+    if (!select) return " * ";
+    var selectQ = "";
+    for (var i = 0; i < model.length; i++) {
+        var column = model[i].name;
+        if (select[column]) {
+            selectQ += ` ${column}, ` ;
+        }
+    }
+    if (and != "") {
+        var sql = and.substring(0, values.length - 2);
+        return sql;
+    } else {
+        return " * ";
+    }
+}
+
 function getSqlFindAll(model, query, table) {
     var p = query.where;
-    if (!p) return `SELECT * FROM ${table} limit 1000`;
+    var select = getSelect(query.select);
+    if (!p) return `SELECT ${select} FROM ${table} limit 1000`;
     var and = "", sql;
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
@@ -90,9 +108,9 @@ function getSqlFindAll(model, query, table) {
     }
     if (and != "") {
         var where = and.substring(0, values.length - 5);
-        return `SELECT * FROM ${table} ${where}`;
+        return `SELECT ${select} FROM ${table} ${where}`;
     } else {
-        return `SELECT * FROM ${table} limit 1000`;
+        return `SELECT ${select} FROM ${table} limit 1000`;
     }
 }
 

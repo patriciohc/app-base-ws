@@ -47,8 +47,8 @@ class Model {
         });
     }
 
-    insertBulk(array, values) {
-        var sql = `INSERT INTO ${this.model} (${columns}) VALUES ?`;
+    insertBulk(columns, values) {
+        var sql = `INSERT INTO ${this.name} (${columns}) VALUES ?`;
         console.log(sql);
         return new Promise((resolve, reject) => {
             db.conecction.query(sql, [values],  function(err, result){
@@ -70,7 +70,10 @@ class Model {
                     if (err) {
                         return reject(err);
                     } else {
-                        return resolve(results);
+                        //if (results.length > 1)
+                            return resolve(results[0]);
+                        //else
+                        //    return resolve({});
                     }
                 })
             } else {
@@ -120,6 +123,9 @@ class Model {
         });
     }
 
+/**
+*
+*/
     delete(where) {
         var sqlWhere = utils.getWhere(where, this.model);
         var sql = `DELETE FROM ${this.name} WHERE ${where};`;
@@ -143,6 +149,9 @@ class Model {
         });
     }
 
+/**
+* agrega una relacion entre tablas
+*/
     addRelation(tableSrc, fieldSrc, tableRef) {
         var sql =
         `ALTER TABLE ${tableSrc}
@@ -157,6 +166,10 @@ class Model {
                 }
             })
         });
+    }
+
+    rawQuery(query) {
+
     }
 
 }

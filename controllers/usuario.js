@@ -5,6 +5,7 @@ const usuario = require('../models').usuario;
 function login(req, res) {
     usuario.findOne({where:{correo_electronico: req.body.correo_electronico}})
     .then(function(result) {
+        console.log(result);
         if (!result) {
             return res.status(404).send({message: "not found"});
         } else {
@@ -13,7 +14,6 @@ function login(req, res) {
             } else {
                 return res.status(401).send({message: "usuario no autorizado"});
             }
-
         }
     })
     .catch(function(err) {
@@ -22,6 +22,7 @@ function login(req, res) {
 }
 
 function create(req, res) {
+    console.log("POST api/usuario/");
     usuario.create(req.body)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
