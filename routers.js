@@ -30,37 +30,17 @@ var upload = multer({ dest: './kml' });
 api.get('/unidad/:id', unidad.get);
 
 /**
-* @api {get} /unidad/:id Obtitene unidad
-* @apiName GetUnidad
-* @apiGroup Unidad
-* @apiParam {Number} id identificador unico
-* @apiSuccess {Unidad} obejto unidad
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     Unidad
-* @apiError UserNotFound The id of the User was not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*       "error": "error"
-*     }
-*/
-api.get('/unidad/', unidad.getLista);
-
-/**
-* @api {put} /unidad/ Obtitene lista de unidades, en base a los parametros
+* @api {post} /unidad/ Obtitene lista de unidades, en base a los parametros
 * pasados por query.
 *
 * @apiName GetUnidad
 * @apiGroup Unidad
 * @apiParam {Float} lat latitud de la ubicacion
 * @apiParam {Float} lng longitud de la ubicacion
-* @apiParam {String} estado
-* @apiParam {String} Municipio
 *
 * @apiSuccess {Unidad} lista de objetos unidad
 */
-api.put('/unidad', unidad.getLista);
+api.get('/unidad', unidad.localizarUnidades);
 
 /**
 * @api {post} /unidad

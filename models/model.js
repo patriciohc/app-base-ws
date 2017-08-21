@@ -70,10 +70,10 @@ class Model {
                     if (err) {
                         return reject(err);
                     } else {
-                        //if (results.length > 1)
+                        if (results.length > 0)
                             return resolve(results[0]);
-                        //else
-                        //    return resolve({});
+                        else
+                            return resolve({});
                     }
                 })
             } else {
@@ -88,7 +88,7 @@ class Model {
         console.log(sql);
         return new Promise((resolve, reject) => {
             if (sql) {
-                db.conecction.query(sql, function(err, results){
+                db.conecction.query(sql, function(err, results) {
                     if (err) {
                         return reject(err);
                     } else {
@@ -124,7 +124,7 @@ class Model {
     }
 
 /**
-*
+* elimina registros
 */
     delete(where) {
         var sqlWhere = utils.getWhere(where, this.model);
@@ -169,7 +169,16 @@ class Model {
     }
 
     rawQuery(query) {
-
+        console.log(query);
+        return new Promise((resolve, reject) => {
+            db.conecction.query(query, function(err, results) {
+                if (err) {
+                    return reject(err);
+                } else {
+                    return resolve(results);
+                }
+            })
+        });
     }
 
 }

@@ -2,7 +2,6 @@
 
 const unidad = require('../models').unidad;
 const poligono = require('../models').poligono;
-const inside = require('point-in-polygon');
 
 function get(req, res) {
     unidad.findById(req.params.id)
@@ -26,10 +25,25 @@ function get(req, res) {
 * @return {array} array de uidaddes
 */
 function localizarUnidades (req, res) {
-    var lat = req.query.lat;
-    var lng = req.query.lng;
-    unidad.localizarUnidades(lat, lng)
+    var lat = parseFloat(req.query.lat);
+    var lng = parseFloat(req.query.lng);
+    var distancia = 0.25;
+    unidad.findPorDistancia(lat, lng, distancia)
     .then(function (result) {
+        var unidadesDisponibles = [];
+        var arrayPromises = [];
+        for (var i = 0; i < result.length; i++) {
+            arrayPromises.push(poligono.isInsade(lat, lng, result[i], unidadesDisponibles));
+        }
+        Promise.all(arrayPromises)
+        .then(function () {
+            return res.status(200).send(unidadesDisponibles);
+        })
+        .catch(function (err) {
+            console.log(err);
+            return res.status(500).send(err);
+        });
+
         // var polygon = [ [ 1, 1 ], [ 1, 2 ], [ 2, 2 ], [ 2, 1 ] ];
         //
         // console.dir([
@@ -39,8 +53,13 @@ function localizarUnidades (req, res) {
         // ]);
     })
     .catch(function (err) {
-
+        console.log(err);
+        return res.status(500).send(err);
     });
+}
+
+function localizarUnidadesPoligonos(req,  res, promises) {
+
 }
 
 function getLista(req, res) {
@@ -81,7 +100,7 @@ function update(req, res) {
 
 module.exports = {
     get,
-    getLista,
+    localizarUnidades,
     create,
     update,
 }

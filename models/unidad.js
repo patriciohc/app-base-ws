@@ -83,11 +83,18 @@ function findOne (query) {
 * Regresa todas las unidades que se encuentran a una determinada distancia de lat, lng
 * @param {float} lat - latitud
 * @param {float} lng - longitud
-* @param {float} distancia - distancia
 * @return {array} array de tipo Unidad
 */
 function findPorDistancia (lat, lng, distancia) {
-
+    var latmin = parseFloat(lat) - parseFloat(distancia);
+    var latmax = parseFloat(lat) + parseFloat(distancia);
+    var lngmin = parseFloat(lng) - parseFloat(distancia);
+    var lngmax = parseFloat(lng) + parseFloat(distancia);
+    var query = `SELECT * FROM ${name} WHERE
+        lat BETWEEN ${latmin} AND ${latmax} AND
+        lng BETWEEN ${lngmin} AND ${lngmax}
+    `;
+    return unidad.rawQuery(query)
 }
 
 function findAll (query) {
@@ -104,5 +111,6 @@ module.exports = {
     findOne,
     findById,
     findAll,
+    findPorDistancia,
     addRelation: unidad.addRelation,
 }

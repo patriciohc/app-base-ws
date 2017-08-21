@@ -6,6 +6,7 @@
 const fs = require('fs');
 const tj = require('togeojson');
 const DOMParser = require('xmldom').DOMParser;
+const inside = require('point-in-polygon');
 
 const DIR_KML = "./kml/"
 
@@ -66,12 +67,31 @@ function create (idUnidad, kml) {
 }
 
 /**
- * retorna todos los puntos que pertenecen al poligono de la unidad
- * @param {string} idUnidad id de la unidad al que pertenece el poligono
- * @returns {Promise}
+ * verficia si lat, lng estan dentro del poligono de la unidad
+ * @param {float} lat - latitud
+ * @param {float} lng - longitud
+ * @param {Unidad} unidad - unidad a verificar
+ * @param {array} isInsadeUnidades - array donde se metera la unidad si pasa
+ * @returns {Promise} unidad
  */
-function findOne (idUnidad) {
-    poligono.findAll({where:{id_unidad: idUnidad}});
+function isInsade (lat, lng, unidad, isInsadeUnidades) {
+    return new Promise (function (resolve, reejct) {
+        poligono.findAll({where:{id_unidad: unidad.id}})
+        .then(function (results) {
+            var  polygon = [];
+            for (var i = 0; i < results.length; i++) {
+                polygon.push([
+                    results[i].lat,
+                    results[i].lng
+                ]);
+            }
+            console.log(inside([ lat, lng ], polygon));
+            if (inside([ lat, lng ], polygon)) {
+                isInsadeUnidades.push(unidad);
+            }
+            resolve();
+        })
+    });
 }
 
 function deleteU (idUnidad) {
@@ -81,6 +101,6 @@ function deleteU (idUnidad) {
 module.exports = {
     sync,
     create,
-    findOne,
+    isInsade,
     deleteU
 }

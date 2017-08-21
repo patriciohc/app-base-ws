@@ -107,8 +107,8 @@ function getSqlFindAll(model, query, table) {
         }
     }
     if (and != "") {
-        var where = and.substring(0, values.length - 5);
-        return `SELECT ${select} FROM ${table} ${where}`;
+        var where = and.substring(0, and.length - 5);
+        return `SELECT ${select} FROM ${table} WHERE ${where}`;
     } else {
         return `SELECT ${select} FROM ${table} limit 1000`;
     }
