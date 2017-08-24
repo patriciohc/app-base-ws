@@ -51,6 +51,9 @@ const columns = [
     }, {
         name: "file_kml",
         type: "VARCHAR(250)"
+    }, {
+        name: "imagen",
+        type: "VARCHAR(250)"
     }
 ]
 
