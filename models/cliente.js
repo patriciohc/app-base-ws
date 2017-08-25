@@ -23,6 +23,12 @@ const columns = [
     }, {
         name: "direccion", // dirreccion completa
         type: "varchar(200)"
+    }, {
+        name: "correo_electronico",
+        type: "VARCHAR(100)"
+    }, {
+        name: "password",
+        type: "VARCHAR(100)"
     }
 ]
 
