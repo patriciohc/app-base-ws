@@ -95,4 +95,5 @@ module.exports = {
     localizarUnidades,
     create,
     update,
+    getLista,
 }

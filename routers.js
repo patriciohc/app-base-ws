@@ -40,7 +40,7 @@ api.get('/unidad/:id', unidad.get);
 *
 * @apiSuccess {Unidad} lista de objetos unidad
 */
-api.get('/unidad', unidad.localizarUnidades);
+api.get('/unidad', unidad.getLista);
 
 /**
 * @api {post} /unidad
@@ -107,6 +107,18 @@ api.get('/cliente/', cliente.getLista);
 *
 */
 api.post('/cliente', cliente.create);
+
+/**
+* @api {post} /cliente-login/ logea cliente
+*
+* @apiGroup Cliente
+*
+* @apiParam {String} - correo_electronico
+* @apiParam {String} - password
+* @apiSuccess {Cliente} id de objeto Cliente
+*
+*/
+api.post('/login-cliente', cliente.login);
 
 //api.put('/cliente', controllers.updateCliente);
 
