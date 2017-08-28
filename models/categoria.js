@@ -54,4 +54,5 @@ module.exports = {
     findOne,
     findById,
     findAll,
+    addRelation: categoria.addRelation,
 }

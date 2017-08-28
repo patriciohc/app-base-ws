@@ -66,4 +66,5 @@ module.exports = {
     findOne,
     findById,
     findAll,
+    addRelation: producto.addRelation,
 }

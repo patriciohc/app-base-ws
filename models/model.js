@@ -151,6 +151,9 @@ class Model {
 
 /**
 * agrega una relacion entre tablas
+* @param {String} tableSrc - tabla fuente
+* @param {String} fieldSrc - campo en tabla fuente
+* @param {String} tableRef - tabla destino, siempre se usa campo id
 */
     addRelation(tableSrc, fieldSrc, tableRef) {
         var sql =

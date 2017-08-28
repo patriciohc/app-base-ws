@@ -75,6 +75,8 @@ function create(req, res) {
         idUnidad = result.insertId;
         if (req.file) {
             return poligono.create(result.insertId, u.file_kml);
+        } else {
+            return new Promise(resolve => resolve());
         }
     })
     .then(function(result) {

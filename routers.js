@@ -6,6 +6,8 @@ const cliente = require('./controllers/cliente');
 const unidad = require('./controllers/unidad');
 const usuario = require('./controllers/usuario');
 const poligono = require('./controllers/poligono');
+const categoria = require('./controllers/categoria');
+const producto = require('./controllers/producto');
 const multer  = require('multer');
 
 var upload = multer({ dest: './kml' });
@@ -94,13 +96,9 @@ api.get('/cliente/', cliente.getLista);
 
 /**
 * @api {post} /cliente/ Crea unidad
-*
 * @apiGroup Cliente
-*
 * @apiParam {Cliente} objeto de tipo cliente
-*
 * @apiSuccess {number} id de objeto insertado
-*
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     id
@@ -147,6 +145,53 @@ api.post('/login/', usuario.login);
 *
 */
 api.post('/usuario', usuario.create);
+
+/**
+* @api {post} /categoria/ Crea una categoria
+* @apiGroup Categoria
+* @apiParam {Cliente} objeto de tipo cliente
+* @apiSuccess {number} id de objeto insertado
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*
+*/
+api.post('/categoria', categoria.create);
+
+/**
+* @api {get} /categoria/ filtra categorias por id de unidad
+* @apiGroup Categoria
+* @apiParam {number} id identificador de unidad
+* @apiSuccess {array} array de categorias
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*
+*/
+api.get('/categoria', categoria.getLista);
+
+/**
+* @api {post} /producto/ Crea una categoria
+* @apiGroup producto
+* @apiParam {Producto} objeto de tipo Producto
+* @apiSuccess {number} id de objeto insertado
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.post('/producto', producto.create);
+
+/**
+* @api {get} /producto/ filtra categorias por id de categoria
+* @apiGroup producto
+* @apiParam {number} id identificador de categoria
+* @apiSuccess {array} array de productos
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*
+*/
+api.get('/producto', producto.getLista);
 
 
 module.exports = api;
