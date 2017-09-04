@@ -64,6 +64,16 @@ function getLista(req, res) {
     })
 }
 
+function getListaCliente(req, res) {
+    unidad.findAll({where: {id_cliente: req.query.id_cliente}})
+    .then(function(result) {
+        return res.status(200).send(result);
+    })
+    .catch(function(err){
+        return res.status(500).send({err: err});
+    })
+}
+
 function create(req, res) {
     var u = req.body, idUnidad;
     if (req.file) {

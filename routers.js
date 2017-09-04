@@ -8,6 +8,7 @@ const usuario = require('./controllers/usuario');
 const poligono = require('./controllers/poligono');
 const categoria = require('./controllers/categoria');
 const producto = require('./controllers/producto');
+const pedido = require('./controllers/pedido');
 const multer  = require('multer');
 
 var upload = multer({ dest: './kml' });
@@ -32,7 +33,7 @@ var upload = multer({ dest: './kml' });
 api.get('/unidad/:id', unidad.get);
 
 /**
-* @api {post} /unidad/ Obtitene lista de unidades, en base a los parametros
+* @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
 * pasados por query.
 *
 * @apiName GetUnidad
@@ -43,6 +44,18 @@ api.get('/unidad/:id', unidad.get);
 * @apiSuccess {Unidad} lista de objetos unidad
 */
 api.get('/unidad', unidad.getLista);
+
+/**
+* @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
+* pasados por query.
+*
+* @apiName GetUnidad
+* @apiGroup Unidad
+* @apiParam {number} id de cliente
+*
+* @apiSuccess {Unidad} lista de objetos unidad
+*/
+//api.get('/unidad-cliente', unidad.getListaCliente);
 
 /**
 * @api {post} /unidad
@@ -192,6 +205,17 @@ api.post('/producto', producto.create);
 *
 */
 api.get('/producto', producto.getLista);
+
+/**
+* @api {post} /pedido/ Crea un pedido
+* @apiGroup producto
+* @apiParam {Pedido} objeto de tipo Pedido
+* @apiSuccess {number} numero de pedido
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.post('/pedido', pedido.create);
 
 
 module.exports = api;
