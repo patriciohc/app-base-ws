@@ -1,11 +1,11 @@
 'use strict'
 /*
-* Unidad representa un establecimiento, consultorio, local ect.
+* DireccionSolicitud: es la direccion de donde el usuario a solicitado el servicio
 *
 */
 var Model = require('./model');
 // nombre de la tabla en db
-const name = "direccion";
+const name = "direccion_solicitud";
 // columnas en db
 const columns = [
     {
@@ -15,10 +15,7 @@ const columns = [
         name: "nombre_direccion",
         type: "VARCHAR(250)"
     }, {
-        name: "estado",
-        type: "VARCHAR(100)"
-    }, {
-        name: "direccion", // municipio, colonia, calle, numero
+        name: "direccion", // municipio, colonia, calle, numero (string que regresa api google maps)
         type: "VARCHAR(200)"
     }, {
         name: "lat", // latitud
@@ -31,7 +28,7 @@ const columns = [
         type: "VARCHAR(200)"
     }, {
         name: "id_usuario",
-        type: "INT NOT NULL"
+        type: "INT"
     }
 ]
 

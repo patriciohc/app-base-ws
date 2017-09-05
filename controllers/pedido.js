@@ -1,6 +1,6 @@
 'use strict'
 
-//const pedido = require('../models').pedido;
+const pedido = require('../models').pedido;
 
 // function get(req, res) {
 //     categoria.findById(req.params.id)
@@ -28,18 +28,60 @@
 
 function create(req, res) {
     console.log(req.body);
-    return res.status(200).send({numero: 454});
-    // categoria.create(req.body)
-    // .then(function(result) {
-    //     return res.status(200).send({id: result.insertId});
-    // })
-    // .catch(function(err) {
-    //     return res.status(500).send({err: err})
-    // })
+    pedido.create(req.body)
+    .then(function(id) {
+        return res.status(200).send({id: id});
+    })
+    .catch(function(err) {
+        return res.status(500).send({err: err})
+    })
 }
 
-function update(req, res) {
+function setEstatus(req, res) {
+    pedido.setEstatus(req.body.id_pedido, req.body.estatus)
+    .then( result => {
+        return res.status(200).send({success: result});
+    })
+    .catch( err => {
+        console.log(err);
+        return res.status(500).send({err: err});
+    })
+}
 
+function asignarRepartidor(req, res) {
+    pedido.asignarRepartidor(req.body.id_pedido, req.body.idRepartidor)
+    .then( result => {
+        return res.status(200).send({success: result});
+    })
+    .catch( err => {
+        console.log(err);
+        return res.status(500).send({err: err});
+    })
+}
+
+function calificar(req, res) {
+    pedido.calificar(req.body.id_pedido, req.body.calificacion)
+    .then( result => {
+        return res.status(200).send({success: result});
+    })
+    .catch( err => {
+        console.log(err);
+        return res.status(500).send({err: err});
+    })
+}
+
+function getPedidoPorRepartidor(req, res) {
+    pedido.findAll({
+        where: {
+            id_operador_entrega: req.query.id_repartidor,
+            estatu: 2
+        }})
+    .then( result => {
+        return res.status(200).send({pedidos: result});
+    })
+    .catch( err => {
+        return res.status(500).send({err: err});
+    });
 }
 
 module.exports = {
@@ -47,4 +89,8 @@ module.exports = {
     create,
     //update,
     //getLista,
+    setEstatus,
+    asignarRepartidor,
+    calificar,
+    getPedidoPorRepartidor,
 }

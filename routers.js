@@ -208,7 +208,7 @@ api.get('/producto', producto.getLista);
 
 /**
 * @api {post} /pedido/ Crea un pedido
-* @apiGroup producto
+* @apiGroup pedido
 * @apiParam {Pedido} objeto de tipo Pedido
 * @apiSuccess {number} numero de pedido
 * @apiSuccessExample Success-Response:
@@ -216,6 +216,51 @@ api.get('/producto', producto.getLista);
 *     id
 */
 api.post('/pedido', pedido.create);
+
+/**
+* @api {put} /pedido/ actuliza pedido
+* @apiGroup pedido
+* @apiParam {number} id_pedido
+* @apiParam {number} estatus
+* @apiSuccess {number} numero de pedido
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.put('/pedido-estatus', pedido.setEstatus);
+
+/**
+* @api {put} /pedido/ Crea un pedido
+* @apiGroup producto
+* @apiParam {number} id_pedido
+* @apiSuccess {number} id_repartidor
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.put('/pedido-repartidor', pedido.asignarRepartidor);
+
+/**
+* @api {put} /pedido/ Crea un pedido
+* @apiGroup producto
+* @apiParam {number} id_pedido
+* @apiSuccess {number} calificacion
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.put('/pedido-calificacion', pedido.calificar);
+
+/**
+* @api {get} /pedido/ obtiene todos los peididos asignados a un repartidor
+* @apiGroup producto
+* @apiParam {number} id_pedido
+* @apiSuccess {number} calificacion
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.get('/pedido-repartidor', pedido.getPedidoPorRepartidor);
 
 
 module.exports = api;
