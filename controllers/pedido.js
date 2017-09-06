@@ -1,6 +1,6 @@
 'use strict'
-const DireccionSolicitud = require('./direccion-solicitud');
-const ListaPedido = require('./lista-pedido');
+const DireccionSolicitud = require('../models').direccionSolicitud;
+const ListaPedido = require('../models').listaPedido;
 const Pedido = require('../models').pedido;
 
 // function get(req, res) {
