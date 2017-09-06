@@ -9,7 +9,7 @@ var producto = require('../models/producto');
 var direccionSolicitud = require('../models/direccion-solicitud');
 var listaPedido = require('../models/lista-pedido');
 var operadorEntrega = require('../models/operador-entrega');
-var pedido = require('../models/operador-entrega');
+var pedido = require('../models/pedido');
 
 cliente.sync()
 .then(function (result) {
