@@ -36,8 +36,8 @@ function create(req, res) {
         console.log(result);
         var pedido = {
             estatus: 0, // en espera de aceptacion por parte de la la unidad
-            comentarios: obj.comentarios,
-            fecha_pedido: new Date(),
+            comentarios: req.body.comentarios,
+            fecha_pedido: (new Date()).toString(),
             calificacion: 0, // no ha recibido calificacion
             id_direccion_solicitud: result.insertId,
             //id_operador_entrega: // no se ha asignado repartidor
@@ -47,8 +47,8 @@ function create(req, res) {
     .then( result => {
         var values = [];
         idPedido = result.insertId;
-        for (let i = 0; i < obj.pedido.length; i++){
-            values.push([idPedido, obj.pedido[i].id_producto, obj.pedido[i].cantidad]);
+        for (let i = 0; i < req.body.pedido.length; i++){
+            values.push([idPedido, req.body.pedido[i].id_producto, req.body.pedido[i].cantidad]);
         }
         return ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
     })
@@ -58,15 +58,6 @@ function create(req, res) {
     .catch( err => {
         console.log(err);
         return res.status(200).send({err: err});
-    })
-
-
-    pedido.create(req.body)
-    .then(function(id) {
-        return res.status(200).send({id: id});
-    })
-    .catch(function(err) {
-        return res.status(500).send({err: err})
     })
 }
 
