@@ -22,7 +22,7 @@ const columns = [
         type: "VARCHAR(100)"
     }, {
         name: "id_unidad",
-        type: "INT"
+        type: "INT NOT NULL"
     }
 ]
 

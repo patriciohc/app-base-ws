@@ -31,10 +31,10 @@ const columns = [
         type: "VARCHAR(100)"
     }, {
         name: "id_unidad",
-        type: "INT"
+        type: "INT NOT NULL"
     }, {
         name: "id_categoria",
-        type: "INT"
+        type: "INT NOT NULL"
     }
 ]
 

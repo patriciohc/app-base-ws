@@ -1,7 +1,4 @@
 'use strict'
-const DireccionSolicitud = require('./direccion-solicitud');
-const ListaPedido = require('./lista-pedido');
-
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
 *
@@ -46,37 +43,7 @@ function sync () {
 }
 
 function create (obj) {
-    var idPedido;
-    return new Promise( (resolve, reject) => {
-      DireccionSolicitud.create(obj.direccion)
-      .then( result => {
-          console.log(result);
-          var pedido = {
-            estatus: 0, // en espera de aceptacion por parte de la la unidad
-            comentarios: obj.comentarios,
-            fecha_pedido: new Date(),
-            calificacion: 0, // no ha recibido calificacion
-            id_direccion_solicitud: result.insertId,
-            //id_operador_entrega: // no se ha asignado repartidor
-          }
-          return pedido.create(obj);
-      })
-      .then( result => {
-          var values = [];
-          idPedido = result.insertId;
-          for (let i = 0; i < obj.pedido.length; i++){
-              values.push([idPedido, obj.pedido[i]]);
-          }
-          return ListaPedido.insertBulk("id_pedido, id_producto", values);
-      })
-      .then( result => {
-          return resolve(idPedido);
-      })
-      .catch( err => {
-          console.log(err);
-          return reject(err);
-      })
-    })
+    return pedido.create(obj);
 }
 
 function findOne (query) {

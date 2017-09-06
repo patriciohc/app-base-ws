@@ -1,6 +1,7 @@
 'use strict'
-
-const pedido = require('../models').pedido;
+const DireccionSolicitud = require('./direccion-solicitud');
+const ListaPedido = require('./lista-pedido');
+const Pedido = require('../models').pedido;
 
 // function get(req, res) {
 //     categoria.findById(req.params.id)
@@ -28,6 +29,38 @@ const pedido = require('../models').pedido;
 
 function create(req, res) {
     console.log(req.body);
+
+    var idPedido;
+    DireccionSolicitud.create(req.body.direccion_entrega)
+    .then( result => {
+        console.log(result);
+        var pedido = {
+            estatus: 0, // en espera de aceptacion por parte de la la unidad
+            comentarios: obj.comentarios,
+            fecha_pedido: new Date(),
+            calificacion: 0, // no ha recibido calificacion
+            id_direccion_solicitud: result.insertId,
+            //id_operador_entrega: // no se ha asignado repartidor
+        }
+        return Pedido.create(pedido);
+    })
+    .then( result => {
+        var values = [];
+        idPedido = result.insertId;
+        for (let i = 0; i < obj.pedido.length; i++){
+            values.push([idPedido, obj.pedido[i].id_producto, obj.pedido[i].cantidad]);
+        }
+        return ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
+    })
+    .then( result => {
+        return res.status(200).send({id_pedido: idPedido})
+    })
+    .catch( err => {
+        console.log(err);
+        return res.status(200).send({err: err});
+    })
+
+
     pedido.create(req.body)
     .then(function(id) {
         return res.status(200).send({id: id});

@@ -13,19 +13,19 @@ const columns = [
         type: "INT AUTO_INCREMENT"
     }, {
         name: "correo_electronico",
-        type: "VARCHAR(250)"
+        type: "VARCHAR(250) NOT NULL"
     }, {
         name: "nombre",
-        type: "VARCHAR(100)"
+        type: "VARCHAR(100) NOT NULL"
     }, {
         name: "password",
-        type: "varchar(100)"
+        type: "varchar(100) NOT NULL"
     }, {
         name: "telefono", // telefono movil
         type: "varchar(200)"
     }, {
         name: "recibir_promociones",
-        type: "TINYINT" // 1 true, 0 false 
+        type: "TINYINT" // 1 true, 0 false
     },
 ]
 

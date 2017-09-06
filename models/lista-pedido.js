@@ -13,9 +13,12 @@ const columns = [
         type: "INT AUTO_INCREMENT"
     }, {
         name: "id_pedido",
-        type: "INT"
+        type: "INT NOT NULL"
     }, {
         name: "id_producto",
+        type: "INT NOT NULL"
+    }, {
+        name: "cantidad",
         type: "INT"
     }
 ]
