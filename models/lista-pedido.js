@@ -45,11 +45,16 @@ function findById (id) {
     return listaPedido.findById(id);
 }
 
+function insertBulk (columns, values) {
+    return listaPedido.insertBulk (columns, values);
+}
+
 module.exports = {
     sync,
     create,
     findOne,
     findById,
     findAll,
+    insertBulk,
     addRelation: listaPedido.addRelation,
 }
