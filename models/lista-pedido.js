@@ -13,10 +13,10 @@ const columns = [
         type: "INT AUTO_INCREMENT"
     }, {
         name: "id_pedido",
-        type: "VARCHAR(250)"
+        type: "INT"
     }, {
         name: "id_producto",
-        type: "VARCHAR(100)"
+        type: "INT"
     }
 ]
 
