@@ -1,6 +1,6 @@
 'use strict'
-const DireccionSolicitud = require('./direccion_solicitud');
-const ListaPedido = require('./lista_pedido');
+const DireccionSolicitud = require('./direccion-solicitud');
+const ListaPedido = require('./lista-pedido');
 
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
