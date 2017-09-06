@@ -6,10 +6,10 @@ var usuario = require('../models/usuario');
 var poligono = require('../models/poligono');
 var categoria = require('../models/categoria');
 var producto = require('../models/producto');
-var direccionSolicitud = require('../models/direccion_solicitud');
-var listaPedido = require('../models/lista_pedido');
-var operadorEntrega = require('../models/operador_entrega');
-var pedido = require('../models/operador_entrega');
+var direccionSolicitud = require('../models/direccion-solicitud');
+var listaPedido = require('../models/lista-pedido');
+var operadorEntrega = require('../models/operador-entrega');
+var pedido = require('../models/operador-entrega');
 
 cliente.sync()
 .then(function (result) {
