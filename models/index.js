@@ -39,12 +39,17 @@ cliente.sync()
 .then(function (result) {
     return pedido.sync();
 })
+.then(function (result) {
+  createForeingKey();
+})
 // errors
 .catch(function (err) {
     console.log(err);
 });
 
 // foreing keys - tableSrc, fieldSrc, tableRef
+
+function createForeingKey () {
 unidad.addRelation('unidad', 'id_cliente', 'cliente')
 .then(result => console.log(result))
 .catch(err => console.log(err));
@@ -76,6 +81,7 @@ listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido')
 listaPedido.addRelation('lista_pedido', 'id_producto', 'producto')
 .then(result => console.log(result))
 .catch(err => console.log(err));
+}
 
 module.exports = {
     cliente,
