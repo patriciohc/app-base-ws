@@ -2,6 +2,8 @@
 
 const unidad = require('../models').unidad;
 const poligono = require('../models').poligono;
+const unidadProducto = require('../models').unidadProducto;
+const utils = require('./utils');
 
 function get(req, res) {
     unidad.findById(req.params.id)
@@ -102,10 +104,38 @@ function update(req, res) {
 
 }
 
+function deleteR(req, res) {
+  unidad.deleteR(req.query.id)
+  .then(result => {
+    res.status(200).send(result);
+  })
+  .catch(err => {
+    console.log(err);
+  })
+}
+
+function addProducto(req, res) {
+    var params = ["id_unidad", "id_producto"];
+    if (!utils.andValidate(params, req.body)) {
+        return res.status(400).send({err: "se require id_unidad, id_producto"});
+    }
+    var up = utils.minimizarObjeto(params, req.body);
+
+    unidadProducto.create(up)
+    .then(result => {
+        return res.status(200).send({success: true});
+    })
+    .catch(err => {
+        return res.status(500).send({err: err});
+    });
+}
+
 module.exports = {
     get,
     localizarUnidades,
     create,
     update,
     getLista,
+    addProducto,
+    deleteR
 }

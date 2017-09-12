@@ -1,6 +1,7 @@
 'use strict'
 
 const categoria = require('../models').categoria;
+const utils = require('./utils');
 
 function get(req, res) {
     categoria.findById(req.params.id)
@@ -17,7 +18,11 @@ function get(req, res) {
 }
 
 function getLista(req, res) {
-    categoria.findAll({where: {id_unidad: req.query.id_unidad}})
+    if (!req.query.id_unidad || !req.query.id_cliente) {
+        return res.status(400).send({err: "se requiere id_unidad o id_cliente"});
+    }
+    var where = utils.minimizarObjeto(["id_unidad", "id_cliente"], req.query);
+    categoria.findAll({where})
     .then(function(result) {
         return res.status(200).send(result);
     })

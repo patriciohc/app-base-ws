@@ -126,7 +126,7 @@ class Model {
 /**
 * elimina registros
 */
-    delete(where) {
+    deleteR (where) {
         var sqlWhere = utils.getWhere(where, this.model);
         var sql = `DELETE FROM ${this.name} WHERE ${where};`;
         console.log(sql);

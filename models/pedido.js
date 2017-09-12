@@ -33,6 +33,9 @@ const columns = [
     }, {
         name: "id_operador_entrega",
         type: "INT"
+    }, {
+        name: "id_unidad",
+        type: "INT"
     }
 ]
 

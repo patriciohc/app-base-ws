@@ -1,51 +1,45 @@
 'use strict'
 /*
-* Cliente representa un usuario dueño de uno o varios establecimientos..
+* productos que tiene cada unidad
 *
 */
 var Model = require('./model');
 // nombre de la tabla en db
-const name = "categoria";
+const name = "unidad_producto";
 // columnas en db
 const columns = [
     {
         name: "id",
         type: "INT AUTO_INCREMENT"
     }, {
-        name: "nombre",
+        name: "id_cliente",
         type: "VARCHAR(250)"
     }, {
-        name: "descripcion",
+        name: "id_producto",
         type: "VARCHAR(100)"
-    }, {
-        name: "imagen",
-        type: "VARCHAR(100)"
-    }, {
-        name: "id_cliente",
-        type: "INT NOT NULL"
     }
 ]
 
-var categoria = new Model(name, columns);
+var unidadProducto = new Model(name, columns);
 
 function sync () {
-    return categoria.createTable();
+    return unidadProducto.createTable();
 }
 
 function create (obj) {
-    return categoria.create(obj);
+    return unidadProducto.create(obj);
 }
 
 function findOne (query) {
-    return categoria.findOne(query);
+    return unidadProducto.findOne(query);
 }
 
 function findAll (query) {
-    return categoria.findAll(query);
+    return unidadProducto.findAll(query);
 }
 
 function findById (id) {
-    return categoria.findById(id);
+    return unidadProducto.findById(id);
 }
 
 module.exports = {

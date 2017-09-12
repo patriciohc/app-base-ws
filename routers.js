@@ -15,22 +15,36 @@ var upload = multer({ dest: './kml' });
 //const middleware = require('../middleware');
 
 /**
-* @api {get} /unidad/:id Obtitene unidad
-* @apiName GetUnidad
+* @api {get} /unidad/:id Obtiene una unidad
 * @apiGroup Unidad
 * @apiParam {Number} id identificador unico
-* @apiSuccess {Unidad} obejto unidad
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     Unidad
+* @apiSuccess {Object} obejto Unidad
+* @apiSuccessExample {json} Success-Response:
+*   HTTP/1.1 200 OK
+*   {
+*
+*   }
 * @apiError UserNotFound The id of the User was not found.
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "error"
+*       "error": "info error"
 *     }
 */
 api.get('/unidad/:id', unidad.get);
+
+/**
+* @api {get} /unidad-cliente/ obitiene unidad por cliente
+* @apiGroup Unidad
+* @apiParam {number} id_cliente identificador unico de cliente
+* @apiSuccess {Object} obejto de tipo unidad
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*
+*     }
+*/
+api.get('/unidad-cliente/', unidad.get);
 
 /**
 * @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
@@ -46,29 +60,38 @@ api.get('/unidad/:id', unidad.get);
 api.get('/unidad', unidad.getLista);
 
 /**
-* @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
-* pasados por query.
+* @api {post} /unidad crea una unidad nueva recibe los parametros
+* en un form-data
 *
-* @apiName GetUnidad
 * @apiGroup Unidad
-* @apiParam {number} id de cliente
-*
-* @apiSuccess {Unidad} lista de objetos unidad
-*/
-//api.get('/unidad-cliente', unidad.getListaCliente);
-
-/**
-* @api {post} /unidad
-* @apiGroup Unidad
-* @apiParam {Unidad} objeto de tipo unidad
+* @apiParam {Object} objeto de tipo Unidad
 * @apiSuccess {number} id de la unidad creada
 */
 api.post('/unidad/', upload.single('file_kml'), unidad.create);
 
+/**
+* @api {post} /unidad-producto agrega un producto a la unidad
+*
+* @apiGroup Unidad
+* @apiParam {Number} id_unidad
+* @apiParam {Number} id_producto
+* @apiSuccess {Object} success
+*/
+api.post('/unidad-producto/', unidad.addProducto);
+
+/**
+* @api {delete} /unidad elimina unidad
+*
+* @apiGroup Unidad
+* @apiParam {Number} id de uniad por query
+* @apiSuccess {Object} success
+*/
+api.delete('/unidad/', unidad.deleteR);
+
 //api.put('/unidad', controllers.updateUnidad);
 
 /**
-* Poligono
+* @{put} /poligono actualiza poligono
 *
 * @api {put} /unidad/ Obtitene lista de unidades, en base a los parametros
 * pasados por query.
@@ -84,13 +107,12 @@ api.put('/poligono', poligono.update);
 
 
 /**
-* Cliente
-*/
-/**
+* @{get} /cliente obtiene cliente por id de cliente
+*
 * @api {get} /cliente/:id
 * @apiGroup Cliente
 * @apiParam {number} id identificado unico de cliente
-* @apiSuccess {Cliente} obejto de tipo cliente
+* @apiSuccess {Object} obejto de tipo Cliente
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     id
@@ -98,9 +120,9 @@ api.put('/poligono', poligono.update);
 api.get('/cliente/:id', cliente.get);
 
 /**
-* @api {get} /cliente
+* @api {get} /cliente obtiene liste de clientes
 * @apiGroup Cliente
-* @apiSuccess {Array} arrya de tipo cliente
+* @apiSuccess {Object[]} arrya de tipo Cliente
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
 *     []
@@ -108,25 +130,22 @@ api.get('/cliente/:id', cliente.get);
 api.get('/cliente/', cliente.getLista);
 
 /**
-* @api {post} /cliente/ Crea unidad
+* @api {post} /cliente/ Crea un nuevo cliente
 * @apiGroup Cliente
-* @apiParam {Cliente} objeto de tipo cliente
+* @apiParam {Object} objeto de tipo cliente
 * @apiSuccess {number} id de objeto insertado
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*     id
-*
+*   {id: id }
 */
 api.post('/cliente', cliente.create);
 
 /**
-* @api {post} /cliente-login/ logea cliente
-*
+* @api {post} /cliente-login/ loguea cliente
 * @apiGroup Cliente
-*
 * @apiParam {String} - correo_electronico
 * @apiParam {String} - password
-* @apiSuccess {Cliente} id de objeto Cliente
+* @apiSuccess {Number} id de objeto Cliente
 *
 */
 api.post('/login-cliente', cliente.login);
@@ -172,14 +191,11 @@ api.post('/usuario', usuario.create);
 api.post('/categoria', categoria.create);
 
 /**
-* @api {get} /categoria/ filtra categorias por id de unidad
+* @api {get} /categoria/ filtra categorias por id de unidad o id de cliente
 * @apiGroup Categoria
 * @apiParam {number} id identificador de unidad
+* @apiParam {number} id identificador de cliente
 * @apiSuccess {array} array de categorias
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
-*
 */
 api.get('/categoria', categoria.getLista);
 

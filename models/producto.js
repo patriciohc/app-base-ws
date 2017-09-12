@@ -30,10 +30,10 @@ const columns = [
         name: "imagen",
         type: "VARCHAR(100)"
     }, {
-        name: "id_unidad",
+        name: "id_categoria",
         type: "INT NOT NULL"
     }, {
-        name: "id_categoria",
+        name: "id_cliente",
         type: "INT NOT NULL"
     }
 ]

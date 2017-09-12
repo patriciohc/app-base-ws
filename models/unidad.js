@@ -19,9 +19,6 @@ const columns = [
         name: "estado",
         type: "VARCHAR(100)"
     }, {
-        name: "municipio",
-        type: "VARCHAR(100)"
-    }, {
         name: "direccion", // colonia, calle, numerovarchar(100)
         type: "VARCHAR(200)"
     }, {
@@ -111,9 +108,14 @@ function findById (id) {
     return unidad.findById(id);
 }
 
+function deleteR (id) {
+    return unidad.deleteR({id});
+}
+
 module.exports = {
     sync,
     create,
+    deleteR,
     findOne,
     findById,
     findAll,
