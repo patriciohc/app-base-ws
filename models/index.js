@@ -39,38 +39,43 @@ cliente.sync()
 .then(function (result) {
     return pedido.sync();
 })
-// foreing keys - tableSrc, fieldSrc, tableRef
-.then(function (result) {
-    return unidad.addRelation('unidad', 'id_cliente', 'cliente');
-})
-.then(function (result) {
-    return categoria.addRelation('categoria', 'id_unidad', 'unidad');
-})
-.then(function (result) {
-    return producto.addRelation('producto', 'id_unidad', 'unidad');
-})
-.then(function (result) {
-    return direccionSolicitud.addRelation('direccion_solicitud', 'id_usuario', 'usuario');
-})
-.then(function (result) {
-    return operadorEntrega.addRelation('operador_entrega', 'id_unidad', 'unidad');
-})
-.then(function (result) {
-    return pedido.addRelation('pedido', 'id_direccion_solicitud', 'direccion_solicitud');
-})
-.then(function (result) {
-    return pedido.addRelation('pedido', 'id_operador_entrega', 'operador_entrega');
-})
-.then(function (result) {
-    return listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido');
-})
-.then(function (result) {
-    return listaPedido.addRelation('lista_pedido', 'id_producto', 'producto');
-})
 // errors
 .catch(function (err) {
     console.log(err);
-})
+});
+
+// foreing keys - tableSrc, fieldSrc, tableRef
+unidad.addRelation('unidad', 'id_cliente', 'cliente')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+producto.addRelation('producto', 'id_unidad', 'unidad')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+direccionSolicitud.addRelation('direccion_solicitud', 'id_usuario', 'usuario')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+operadorEntrega.addRelation('operador_entrega', 'id_unidad', 'unidad')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+pedido.addRelation('pedido', 'id_direccion_solicitud', 'direccion_solicitud')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+pedido.addRelation('pedido', 'id_operador_entrega', 'operador_entrega')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+
+listaPedido.addRelation('lista_pedido', 'id_producto', 'producto')
+.then(result => console.log(result))
+.catch(err => console.log(err));
 
 module.exports = {
     cliente,
