@@ -119,5 +119,6 @@ module.exports = {
     concat,
     getSqlInsert,
     getSqlFind,
-    getSqlFindAll
+    getSqlFindAll,
+    getWhere
 }

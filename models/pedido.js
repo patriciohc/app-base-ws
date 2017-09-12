@@ -1,8 +1,23 @@
 'use strict'
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
+* json pedido
+* {
+*    id_usuario:4,
+*    pedido:[ 12, 13 ],
+*    direccion_entrega: {
+*        lat:545,
+*        lng:45,
+*        referencia: "sdfds"
+*    },
+*    metodo_pago:{
+*        tipo: 1
+*    }
+*    comentarios: "dfdsa"
+* }
 *
 */
+
 var Model = require('./model');
 // nombre de la tabla en db
 const name = "pedido";
