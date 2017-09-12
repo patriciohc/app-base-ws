@@ -128,7 +128,7 @@ class Model {
 */
     deleteR (where) {
         var sqlWhere = utils.getWhere(where, this.model);
-        var sql = `DELETE FROM ${this.name} WHERE ${where};`;
+        var sql = `DELETE FROM ${this.name} WHERE ${sqlWhere};`;
         console.log(sql);
         return new Promise((resolve, reject) => {
             if (sqlWhere) {
