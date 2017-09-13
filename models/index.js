@@ -54,10 +54,6 @@ unidad.addRelation('unidad', 'id_cliente', 'cliente')
 .then(result => console.log(result))
 .catch(err => console.log(err));
 
-producto.addRelation('producto', 'id_unidad', 'unidad')
-.then(result => console.log(result))
-.catch(err => console.log(err));
-
 direccionSolicitud.addRelation('direccion_solicitud', 'id_usuario', 'usuario')
 .then(result => console.log(result))
 .catch(err => console.log(err));

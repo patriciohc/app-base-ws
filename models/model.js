@@ -158,7 +158,7 @@ class Model {
     addRelation(tableSrc, fieldSrc, tableRef) {
         var sql =
         `ALTER TABLE ${tableSrc}
-        ADD CONSTRAINT fk_${tableSrc}_${fieldSrc}_${tableSrc}
+        ADD CONSTRAINT fk_${tableSrc}_${fieldSrc}_${tableRef}
         FOREIGN KEY (${fieldSrc}) REFERENCES ${tableRef}(id) ON DELETE CASCADE;`
         console.log(sql);
         return new Promise((resolve, reject) => {
