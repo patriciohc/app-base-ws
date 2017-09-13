@@ -17,7 +17,7 @@ function get(req, res) {
 }
 
 function getLista(req, res) {
-    if (!req.query.id_unidad || !req.query.id_cliente || !req.query.id_categoria) {
+    if (!req.query.id_unidad && !req.query.id_cliente && !req.query.id_categoria) {
         return res.status(400).send({err: "se requiere: id_unidad || id_cliente || id_categoria"});
     }
     var where = utils.minimizarObjeto(["id_unidad", "id_cliente", "id_categoria"], req.query);
