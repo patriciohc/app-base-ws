@@ -53,43 +53,41 @@ cliente.sync()
 
 // foreing keys - tableSrc, fieldSrc, tableRef
 function createForeingKey () {
-unidad.addRelation('unidad', 'id_cliente', 'cliente')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  unidad.addRelation('unidad', 'id_cliente', 'cliente')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-direccionSolicitud.addRelation('direccion_solicitud', 'id_usuario', 'usuario')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  direccionSolicitud.addRelation('direccion_solicitud', 'id_usuario', 'usuario')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-operadorEntrega.addRelation('operador_entrega', 'id_unidad', 'unidad')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  operadorEntrega.addRelation('operador_entrega', 'id_unidad', 'unidad')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-pedido.addRelation('pedido', 'id_direccion_solicitud', 'direccion_solicitud')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  pedido.addRelation('pedido', 'id_direccion_solicitud', 'direccion_solicitud')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-pedido.addRelation('pedido', 'id_operador_entrega', 'operador_entrega')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  pedido.addRelation('pedido', 'id_operador_entrega', 'operador_entrega')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-listaPedido.addRelation('lista_pedido', 'id_producto', 'producto')
-.then(result => console.log(result))
-.catch(err => console.log(err));
-}
+  listaPedido.addRelation('lista_pedido', 'id_producto', 'producto')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-unidadProducto.addRelation('unidad_producto', 'id_producto', 'producto')
-.then(result => console.log(result))
-.catch(err => console.log(err));
-}
+  unidadProducto.addRelation('unidad_producto', 'id_producto', 'producto')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 
-unidadProducto.addRelation('unidad_producto', 'id_unidad', 'unidad')
-.then(result => console.log(result))
-.catch(err => console.log(err));
+  unidadProducto.addRelation('unidad_producto', 'id_unidad', 'unidad')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 }
 
 module.exports = {
