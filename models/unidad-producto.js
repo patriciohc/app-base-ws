@@ -9,7 +9,7 @@ const name = "unidad_producto";
 // columnas en db
 const columns = [
     {
-        name: "id_cliente",
+        name: "id_unidad",
         type: "INT"
     }, {
         name: "id_producto",
@@ -20,7 +20,7 @@ const columns = [
 var unidadProducto = new Model(name, columns);
 
 function sync () {
-    return unidadProducto.createTableLlaveCompuesta('id_cliente', 'id_producto');
+    return unidadProducto.createTableLlaveCompuesta('id_unidad', 'id_producto');
 }
 
 function create (obj) {
