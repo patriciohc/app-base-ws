@@ -52,7 +52,6 @@ cliente.sync()
 });
 
 // foreing keys - tableSrc, fieldSrc, tableRef
-
 function createForeingKey () {
 unidad.addRelation('unidad', 'id_cliente', 'cliente')
 .then(result => console.log(result))
@@ -79,6 +78,16 @@ listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido')
 .catch(err => console.log(err));
 
 listaPedido.addRelation('lista_pedido', 'id_producto', 'producto')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+}
+
+unidadProducto.addRelation('unidad_producto', 'id_producto', 'producto')
+.then(result => console.log(result))
+.catch(err => console.log(err));
+}
+
+unidadProducto.addRelation('unidad_producto', 'id_unidad', 'unidad')
 .then(result => console.log(result))
 .catch(err => console.log(err));
 }

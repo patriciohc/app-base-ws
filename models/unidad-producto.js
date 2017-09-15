@@ -49,6 +49,6 @@ module.exports = {
     findOne,
     findById,
     findAll,
-    addRelation: categoria.addRelation,
+    addRelation: unidadProducto.addRelation,
     insertBulk
 }
