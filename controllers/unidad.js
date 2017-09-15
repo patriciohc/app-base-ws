@@ -122,7 +122,7 @@ function addProducto(req, res) {
     // }
     // var up = utils.minimizarObjeto(params, req.body);
 
-    unidadProducto.insertBulk(req.body)
+    unidadProducto.insertBulk("id_unidad, id_producto",req.body)
     .then(result => {
         return res.status(200).send({success: true});
     })
