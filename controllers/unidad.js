@@ -115,13 +115,6 @@ function deleteR(req, res) {
 }
 
 function addProducto(req, res) {
-  console.log(req.body);
-    // var params = ["id_unidad", "ids_producto"];
-    // if (!utils.andValidate(params, req.body)) {
-    //     return res.status(400).send({err: "se require id_unidad, ids_producto"});
-    // }
-    // var up = utils.minimizarObjeto(params, req.body);
-
     unidadProducto.insertBulk("id_unidad, id_producto",req.body)
     .then(result => {
         return res.status(200).send({success: true});
@@ -131,6 +124,20 @@ function addProducto(req, res) {
     });
 }
 
+function getProductos(req, res) {
+  var params = ["id_unidad"];
+  if (!req.query.id_unidad) {
+      return res.status(400).send({err: "se require id_unidad"});
+  }
+  unidadProducto.findAll({where: {id_unidad: req.query.id_unidad}})
+  .then(result => {
+      return res.status(200).send(result);
+  })
+  .catch(err => {
+      return res.status(500).send({err});
+  });
+}
+
 module.exports = {
     get,
     localizarUnidades,
@@ -138,5 +145,6 @@ module.exports = {
     update,
     getLista,
     addProducto,
-    deleteR
+    deleteR,
+    getProductos
 }

@@ -79,6 +79,15 @@ api.post('/unidad/', upload.single('file_kml'), unidad.create);
 api.post('/unidad-producto/', unidad.addProducto);
 
 /**
+* @api {get} /unidad-producto obtiene todos los productos en una unidad
+*
+* @apiGroup Unidad
+* @apiParam {Number} id_unidad
+* @apiSuccess {Object[]} lista de productos
+*/
+api.get('/unidad-producto/', unidad.getProductos);
+
+/**
 * @api {delete} /unidad elimina unidad
 *
 * @apiGroup Unidad
