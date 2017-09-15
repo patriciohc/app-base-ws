@@ -35,6 +35,13 @@ function findAll (query) {
     return unidadProducto.findAll(query);
 }
 
+function findAllProductos (id_unidad) {
+  var query = `SELECT * FROM producto p
+    INNER JOIN unidad_producto up ON up.id_producto = p.id
+    WHERE up.id_unidad = ${id_unidad}`
+    return unidadProducto.rawQuery(query);
+}
+
 function findById (id) {
     return unidadProducto.findById(id);
 }
@@ -50,5 +57,6 @@ module.exports = {
     findById,
     findAll,
     addRelation: unidadProducto.addRelation,
-    insertBulk
+    insertBulk,
+    findAllProductos
 }

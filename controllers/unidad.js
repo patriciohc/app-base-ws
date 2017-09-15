@@ -125,11 +125,10 @@ function addProducto(req, res) {
 }
 
 function getProductos(req, res) {
-  var params = ["id_unidad"];
   if (!req.query.id_unidad) {
       return res.status(400).send({err: "se require id_unidad"});
   }
-  unidadProducto.findAll({where: {id_unidad: req.query.id_unidad}})
+  unidadProducto.findAllProductos(req.query.id_unidad)
   .then(result => {
       return res.status(200).send(result);
   })
