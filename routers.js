@@ -70,11 +70,10 @@ api.get('/unidad', unidad.getLista);
 api.post('/unidad/', upload.single('file_kml'), unidad.create);
 
 /**
-* @api {post} /unidad-producto agrega un producto a la unidad
+* @api {post} /unidad-producto agrega productos a la unidad
 *
 * @apiGroup Unidad
-* @apiParam {Number} id_unidad
-* @apiParam {Number} id_producto
+* @apiParam {Number[][]} id_unidad, id_producto
 * @apiSuccess {Object} success
 */
 api.post('/unidad-producto/', unidad.addProducto);

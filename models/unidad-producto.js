@@ -42,6 +42,10 @@ function findById (id) {
     return unidadProducto.findById(id);
 }
 
+function insertBulk (columns, values) {
+    return unidadProducto.insertBulk (columns, values);
+}
+
 module.exports = {
     sync,
     create,
@@ -49,4 +53,5 @@ module.exports = {
     findById,
     findAll,
     addRelation: categoria.addRelation,
+    insertBulk
 }
