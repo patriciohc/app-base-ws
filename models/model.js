@@ -29,6 +29,26 @@ class Model {
         })
     }
 
+    createTableLlaveCompuesta (key1, key2) {
+      var self = this;
+      return new Promise(function(resolve, reject){
+          db.connect()
+          .then(function(con) {
+              var columns = utils.concat(self.model);
+              var sql = `CREATE TABLE IF NOT EXISTS ${self.name} (${columns},
+                PRIMARY KEY(${key1}, ${key2}));`;
+              console.log(sql);
+              con.query(sql, function (err, result) {
+                  if (err) return reject(err);;
+                  return resolve(result);
+              });
+          })
+          .catch(function(err) {
+              reject(err);
+          });
+      })
+    }
+
     create(user) {
         var sql = utils.getSqlInsert(user, this.model, this.name);
         console.log(sql);

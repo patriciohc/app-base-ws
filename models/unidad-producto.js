@@ -9,21 +9,18 @@ const name = "unidad_producto";
 // columnas en db
 const columns = [
     {
-        name: "id",
-        type: "INT AUTO_INCREMENT"
-    }, {
         name: "id_cliente",
-        type: "VARCHAR(250)"
+        type: "INT"
     }, {
         name: "id_producto",
-        type: "VARCHAR(100)"
+        type: "INT"
     }
 ]
 
 var unidadProducto = new Model(name, columns);
 
 function sync () {
-    return unidadProducto.createTable();
+    return unidadProducto.createTableLlaveCompuesta('id_cliente', 'id_producto');
 }
 
 function create (obj) {

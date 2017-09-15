@@ -10,6 +10,7 @@ var direccionSolicitud = require('../models/direccion-solicitud');
 var listaPedido = require('../models/lista-pedido');
 var operadorEntrega = require('../models/operador-entrega');
 var pedido = require('../models/pedido');
+var unidadProducto = require('../models/unidad-producto');
 
 cliente.sync()
 .then(function (result) {
@@ -38,6 +39,9 @@ cliente.sync()
 })
 .then(function (result) {
     return pedido.sync();
+})
+.then(function (result) {
+    return unidadProducto.sync();
 })
 .then(function (result) {
   createForeingKey();
@@ -90,4 +94,5 @@ module.exports = {
     listaPedido,
     operadorEntrega,
     pedido,
+    unidadProducto,
 }
