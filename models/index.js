@@ -8,7 +8,7 @@ var categoria = require('../models/categoria');
 var producto = require('../models/producto');
 var direccionSolicitud = require('../models/direccion-solicitud');
 var listaPedido = require('../models/lista-pedido');
-var operadorEntrega = require('../models/operador-entrega');
+var operador = require('../models/operador');
 var pedido = require('../models/pedido');
 var unidadProducto = require('../models/unidad-producto');
 
@@ -35,7 +35,7 @@ cliente.sync()
     return listaPedido.sync();
 })
 .then(function (result) {
-    return operadorEntrega.sync();
+    return operador.sync();
 })
 .then(function (result) {
     return pedido.sync();
@@ -61,7 +61,7 @@ function createForeingKey () {
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
-  operadorEntrega.addRelation('operador_entrega', 'id_unidad', 'unidad')
+  operador.addRelation('operador', 'id_unidad', 'unidad')
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
@@ -69,7 +69,7 @@ function createForeingKey () {
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
-  pedido.addRelation('pedido', 'id_operador_entrega', 'operador_entrega')
+  pedido.addRelation('pedido', 'id_operador', 'operador')
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
@@ -99,7 +99,7 @@ module.exports = {
     producto,
     direccionSolicitud,
     listaPedido,
-    operadorEntrega,
+    operador,
     pedido,
     unidadProducto,
 }

@@ -9,6 +9,7 @@ const poligono = require('./controllers/poligono');
 const categoria = require('./controllers/categoria');
 const producto = require('./controllers/producto');
 const pedido = require('./controllers/pedido');
+const operador = require('./controllers/operador');
 const multer  = require('multer');
 
 var upload = multer({ dest: './kml' });
@@ -95,6 +96,24 @@ api.get('/unidad-producto/', unidad.getProductos);
 * @apiSuccess {Object} success
 */
 api.delete('/unidad/', unidad.deleteR);
+
+/**
+* @api {post} /operador crea un operador
+*
+* @apiGroup Operador
+* @apiParam {Object} Operador
+* @apiSuccess {Boolean} success
+*/
+api.post('/operador/', operador.create);
+
+/**
+* @api {get} /operador obitiene operadores por unidad
+*
+* @apiGroup Operador
+* @apiParam {Number} id_unidad
+* @apiSuccess {Boolean} success
+*/
+api.get('/operador/', operador.getLista);
 
 //api.put('/unidad', controllers.updateUnidad);
 
