@@ -41,6 +41,27 @@ function andValidate(parametros, json) {
     }
 }
 
+/**
+* Convierte un objeto Date de javascript a un string fecha compatible con mysql
+* @param {Date} fecha - objeto Date javascript
+* @return {String} fecha formato mysql
+*/
+function getDateMysql(date) {
+  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+}
+
+/**
+* Convierte un objeto Date de javascript a un string fecha compatible con mysql
+* @param {Date} fecha - objeto Date javascript
+* @return {String} fecha formato mysql
+*/
+function getTimeMysql(date) {
+  return date.getHours()() + ":" + date.getMinutes() + ":" + date.getSeconds();
+}
+
+
 module.exports = {
-    minimizarObjeto
+    minimizarObjeto,
+    getDateMysql,
+    getTimeMysql
 }

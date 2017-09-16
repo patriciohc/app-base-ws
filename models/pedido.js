@@ -37,8 +37,11 @@ const columns = [
         name: "comentarios",
         type: "VARCHAR(100)"
     }, {
-        name: "fecha_pedido",
-        type: "VARCHAR(100)"
+        name: "fecha_recibido",
+        type: "DATE NOT NULL"
+    }, {
+        name: "hora_recibido",
+        type: "TIME NOT NULL"
     }, {
         name: "calificacion",
         type: "INT"
@@ -50,7 +53,7 @@ const columns = [
         type: "INT"
     }, {
         name: "id_unidad",
-        type: "INT"
+        type: "INT NOT NULL"
     }
 ]
 
@@ -74,6 +77,10 @@ function findAll (query) {
 
 function findById (id) {
     return pedido.findById(id);
+}
+
+function findAllWithDependencies() {
+
 }
 
 function setEstatus(id, estatus) {

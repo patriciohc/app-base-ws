@@ -2,6 +2,7 @@
 const DireccionSolicitud = require('../models').direccionSolicitud;
 const ListaPedido = require('../models').listaPedido;
 const Pedido = require('../models').pedido;
+const utils = require('./utils');
 
 // function get(req, res) {
 //     categoria.findById(req.params.id)
@@ -17,42 +18,52 @@ const Pedido = require('../models').pedido;
 //     });
 // }
 //
-// function getLista(req, res) {
-//     categoria.findAll({where: {id_unidad: req.query.id_unidad}})
-//     .then(function(result) {
-//         return res.status(200).send(result);
-//     })
-//     .catch(function(err){
-//         return res.status(500).send({err: err});
-//     })
-// }
+
+function getLista(req, res) {
+  var params = [["id_unidad", "id_cliente"]];
+  if (!utils.orValidate(params, req.query)) {
+      return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
+  }
+  var where = utils.minimizarObjeto(params, req.query);
+
+    Pedido.findAllWithDependencies({where})
+    .then(function(result) {
+        return res.status(200).send(result);
+    })
+    .catch(function(err){
+        return res.status(500).send({err});
+    })
+}
 
 function create(req, res) {
     console.log(req.body);
-
     var idPedido;
+    var date = new Date();
     DireccionSolicitud.create(req.body.direccion_entrega)
     .then( result => {
         console.log(result);
         var pedido = {
             estatus: 0, // en espera de aceptacion por parte de la la unidad
             comentarios: req.body.comentarios,
-            fecha_pedido: (new Date()).toString(),
+            fecha_recibido: utils.getDateMysql(date),
+            hora_recibido: utils.getTimeMysql(date),
             calificacion: 0, // no ha recibido calificacion
             id_direccion_solicitud: result.insertId,
             //id_operador_entrega: // no se ha asignado repartidor
         }
+        console.log(pedido);
         return Pedido.create(pedido);
     })
     .then( result => {
         var values = [];
         idPedido = result.insertId;
-        for (let i = 0; i < req.body.pedido.length; i++){
+        for (let i = 0; i < req.body.pedido.length; i++) {
             values.push([idPedido, req.body.pedido[i].id_producto, req.body.pedido[i].cantidad]);
         }
         return ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
     })
     .then( result => {
+        if (result) // verificar que se inserto corretamente
         return res.status(200).send({id_pedido: idPedido})
     })
     .catch( err => {
