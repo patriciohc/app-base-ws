@@ -19,7 +19,7 @@ const utils = require('./utils');
 // }
 //
 
-function getLista(req, res) {
+function getLista(req, res) { // por fecha
   var params = [["id_unidad", "id_cliente"]];
   if (!utils.orValidate(params, req.query)) {
       return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
