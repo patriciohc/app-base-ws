@@ -12,8 +12,8 @@ const columns = [
         name: "id",
         type: "INT AUTO_INCREMENT"
     }, {
-        name: "nombre NOT NULL",
-        type: "VARCHAR(250)"
+        name: "nombre",
+        type: "VARCHAR(250) NOT NULL"
     }, {
         name: "apellido_paterno",
         type: "VARCHAR(100) NOT NULL"
