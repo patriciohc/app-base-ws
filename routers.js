@@ -295,15 +295,13 @@ api.put('/pedido-repartidor', pedido.asignarRepartidor);
 api.put('/pedido-calificacion', pedido.calificar);
 
 /**
-* @api {get} /pedido/ obtiene todos los peididos asignados a un repartidor
-* @apiGroup producto
-* @apiParam {number} id_pedido
-* @apiSuccess {number} calificacion
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
+* @api {get} /pedido/ obtiene lista de pedidos
+* @apiGroup pedido
+* @apiParam {number} id_cliente
+* @apiParam {number} id_unidad
+* @apiSuccess {Object[]} lista de pedidos
 */
-api.get('/pedido-repartidor', pedido.getPedidoPorRepartidor);
+api.get('/pedido', pedido.getLista);
 
 
 module.exports = api;
