@@ -309,7 +309,7 @@ api.get('/pedido', pedido.getListaPorUnidad);
 * @apiParam {number} id_usuario
 * @apiSuccess {Object[]} lista de pedidos
 */
-api.get('/pedido', pedido.getListaPorUsuario);
+api.get('/pedido-usuario', pedido.getListaPorUsuario);
 
 
 module.exports = api;
