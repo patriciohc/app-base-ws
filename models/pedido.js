@@ -49,12 +49,15 @@ const columns = [
         type: "INT"
     }, {
         name: "id_direccion_solicitud",
-        type: "INT"
+        type: "INT NOT NULL"
     }, {
         name: "id_operador_entrega",
         type: "INT"
     }, {
         name: "id_unidad",
+        type: "INT NOT NULL"
+    }, {
+        name: "id_usuario",
         type: "INT NOT NULL"
     }
 ]
@@ -97,7 +100,7 @@ function getDireccion(pedido) {
   return new Promise ( (resolve, reject) => {
     direccionSolicitud.findAll({where: {id: pedido.id_direccion_solicitud}})
     .then(result => {
-      pedido.direccion_entrega = result;
+      pedido.direccion_entrega = result[0];
       resolve();
     })
     .catch(err => reject(err))

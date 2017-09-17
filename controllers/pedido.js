@@ -19,10 +19,27 @@ const utils = require('./utils');
 // }
 //
 
-function getLista(req, res) { // por fecha
+function getListaPorUnidad(req, res) { // forbidden for users
   var params = ["id_unidad", "id_cliente"];
   if (!utils.orValidate(params, req.query)) {
       return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
+  }
+  var where = utils.minimizarObjeto(params, req.query);
+    Pedido.findAllWithDependencies({where})
+    .then(function(result) {
+      console.log(result);
+      return res.status(200).send(result);
+    })
+    .catch(function(err){
+      console.log(err);
+      return res.status(500).send({err});
+    })
+}
+
+function getListaPorUsuario(req, res) { 
+  var params = ["id_usuario"];
+  if (!utils.orValidate(params, req.query)) {
+      return res.status(400).send({err: "se requiere: id_usuario"});
   }
   var where = utils.minimizarObjeto(params, req.query);
     Pedido.findAllWithDependencies({where})
@@ -125,7 +142,8 @@ module.exports = {
     //get,
     create,
     //update,
-    getLista,
+    getListaPorUnidad,
+    getListaPorUsuario,
     setEstatus,
     asignarRepartidor,
     calificar,

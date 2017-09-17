@@ -301,7 +301,15 @@ api.put('/pedido-calificacion', pedido.calificar);
 * @apiParam {number} id_unidad
 * @apiSuccess {Object[]} lista de pedidos
 */
-api.get('/pedido', pedido.getLista);
+api.get('/pedido', pedido.getListaPorUnidad);
+
+/**
+* @api {get} /pedido/ obtiene lista de pedidos
+* @apiGroup pedido
+* @apiParam {number} id_usuario
+* @apiSuccess {Object[]} lista de pedidos
+*/
+api.get('/pedido', pedido.getListaPorUsuario);
 
 
 module.exports = api;
