@@ -36,7 +36,7 @@ function getListaPorUnidad(req, res) { // forbidden for users
     })
 }
 
-function getListaPorUsuario(req, res) { 
+function getListaPorUsuario(req, res) {
   var params = ["id_usuario"];
   if (!utils.orValidate(params, req.query)) {
       return res.status(400).send({err: "se requiere: id_usuario"});
@@ -68,6 +68,7 @@ function create(req, res) {
             calificacion: 0, // no ha recibido calificacion
             id_direccion_solicitud: result.insertId,
             id_unidad: req.body.id_unidad,
+            id_usuario: req.body.id_usuario,
             //id_operador_entrega: // no se ha asignado repartidor
         }
         console.log(pedido);
