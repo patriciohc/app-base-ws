@@ -108,7 +108,7 @@ function findAllWithDependencies(query) {
   return new Promise((resolve, reject) => {
     pedido.findAll(query)
     .then(result => {
-      var lista = resutl;
+      var lista = result;
       for (let i = 0; i < lista.length; i++) {
         var pedido = lista[i];
         promises.push(getListaProductos(pedido));
