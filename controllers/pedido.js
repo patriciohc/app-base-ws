@@ -124,7 +124,7 @@ module.exports = {
     //get,
     create,
     //update,
-    //getLista,
+    getLista,
     setEstatus,
     asignarRepartidor,
     calificar,
