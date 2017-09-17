@@ -53,7 +53,7 @@ function findAllListaPedido (id_pedido) {
   var query = `SELECT * FROM producto p
     INNER JOIN lista_pedido lp ON lp.id_producto = p.id
     WHERE lp.id_pedido = ${id_pedido}`
-    return unidadProducto.rawQuery(query);
+    return listaPedido.rawQuery(query);
 }
 
 module.exports = {
