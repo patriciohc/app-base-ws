@@ -50,6 +50,7 @@ function create(req, res) {
             hora_recibido: utils.getTimeMysql(date),
             calificacion: 0, // no ha recibido calificacion
             id_direccion_solicitud: result.insertId,
+            id_unidad: req.body.id_unidad,
             //id_operador_entrega: // no se ha asignado repartidor
         }
         console.log(pedido);
