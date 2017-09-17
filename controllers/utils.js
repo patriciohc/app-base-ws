@@ -23,7 +23,10 @@ function minimizarObjeto(parametros, json) {
 * @return {Boolean}
 */
 function orValidate(parametros, json) {
+  console.log("json: ");
+  console.log(json);
     for (let i = 0; i < parametros.length; i++) {
+      console.log(parametros[i]);
         if (json[parametros[i]]) return true;
     }
     return false;
