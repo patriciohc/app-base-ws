@@ -56,7 +56,7 @@ function getDateMysql(date) {
 * @return {String} fecha formato mysql
 */
 function getTimeMysql(date) {
-  return date.getHours()() + ":" + date.getMinutes() + ":" + date.getSeconds();
+  return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 }
 
 
