@@ -64,4 +64,5 @@ module.exports = {
     findAll,
     insertBulk,
     addRelation: listaPedido.addRelation,
+    findAllListaPedido
 }
