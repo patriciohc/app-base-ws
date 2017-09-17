@@ -63,5 +63,7 @@ function getTimeMysql(date) {
 module.exports = {
     minimizarObjeto,
     getDateMysql,
-    getTimeMysql
+    getTimeMysql,
+    orValidate,
+    andValidate
 }
