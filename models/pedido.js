@@ -87,6 +87,7 @@ function getListaProductos(pedido) {
     listaPedido.findAllListaPedido(pedido.id)
     .then(result => {
       pedido.productos = result;
+      resolve();
     })
     .catch(err => reject(err));
   });
@@ -97,6 +98,7 @@ function getDireccion(pedido) {
     direccionSolicitud.findAll({where: {id: pedido.id_direccion_solicitud}})
     .then(result => {
       pedido.direccion_entrega = result;
+      resolve();
     })
     .catch(err => reject(err))
   });
