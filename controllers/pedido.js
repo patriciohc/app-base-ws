@@ -25,13 +25,14 @@ function getLista(req, res) { // por fecha
       return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
   }
   var where = utils.minimizarObjeto(params, req.query);
-
     Pedido.findAllWithDependencies({where})
     .then(function(result) {
-        return res.status(200).send(result);
+      console.log(result);
+      return res.status(200).send(result);
     })
     .catch(function(err){
-        return res.status(500).send({err});
+      console.log(err);
+      return res.status(500).send({err});
     })
 }
 

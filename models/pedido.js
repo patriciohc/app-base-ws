@@ -1,4 +1,6 @@
 'use strict'
+var listaPedido = require('./lista-pedido');
+var direccionSolicitud = require('./direccion-solicitud');
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
 * json pedido
@@ -79,8 +81,46 @@ function findById (id) {
     return pedido.findById(id);
 }
 
-function findAllWithDependencies() {
 
+function getListaProductos(pedido) {
+  return new Promise ((resolve, reject) => {
+    listaPedido.findAllListaPedido(pedido.id)
+    .then(result => {
+      pedido.productos = result;
+    })
+    .catch(err => reject(err));
+  });
+}
+
+function getDireccion(pedido) {
+  return new Promise ( (resolve, reject) => {
+    direccionSolicitud.findAll({where: {id: pedido.id_direccion_solicitud}})
+    .then(result => {
+      pedido.direccion_entrega = result;
+    })
+    .catch(err => reject(err))
+  });
+}
+
+function findAllWithDependencies(query) {
+  var promises = [];
+  var lista;
+  return new Promise((resolve, reject) => {
+    pedido.findAll(query)
+    .then(result => {
+      var lista = resutl;
+      for (let i = 0; i < lista.length; i++) {
+        var pedido = lista[i];
+        promises.push(getListaProductos(pedido));
+        promises.push(getDireccion(pedido));
+      }
+      Promise.all(promises).then(() => {
+        resolve(lista);
+      })
+      .catch(err => reject(err));
+    })
+    .catch(err => reject(err))
+  });
 }
 
 function setEstatus(id, estatus) {
@@ -114,4 +154,5 @@ module.exports = {
     asignarRepartidor,
     calificar,
     addRelation: pedido.addRelation,
+    findAllWithDependencies
 }
