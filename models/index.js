@@ -73,6 +73,10 @@ function createForeingKey () {
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
+  pedido.addRelation('pedido', 'id_usuario', 'usuario')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
   listaPedido.addRelation('lista_pedido', 'id_pedido', 'pedido')
   .then(result => console.log(result))
   .catch(err => console.log(err));
