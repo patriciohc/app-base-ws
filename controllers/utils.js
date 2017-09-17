@@ -26,6 +26,7 @@ function orValidate(parametros, json) {
     for (let i = 0; i < parametros.length; i++) {
         if (json[parametros[i]]) return true;
     }
+    return false;
 }
 
 /**
@@ -39,6 +40,7 @@ function andValidate(parametros, json) {
     for (let i = 0; i < parametros.length; i++) {
         if (!json[parametros[i]]) return false;
     }
+    return true;
 }
 
 /**
