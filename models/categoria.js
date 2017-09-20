@@ -48,6 +48,16 @@ function findById (id) {
     return categoria.findById(id);
 }
 
+function findAllPorUnidad (id_unidad) {
+  var sql = `
+  SELECT DISTINCT c.id, c.nombre, c.descripcion, c.imagen
+  FROM unidad_producto up
+  INNER JOIN producto p ON up.id_producto = p.id
+  INNER JOIN categoria c on p.id_categoria = c.id
+  WHERE up.id_unidad = ${id_unidad}`;
+  return categoria.rawQuery(sql)
+}
+
 module.exports = {
     sync,
     create,
@@ -55,4 +65,5 @@ module.exports = {
     findById,
     findAll,
     addRelation: categoria.addRelation,
+    findAllPorUnidad
 }

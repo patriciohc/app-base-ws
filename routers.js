@@ -218,13 +218,22 @@ api.post('/usuario', usuario.create);
 api.post('/categoria', categoria.create);
 
 /**
-* @api {get} /categoria/ filtra categorias por id de unidad o id de cliente
+* @api {get} /categoria/ filtra categorias por id de unidad
 * @apiGroup Categoria
 * @apiParam {number} id identificador de unidad
 * @apiParam {number} id identificador de cliente
 * @apiSuccess {array} array de categorias
 */
-api.get('/categoria', categoria.getLista);
+api.get('/categoria', categoria.getListaPorUnidad);
+
+/**
+* @api {get} /categoria/ filtra categorias por id de cliente
+* @apiGroup Categoria
+* @apiParam {number} id identificador de unidad
+* @apiParam {number} id identificador de cliente
+* @apiSuccess {array} array de categorias
+*/
+api.get('/categoria-cliente', categoria.getLista);
 
 /**
 * @api {post} /producto/ Crea una categoria
