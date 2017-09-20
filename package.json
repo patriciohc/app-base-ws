@@ -28,5 +28,9 @@
     "point-in-polygon": "^1.0.1",
     "togeojson": "^0.16.0",
     "xmldom": "^0.1.27"
+  },
+  "engines": {
+    "node": "6.11.2",
+    "npm": "3.10.10"
   }
 }
