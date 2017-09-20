@@ -3,6 +3,7 @@
 * 04/08/2017
 * Archivo javascript principal para la ejecución del servidor
 */
+var path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 
