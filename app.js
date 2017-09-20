@@ -13,7 +13,7 @@ var app = express();
 //var jwt = require('jwt-simple');
 const rootPath = __dirname;
 
-app.use(express.static(rootPath+"/www"));
+app.use(express.static(rootPath+"/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -23,7 +23,7 @@ app.use('/api', api);
 /************ https ************/
 // var fs = require('fs');
 // var https = require('https');
-// var privateKey  = fs.readFileSync(rootPath+'/https/panda-express.key');
+// var privateKey  = fs.readFileSync(rootPath+'/https/key.key');
 // var certificate = fs.readFileSync(rootPath+'/https/396b94f1a9c1d5b9.crt');
 // var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
