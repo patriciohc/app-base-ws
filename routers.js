@@ -17,7 +17,7 @@ var upload = multer({ dest: './kml' });
 //const middleware = require('../middleware');
 
 
-api.get('catalogos', catalogos.get)
+api.get('/catalogos', catalogos.get)
 
 /**
 * @api {get} /unidad/:id Obtiene una unidad

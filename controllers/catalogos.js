@@ -7,7 +7,7 @@ function get (req, res) {
       return res.status(200).send({err})
     }
     var obj = JSON.parse(data);
-    return res.status(200).send(obj);
+    return res.status(200).send(obj)
   });
 }
 
