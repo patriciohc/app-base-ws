@@ -13,11 +13,12 @@ var app = express();
 //const config = require('./api/config');
 //var jwt = require('jwt-simple');
 const rootPath = __dirname;
-process.env.PWD = process.cwd()
+//process.env.PWD = process.cwd()
+//app.use('/public', express.static(process.env.PWD + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/public', express.static(process.env.PWD + '/public'))
+
 const api = require('./routers');
 app.use('/api', api);
 /************ https ************/

@@ -10,10 +10,14 @@ const categoria = require('./controllers/categoria');
 const producto = require('./controllers/producto');
 const pedido = require('./controllers/pedido');
 const operador = require('./controllers/operador');
+const catalogos = require('./controllers/catalogos');
 const multer  = require('multer');
 
 var upload = multer({ dest: './kml' });
 //const middleware = require('../middleware');
+
+
+api.get('catalogos', catalogos.get)
 
 /**
 * @api {get} /unidad/:id Obtiene una unidad
