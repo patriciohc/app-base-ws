@@ -1,7 +1,7 @@
 'use strict'
-var fs = require('fs');
+//var fs = require('fs');
 
-CATALOGOS = {
+const CATALOGOS = {
   "estatus": [
     "En espera de aceptación",
     "Aceptado por la tienda",
