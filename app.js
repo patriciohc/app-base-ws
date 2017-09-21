@@ -16,7 +16,7 @@ const rootPath = __dirname;
 
 process.env.PWD = process.cwd()
 console.log(process.env.PWD)
-app.use(express.static(process.env.PWD + '/public'));
+app.use(express.static('./public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
