@@ -13,10 +13,7 @@ var app = express();
 //const config = require('./api/config');
 //var jwt = require('jwt-simple');
 const rootPath = __dirname;
-
-process.env.PWD = process.cwd()
-console.log(process.env.PWD)
-app.use(express.static('./public'));
+app.use(express.static('/public', path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
