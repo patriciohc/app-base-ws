@@ -60,6 +60,10 @@ function findById (id) {
     return producto.findById(id);
 }
 
+function deleteR (query) {
+    return producto.deleteR(query.where);
+}
+
 module.exports = {
     sync,
     create,
@@ -67,4 +71,5 @@ module.exports = {
     findById,
     findAll,
     addRelation: producto.addRelation,
+    deleteR,
 }

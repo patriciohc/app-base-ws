@@ -44,9 +44,16 @@ function update(req, res) {
 
 }
 
+function deleteR(req, res) {
+  if (!req.query.id)
+    return res.status(400).send({err: "se requiere id de producto"})
+  producto.deleteR({where: {id: req.query.id}})
+}
+
 module.exports = {
     get,
     create,
     update,
     getLista,
+    deleteR
 }

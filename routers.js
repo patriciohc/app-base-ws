@@ -263,6 +263,14 @@ api.post('/producto', producto.create);
 api.get('/producto', producto.getLista);
 
 /**
+* @api {delete} /producto/ elimina producto por id
+* @apiGroup producto
+* @apiParam {number} id identificador de producto
+* @apiSuccess {Boolean} respuesta
+*/
+api.delete('/producto', producto.deleteR);
+
+/**
 * @api {post} /pedido/ Crea un pedido
 * @apiGroup pedido
 * @apiParam {Pedido} objeto de tipo Pedido
