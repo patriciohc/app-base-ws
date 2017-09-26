@@ -48,8 +48,8 @@ function findById (id) {
     return categoria.findById(id);
 }
 
-function deleteR (where) {
-  return categoria.deleteR(where)
+function deleteR (query) {
+  return categoria.deleteR(query.where)
 }
 
 function findAllPorUnidad (id_unidad) {
