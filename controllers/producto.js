@@ -48,6 +48,12 @@ function deleteR(req, res) {
   if (!req.query.id)
     return res.status(400).send({err: "se requiere id de producto"})
   producto.deleteR({where: {id: req.query.id}})
+  .then(result => {
+    return res.status(200).send({success: true})
+  })
+  .catch(err => {
+    return res.status(500).send({err})
+  });
 }
 
 module.exports = {
