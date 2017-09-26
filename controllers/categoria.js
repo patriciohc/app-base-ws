@@ -58,10 +58,23 @@ function update(req, res) {
 
 }
 
+function deleteR(req, res) {
+  if (!req.query.id)
+    return res.status(400).send({err: "se requiere id del registro"})
+  categoria.deleteR({where: {id: req.query.id}})
+  .then(result => {
+    return res.status(200).send({success: true})
+  })
+  .catch(err => {
+    return res.status(500).send({err})
+  });
+}
+
 module.exports = {
     get,
     create,
     update,
     getLista,
     getListaPorUnidad,
+    deleteR
 }

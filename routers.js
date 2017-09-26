@@ -222,6 +222,14 @@ api.post('/usuario', usuario.create);
 api.post('/categoria', categoria.create);
 
 /**
+* @api {delete} /categoria/ elimina categoria por id
+* @apiGroup Categoria
+* @apiParam {Number} id de la categoria
+* @apiSuccess {Boolean}
+*/
+api.delete('/categoria', categoria.deleteR);
+
+/**
 * @api {get} /categoria/ filtra categorias por id de unidad
 * @apiGroup Categoria
 * @apiParam {number} id identificador de unidad

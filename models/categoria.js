@@ -48,6 +48,10 @@ function findById (id) {
     return categoria.findById(id);
 }
 
+function deleteR (where) {
+  return categoria.deleteR(where)
+}
+
 function findAllPorUnidad (id_unidad) {
   var sql = `
   SELECT DISTINCT c.id, c.nombre, c.descripcion, c.imagen
@@ -65,5 +69,6 @@ module.exports = {
     findById,
     findAll,
     addRelation: categoria.addRelation,
-    findAllPorUnidad
+    findAllPorUnidad,
+    deleteR
 }

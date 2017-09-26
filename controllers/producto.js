@@ -17,10 +17,10 @@ function get(req, res) {
 }
 
 function getLista(req, res) {
-    if (!req.query.id_unidad && !req.query.id_cliente && !req.query.id_categoria) {
-        return res.status(400).send({err: "se requiere: id_unidad || id_cliente || id_categoria"});
+    if (!req.query.id_cliente && !req.query.id_categoria) {
+        return res.status(400).send({err: "se requiere: id_cliente || id_categoria"});
     }
-    var where = utils.minimizarObjeto(["id_unidad", "id_cliente", "id_categoria"], req.query);
+    var where = utils.minimizarObjeto(["id_cliente", "id_categoria"], req.query);
     producto.findAll({where})
     .then(function(result) {
         return res.status(200).send(result);
@@ -46,7 +46,7 @@ function update(req, res) {
 
 function deleteR(req, res) {
   if (!req.query.id)
-    return res.status(400).send({err: "se requiere id de producto"})
+    return res.status(400).send({err: "se requiere id del registro"})
   producto.deleteR({where: {id: req.query.id}})
   .then(result => {
     return res.status(200).send({success: true})
