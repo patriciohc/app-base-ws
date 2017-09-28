@@ -104,7 +104,7 @@ function setEstatus(req, res) {
 }
 
 function asignarRepartidor(req, res) {
-    Pedido.asignarRepartidor(req.body.id_pedido, req.body.idRepartidor)
+    Pedido.asignarRepartidor(req.query.id, req.body.id_repartidor)
     .then( result => {
         return res.status(200).send({success: result});
     })
