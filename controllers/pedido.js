@@ -93,7 +93,7 @@ function create(req, res) {
 }
 
 function setEstatus(req, res) {
-    pedido.setEstatus(req.body.id_pedido, req.body.estatus)
+    pedido.setEstatus(req.query.id, req.body.estatus)
     .then( result => {
         return res.status(200).send({success: result});
     })

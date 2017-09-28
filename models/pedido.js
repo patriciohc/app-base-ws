@@ -29,10 +29,10 @@ const columns = [
         name: "id",
         type: "INT AUTO_INCREMENT"
     }, {
-        // 1: en espera de aceptacion de la tienda
-        // 2: aceptado por la tienda, preparando envio
-        // 3: en ruta
-        // 4: entregado
+        // 0: en espera de aceptacion de la tienda
+        // 1: aceptado por la tienda, preparando envio
+        // 2: en ruta
+        // 3: entregado
         name: "estatus",
         type: "TINYINT"
     }, {
@@ -137,7 +137,8 @@ function setEstatus(id, estatus) {
 
 function asignarRepartidor(id, idRepartidor) {
     var query = `UPDATE pedido
-        SET id_operador_entrega=${idRepartidor}
+        SET id_operador_entrega=${idRepartidor},
+        estatus=2
         WHERE id=${id}`;
     return pedido.rawQuery(query);
 }
