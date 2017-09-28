@@ -93,7 +93,7 @@ function create(req, res) {
 }
 
 function setEstatus(req, res) {
-    pedido.setEstatus(req.query.id, req.body.estatus)
+    Pedido.setEstatus(req.query.id, req.body.estatus)
     .then( result => {
         return res.status(200).send({success: result});
     })
@@ -104,7 +104,7 @@ function setEstatus(req, res) {
 }
 
 function asignarRepartidor(req, res) {
-    pedido.asignarRepartidor(req.body.id_pedido, req.body.idRepartidor)
+    Pedido.asignarRepartidor(req.body.id_pedido, req.body.idRepartidor)
     .then( result => {
         return res.status(200).send({success: result});
     })
@@ -115,7 +115,7 @@ function asignarRepartidor(req, res) {
 }
 
 function calificar(req, res) {
-    pedido.calificar(req.body.id_pedido, req.body.calificacion)
+    Pedido.calificar(req.body.id_pedido, req.body.calificacion)
     .then( result => {
         return res.status(200).send({success: result});
     })
@@ -126,7 +126,7 @@ function calificar(req, res) {
 }
 
 function getPedidoPorRepartidor(req, res) {
-    pedido.findAll({
+    Pedido.findAll({
         where: {
             id_operador_entrega: req.query.id_repartidor,
             estatu: 2
