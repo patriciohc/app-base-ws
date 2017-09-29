@@ -169,5 +169,7 @@ module.exports = {
     getLista,
     addProducto,
     deleteR,
-    getProductos
+    getProductos,
+    addOperador,
+    getLOperadoresUnidad
 }

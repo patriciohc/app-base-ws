@@ -99,7 +99,7 @@ api.get('/unidad-producto/', unidad.getProductos);
 * @apiParam {Number[][]} id_unidad, id_operador
 * @apiSuccess {Boolean} success
 */
-api.post('/unidad-operador/', operador.addOperador);
+api.post('/unidad-operador/', unidad.addOperador);
 
 /**
 * @api {get} /unidad-operador obtiene todos los operadores en una unidad
