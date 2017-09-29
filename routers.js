@@ -93,6 +93,24 @@ api.post('/unidad-producto/', unidad.addProducto);
 api.get('/unidad-producto/', unidad.getProductos);
 
 /**
+* @api {post} /unidad-operador agrega operadores a unidad
+*
+* @apiGroup Unidad
+* @apiParam {Number[][]} id_unidad, id_operador
+* @apiSuccess {Boolean} success
+*/
+api.post('/unidad-operador/', operador.addOperador);
+
+/**
+* @api {get} /unidad-operador obtiene todos los operadores en una unidad
+*
+* @apiGroup Unidad
+* @apiParam {Number} id_unidad
+* @apiSuccess {Object[]} lista de operadores
+*/
+api.get('/unidad-operador/', unidad.getLOperadoresUnidad);
+
+/**
 * @api {delete} /unidad elimina unidad
 *
 * @apiGroup Unidad

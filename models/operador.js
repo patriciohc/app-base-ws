@@ -28,7 +28,10 @@ const columns = [
         type: "VARCHAR(50) NOT NULL"
     }, {
         name: "rol",
-        type: "TINYINT NOT NULL" // 1. repartidor, 2. operador de unidad
+        // 0 repartidor,
+        // 1 operador de unidad
+        // 2 administrador
+        type: "TINYINT NOT NULL"
     }, {
         name: "id_unidad",
         type: "INT NOT NULL"

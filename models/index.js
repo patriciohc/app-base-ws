@@ -11,6 +11,7 @@ var listaPedido = require('../models/lista-pedido');
 var operador = require('../models/operador');
 var pedido = require('../models/pedido');
 var unidadProducto = require('../models/unidad-producto');
+var unidadOperador = require('../models/unidad-operador');
 
 cliente.sync()
 .then(function (result) {
@@ -42,6 +43,9 @@ cliente.sync()
 })
 .then(function (result) {
     return unidadProducto.sync();
+})
+.then(function (result) {
+    return unidadOperador.sync();
 })
 .then(function (result) {
   createForeingKey();
@@ -92,6 +96,14 @@ function createForeingKey () {
   unidadProducto.addRelation('unidad_producto', 'id_unidad', 'unidad')
   .then(result => console.log(result))
   .catch(err => console.log(err));
+
+  unidadOperador.addRelation('unidad_operador', 'id_operador', 'operador')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+  unidadOperador.addRelation('unidad_operador', 'id_unidad', 'unidad')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
 }
 
 module.exports = {
@@ -106,4 +118,5 @@ module.exports = {
     operador,
     pedido,
     unidadProducto,
+    unidadOperador
 }

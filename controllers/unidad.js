@@ -3,6 +3,7 @@
 const unidad = require('../models').unidad;
 const poligono = require('../models').poligono;
 const unidadProducto = require('../models').unidadProducto;
+const unidadOperador = require('../models').unidadOperador;
 const utils = require('./utils');
 
 function get(req, res) {
@@ -122,6 +123,29 @@ function addProducto(req, res) {
     .catch(err => {
         return res.status(500).send({err: err});
     });
+}
+
+function addOperador(req, res) {
+    unidadOperador.insertBulk("id_unidad, id_operador",req.body)
+    .then(result => {
+        return res.status(200).send({success: true});
+    })
+    .catch(err => {
+        return res.status(500).send({err: err});
+    });
+}
+
+function getLOperadoresUnidad(req, res) {
+  if (!req.query.id_unidad) {
+      return res.status(400).send({err: "se require id_unidad"});
+  }
+  unidadOperador.findAllOperadores(req.query.id_unidad)
+  .then(result => {
+      return res.status(200).send(result);
+  })
+  .catch(err => {
+      return res.status(500).send({err});
+  });
 }
 
 function getProductos(req, res) {
