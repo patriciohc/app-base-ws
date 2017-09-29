@@ -2,12 +2,12 @@
 //var fs = require('fs');
 
 const CATALOGOS = {
-  "estatus": [
-    "En espera de aceptación",
-    "Aceptado por la tienda",
-    "En ruta",
-    "Entregado",
-  ]
+  "estatus": {
+    1: "En espera de aceptación",
+    2: "Aceptado por la tienda",
+    3: "En ruta",
+    4: "Entregado",
+  }
 }
 
 function get (req, res) {
