@@ -58,5 +58,5 @@ module.exports = {
     findAll,
     addRelation: unidadOperador.addRelation,
     insertBulk,
-    findAllProductos
+    findAllOperadores
 }
