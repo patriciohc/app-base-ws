@@ -61,7 +61,7 @@ function create(req, res) {
     .then( result => {
         console.log(result);
         var pedido = {
-            estatus: 1, // en espera de aceptacion por parte de la la unidad
+            estatus: 0, // en espera de aceptacion por parte de la la unidad
             comentarios: req.body.comentarios,
             fecha_recibido: utils.getDateMysql(date),
             hora_recibido: utils.getTimeMysql(date),
