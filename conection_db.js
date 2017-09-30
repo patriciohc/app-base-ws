@@ -15,7 +15,7 @@ var isConected = true;
 // });
 
 var conecction  = mysql.createPool({
-  connectionLimit : 10,
+  connectionLimit : 5,
   host            : 'us-cdbr-iron-east-05.cleardb.net',
   user            : 'b93a567617aa59',
   password        : '619b8316',
