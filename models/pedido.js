@@ -138,7 +138,7 @@ function setEstatus(id, estatus) {
 function asignarRepartidor(id, idRepartidor) {
     var query = `UPDATE pedido
         SET id_operador_entrega=${idRepartidor},
-        estatus=2
+        estatus=3
         WHERE id=${id}`;
     return pedido.rawQuery(query);
 }
