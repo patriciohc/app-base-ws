@@ -7,7 +7,7 @@ const CATALOGOS = {
     2: "Aceptado por la tienda",
     3: "En ruta",
     4: "Entregado",
-  }
+  },
   "roles": {
     1: "Operador de tienda",
     2: "Repartidor",
