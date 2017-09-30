@@ -8,6 +8,11 @@ const CATALOGOS = {
     3: "En ruta",
     4: "Entregado",
   }
+  "roles": {
+    1: "Operador de tienda",
+    2: "Repartidor",
+    3: "Administrador"
+  }
 }
 
 function get (req, res) {
