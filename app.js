@@ -10,9 +10,12 @@ const bodyParser = require('body-parser');
 var cors = require('cors');
 
 var app = express();
+// websockets
+var server = require("http").Server(app);
+var io = require("socket.io")(server);
+require('./controllers-sk/seguimiento')(io.of('/seguimiento'));
 //const config = require('./api/config');
 //var jwt = require('jwt-simple');
-const rootPath = __dirname;
 //process.env.PWD = process.cwd()
 //app.use('/public', express.static(process.env.PWD + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
