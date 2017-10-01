@@ -5,6 +5,7 @@ var io;
 * usuario esta a la escucha de las posiciones
 */
 function listenUser(msg) {
+  console.log('listen: ' + msg.id_pedido)
   // verificar token
   // if (!req.id_pedido || !req.id_usuario)
   var socket = this;
@@ -16,7 +17,9 @@ function listenUser(msg) {
 * se envia a la app de usaurio
 */
 function receivePosition(msg) {
-    var socket = this;
+    var socket = this
+    console.log('position...')
+    console.log(msg)
     // verificar token
     // if (!req.id_pedido || !req.id_usuario)
     io.to(msg.id_pedido).emit('send-position', msg);
