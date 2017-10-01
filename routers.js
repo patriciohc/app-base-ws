@@ -358,5 +358,10 @@ api.get('/pedido', pedido.getListaPorUnidad);
 */
 api.get('/pedido-usuario', pedido.getListaPorUsuario);
 
+api.post('/test', function (req, res) {
+  console.log(req.body)
+  return res.status(200).send({message: "success"})
+})
+
 
 module.exports = api;
