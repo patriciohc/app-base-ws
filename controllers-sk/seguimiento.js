@@ -27,8 +27,8 @@ function receivePosition(msg) {
 
 function connect(socket) {
     console.log("web sockec conectado...");
-    socket.on('liste', listenUser);
-    socket.on('receive-position', receivePosition)
+    socket.on('listen', listenUser);
+    socket.on('receive_position', receivePosition)
 }
 
 module.exports = function(sockeIO) {
