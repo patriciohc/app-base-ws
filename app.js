@@ -13,7 +13,7 @@ var app = express();
 // websockets
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-require('./controllers-sk/seguimiento')(io.of('/seguimiento'));
+require('./controllers-sk/seguimiento')(io);
 //const config = require('./api/config');
 //var jwt = require('jwt-simple');
 //process.env.PWD = process.cwd()
@@ -31,11 +31,6 @@ app.use('/api', api);
 // var certificate = fs.readFileSync(rootPath+'/https/396b94f1a9c1d5b9.crt');
 // var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
-
-// websockets
-var server = require("http").Server(app);
-//var io = require("socket.io")(server);
-//require('./controllerWs')(io);
 
 const port = process.env.PORT || 8088;
 server.listen(port, () =>{
