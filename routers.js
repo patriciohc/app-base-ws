@@ -367,7 +367,7 @@ api.get('/pedido', pedido.getListaPorUnidad);
 * @apiParam {Number} id_repartidor
 * @apiSuccess {Pedido[]}
 */
-api.get('/pedido-repartidor/', operador.getPedidoPorRepartidor);
+api.get('/pedido-repartidor/', pedido.getPedidoPorRepartidor);
 
 /**
 * @api {get} /pedido/ obtiene lista de pedidos
