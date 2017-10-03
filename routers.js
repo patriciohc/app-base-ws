@@ -145,7 +145,7 @@ api.get('/operador/', operador.getLista);
 * @apiParam {string} password
 * @apiSuccess {Operador} success
 */
-api.get('/login-operado/', operador.login);
+api.post('/login-operado/', operador.login);
 
 //api.put('/unidad', controllers.updateUnidad);
 
