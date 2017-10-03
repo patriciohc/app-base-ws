@@ -130,7 +130,7 @@ function getPedidoPorRepartidor(req, res) {
     Pedido.findAll({
         where: {
             id_operador_entrega: req.query.id_repartidor,
-            estatus: 2
+            estatus: 3
         }})
     .then( result => {
         return res.status(200).send({pedidos: result});
