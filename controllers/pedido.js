@@ -126,10 +126,11 @@ function calificar(req, res) {
 }
 
 function getPedidoPorRepartidor(req, res) {
+  if (!req.query.id_repartidor) return res.status(404).send({message: "se require id_repartidor"})
     Pedido.findAll({
         where: {
             id_operador_entrega: req.query.id_repartidor,
-            estatu: 2
+            estatus: 2
         }})
     .then( result => {
         return res.status(200).send({pedidos: result});
