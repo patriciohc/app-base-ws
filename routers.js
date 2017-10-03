@@ -361,6 +361,15 @@ api.put('/pedido-calificacion', pedido.calificar);
 api.get('/pedido', pedido.getListaPorUnidad);
 
 /**
+* @api {get} /operador-repartidor obitene los pedidos asignados a un repartidor
+*
+* @apiGroup pedido
+* @apiParam {Number} id_repartidor
+* @apiSuccess {Pedido[]}
+*/
+api.get('/pedido-repartidor/', operador.getPedidoPorRepartidor);
+
+/**
 * @api {get} /pedido/ obtiene lista de pedidos
 * @apiGroup pedido
 * @apiParam {number} id_usuario
