@@ -137,6 +137,16 @@ api.post('/operador/', operador.create);
 */
 api.get('/operador/', operador.getLista);
 
+/**
+* @api {post} /login-operador logue operador
+*
+* @apiGroup Operador
+* @apiParam {string} correo_electronico
+* @apiParam {string} password
+* @apiSuccess {Operador} success
+*/
+api.get('/login-operado/', operador.login);
+
 //api.put('/unidad', controllers.updateUnidad);
 
 /**
