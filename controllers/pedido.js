@@ -133,7 +133,7 @@ function getPedidoPorRepartidor(req, res) {
             estatus: 3
         }})
     .then( result => {
-        return res.status(200).send({pedidos: result});
+        return res.status(200).send(result);
     })
     .catch( err => {
         return res.status(500).send({err: err});
