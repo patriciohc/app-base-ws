@@ -125,9 +125,9 @@ function calificar(req, res) {
     })
 }
 
-function getPedidoPorRepartidor(req, res) {
+function getListaPorRepartidor(req, res) {
   if (!req.query.id_repartidor) return res.status(404).send({message: "se require id_repartidor"})
-    Pedido.findAll({
+    Pedido.findAllWithDependencies({
         where: {
             id_operador_entrega: req.query.id_repartidor,
             estatus: 3
@@ -149,5 +149,5 @@ module.exports = {
     setEstatus,
     asignarRepartidor,
     calificar,
-    getPedidoPorRepartidor,
+    getListaPorRepartidor,
 }
