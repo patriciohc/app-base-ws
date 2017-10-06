@@ -18,11 +18,11 @@ function listenUser(msg) {
 */
 function receivePosition(msg) {
     var socket = this
-    console.log('position...')
+    console.log('position: ' + msg.id_pedido)
     console.log(msg)
     // verificar token
     // if (!req.id_pedido || !req.id_usuario)
-    io.to(msg.id_pedido).emit('send_position', msg);
+    io.to(msg.id_pedido).emit('send_position', msg.position);
 }
 
 function connect(socket) {
