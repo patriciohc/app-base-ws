@@ -22,7 +22,7 @@ function receivePosition(msg) {
     console.log(msg)
     // verificar token
     // if (!req.id_pedido || !req.id_usuario)
-    io.to(msg.id_pedido).emit('send_position', msg.position);
+    io.to(msg.id_pedido).emit('send_position', msg.location);
 }
 
 function connect(socket) {
