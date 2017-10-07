@@ -1,6 +1,7 @@
 'use strict'
 var listaPedido = require('./lista-pedido');
 var direccionSolicitud = require('./direccion-solicitud');
+var usuario = require('./usuario')
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
 * json pedido
@@ -107,6 +108,17 @@ function getDireccion(pedido) {
   });
 }
 
+function getUsuario(pedido) {
+  return new Promise ( (resolve, reject) => {
+    usuario.findById(pedido.id_usuario)
+    .then(result => {
+      pedido.usuario = result;
+      resolve();
+    })
+    .catch(err => reject(err))
+  });
+}
+
 function findAllWithDependencies(query) {
   var promises = [];
   var lista;
@@ -118,6 +130,7 @@ function findAllWithDependencies(query) {
         var pedido = lista[i];
         promises.push(getListaProductos(pedido));
         promises.push(getDireccion(pedido));
+        promises.push(getUsuario(pedido));
       }
       Promise.all(promises).then(() => {
         resolve(lista);
