@@ -38,7 +38,7 @@ function create(req, res) {
 }
 
 function login(req, res) {
-  console.log(JSON.stringify(req))
+  console.log(req)
     cliente.findOne({where:{correo_electronico: req.body.correo_electronico}})
     .then(function(result) {
         console.log(result);
