@@ -318,14 +318,11 @@ api.delete('/producto', producto.deleteR);
 api.post('/pedido', pedido.create);
 
 /**
-* @api {put} /pedido/ actuliza pedido
+* @api {put} /pedido/ actuliza estatus pedido
 * @apiGroup pedido
 * @apiParam {number} id_pedido
 * @apiParam {number} estatus
-* @apiSuccess {number} numero de pedido
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
+* @apiSuccess {Boolean} success
 */
 api.put('/pedido-estatus', pedido.setEstatus);
 
