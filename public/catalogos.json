@@ -1,0 +1,8 @@
+{
+  "estatus": [
+    "En espera de aceptación",
+    "Aceptado por la tienda",
+    "En ruta",
+    "Entregado",
+  ]
+}
