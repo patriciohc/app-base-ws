@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 var cors = require('cors');
 
 var app = express();
-app.use(express.static(__dirname+"/public"));
+app.use(express.static("./public"));
 // websockets
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
