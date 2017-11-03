@@ -3,6 +3,7 @@
 * Cliente representa un usuario dueño de uno o varios establecimientos..
 *
 */
+var SHA256 = require("crypto-js/sha256");
 var Model = require('./model');
 // nombre de la tabla en db
 const name = "cliente";
@@ -39,7 +40,8 @@ function sync () {
 }
 
 function create (obj) {
-    return cliente.create(obj);
+  obj.password = SHA256(obj.password);
+  return cliente.create(obj);
 }
 
 function findOne (query) {

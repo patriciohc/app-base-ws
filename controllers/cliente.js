@@ -1,6 +1,10 @@
 'use strict'
 
 const cliente = require('../models').cliente;
+const utils = require('./utils');
+const SHA256 = require("crypto-js/sha256");
+const Auth = require('./autentication');
+const permisos = require('../permisos');
 
 function get(req, res) {
     cliente.findById(req.params.id)
@@ -27,30 +31,35 @@ function getLista(req, res) {
 }
 
 function create(req, res) {
-    cliente.create(req.body)
-    .then(function(result) {
-        return res.status(200).send({id: result.insertId});
-    })
-    .catch(function(err) {
-        return res.status(500).send({err: err})
-    })
+  let isValid = utils.andValidate(['razon_social', 'telefono', 'direccion', 'correo_electronico', 'password'], req.body)
+  if (!isValid) return res.status(400).send({message: 'faltan parametros'})
+  cliente.create(req.body)
+  .then(function(result) {
+    return res.status(200).send({id: result.insertId});
+  })
+  .catch(function(err) {
+    return res.status(500).send({err: err})
+  })
 
 }
 
 function login(req, res) {
-  console.log(req.url)
-  console.log(req.method)
-    cliente.findOne({where:{correo_electronico: req.body.correo_electronico}})
+    cliente.findOne({
+      select: ['id', 'razon_social', 'representante_legal', 'telefono', 'direccion', 'correo_electronico'],
+      where: {correo_electronico: req.body.correo_electronico}
+    })
     .then(function(result) {
         console.log(result);
         if (!result) {
-            return res.status(404).send({message: "not found"});
+          return res.status(404).send({message: "not found"});
         } else {
-            if (req.body.password == result.password) {
-                return res.status(200).send(result);
-            } else {
-                return res.status(401).send({message: "usuario no autorizado"});
-            }
+          let shaPass = SHA256(req.body.password)
+          if (shaPass == result.password) {
+            result.token = Auth.createToken(result.id, permisos.CLIENTE)
+            return res.status(200).send(result);
+          } else {
+              return res.status(401).send({message: "usuario no autorizado"});
+          }
         }
     })
     .catch(function(err) {

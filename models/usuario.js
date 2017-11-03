@@ -3,6 +3,7 @@
 * Usuario que usa la app de compra
 *
 */
+var SHA256 = require("crypto-js/sha256");
 var Model = require('./model');
 // nombre de la tabla en db
 const name = "usuario";
@@ -36,7 +37,8 @@ function sync () {
 }
 
 function create (obj) {
-    return usuario.create(obj);
+  obj.password = SHA256(obj.password);
+  return usuario.create(obj);
 }
 
 function findOne (query) {

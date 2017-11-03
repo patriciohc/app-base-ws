@@ -11,12 +11,14 @@ const producto = require('./controllers/producto');
 const pedido = require('./controllers/pedido');
 const operador = require('./controllers/operador');
 const catalogos = require('./controllers/catalogos');
+const autentication =  require('./controllers/autentication');
+const permisos = require('./permisos');
 const multer  = require('multer');
 
 var upload = multer({ dest: './kml' });
 //const middleware = require('../middleware');
 
-
+// -- no require permisos
 api.get('/catalogos', catalogos.get)
 
 /**
@@ -33,10 +35,10 @@ api.get('/catalogos', catalogos.get)
 * @apiErrorExample Error-Response:
 *     HTTP/1.1 404 Not Found
 *     {
-*       "error": "info error"
+*
 *     }
 */
-api.get('/unidad/:id', unidad.get);
+// api.get('/unidad/:id', unidad.get);
 
 /**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
@@ -49,7 +51,8 @@ api.get('/unidad/:id', unidad.get);
 *
 *     }
 */
-api.get('/unidad-cliente/', unidad.get);
+permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE])
+api.get('/unidad-cliente/', autentication.isAuth, unidad.get);
 
 /**
 * @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
@@ -62,6 +65,7 @@ api.get('/unidad-cliente/', unidad.get);
 *
 * @apiSuccess {Unidad} lista de objetos unidad
 */
+// -- no requiere permisos
 api.get('/unidad', unidad.getLista);
 
 /**
@@ -72,7 +76,8 @@ api.get('/unidad', unidad.getLista);
 * @apiParam {Object} objeto de tipo Unidad
 * @apiSuccess {number} id de la unidad creada
 */
-api.post('/unidad/', upload.single('file_kml'), unidad.create);
+permisos.add('/unidad/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/unidad/', autentication.isAuth, upload.single('file_kml'), unidad.create);
 
 /**
 * @api {post} /unidad-producto agrega productos a la unidad
@@ -81,7 +86,8 @@ api.post('/unidad/', upload.single('file_kml'), unidad.create);
 * @apiParam {Number[][]} id_unidad, id_producto
 * @apiSuccess {Object} success
 */
-api.post('/unidad-producto/', unidad.addProducto);
+permisos.add('/unidad-producto/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/unidad-producto/', autentication.isAuth, unidad.addProducto);
 
 /**
 * @api {get} /unidad-producto obtiene todos los productos en una unidad
@@ -99,7 +105,8 @@ api.get('/unidad-producto/', unidad.getProductos);
 * @apiParam {Number[][]} id_unidad, id_operador
 * @apiSuccess {Boolean} success
 */
-api.post('/unidad-operador/', unidad.addOperador);
+permisos.add('/unidad-operador/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/unidad-operador/', autentication.isAuth, unidad.addOperador);
 
 /**
 * @api {get} /unidad-operador obtiene todos los operadores en una unidad
@@ -108,7 +115,8 @@ api.post('/unidad-operador/', unidad.addOperador);
 * @apiParam {Number} id_unidad
 * @apiSuccess {Object[]} lista de operadores
 */
-api.get('/unidad-operador/', unidad.getLOperadoresUnidad);
+permisos.add('/unidad-operador/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/unidad-operador/', autentication.isAuth, unidad.getLOperadoresUnidad);
 
 /**
 * @api {delete} /unidad elimina unidad
@@ -117,7 +125,8 @@ api.get('/unidad-operador/', unidad.getLOperadoresUnidad);
 * @apiParam {Number} id de uniad por query
 * @apiSuccess {Object} success
 */
-api.delete('/unidad/', unidad.deleteR);
+permisos.add('/unidad/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 
 /**
 * @api {post} /operador crea un operador
@@ -126,7 +135,8 @@ api.delete('/unidad/', unidad.deleteR);
 * @apiParam {Object} Operador
 * @apiSuccess {Boolean} success
 */
-api.post('/operador/', operador.create);
+permisos.add('/operador/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/operador/', autentication.isAuth, operador.create);
 
 /**
 * @api {get} /operador obitiene operadores por unidad
@@ -135,7 +145,7 @@ api.post('/operador/', operador.create);
 * @apiParam {Number} id_unidad
 * @apiSuccess {Boolean} success
 */
-api.get('/operador/', operador.getLista);
+// api.get('/operador/', operador.getLista);
 
 /**
 * @api {post} /login-operador logue operador
@@ -162,7 +172,8 @@ api.post('/login-operador/', operador.login);
 *
 * @apiSuccess {Boolean}
 */
-api.put('/poligono', poligono.update);
+permisos.add('/poligono/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.put('/poligono/', autentication.isAuth, poligono.update);
 
 
 /**
@@ -176,7 +187,8 @@ api.put('/poligono', poligono.update);
 *     HTTP/1.1 200 OK
 *     id
 */
-api.get('/cliente/:id', cliente.get);
+permisos.add('/cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/cliente/:id', autentication.isAuth, cliente.get);
 
 /**
 * @api {get} /cliente obtiene liste de clientes
@@ -186,7 +198,8 @@ api.get('/cliente/:id', cliente.get);
 *     HTTP/1.1 200 OK
 *     []
 */
-api.get('/cliente/', cliente.getLista);
+permisos.add('/cliente/', 'GET', [permisos.ADMINISTRADOR])
+api.get('/cliente/', autentication.isAuth, cliente.getLista);
 
 /**
 * @api {post} /cliente/ Crea un nuevo cliente
@@ -197,7 +210,8 @@ api.get('/cliente/', cliente.getLista);
 *     HTTP/1.1 200 OK
 *   {id: id }
 */
-api.post('/cliente', cliente.create);
+permisos.add('/cliente/', 'POST', [permisos.ADMINISTRADOR])
+api.post('/cliente', autentication.isAuth, cliente.create);
 
 /**
 * @api {post} /cliente-login/ loguea cliente
@@ -226,6 +240,18 @@ api.post('/login-cliente', cliente.login);
 api.post('/login/', usuario.login);
 
 /**
+* Administrador
+*/
+/**
+* @api {post} /login-admin/
+* @apiGroup usuario
+* @apiParam {string} correo_electronico
+* @apiParam {string} password
+* @apiSuccess {Usuario} obejto de tipo Usuario
+*/
+api.post('/login-admin/', usuario.login_admin);
+
+/**
 * @api {post} /cliente/ Crea usuario
 * @apiGroup usuario
 * @apiParam {Usuario} objeto de tipo cliente
@@ -247,7 +273,8 @@ api.post('/usuario', usuario.create);
 *     id
 *
 */
-api.post('/categoria', categoria.create);
+permisos.add('/categoria/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/categoria/', autentication.isAuth, categoria.create);
 
 /**
 * @api {delete} /categoria/ elimina categoria por id
@@ -255,7 +282,8 @@ api.post('/categoria', categoria.create);
 * @apiParam {Number} id de la categoria
 * @apiSuccess {Boolean}
 */
-api.delete('/categoria', categoria.deleteR);
+permisos.add('/categoria/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.delete('/categoria/', autentication.isAuth, categoria.deleteR);
 
 /**
 * @api {get} /categoria/ filtra categorias por id de unidad
@@ -276,7 +304,7 @@ api.get('/categoria', categoria.getListaPorUnidad);
 api.get('/categoria-cliente', categoria.getLista);
 
 /**
-* @api {post} /producto/ Crea una categoria
+* @api {post} /producto/ Crea un producto
 * @apiGroup producto
 * @apiParam {Producto} objeto de tipo Producto
 * @apiSuccess {number} id de objeto insertado
@@ -284,7 +312,8 @@ api.get('/categoria-cliente', categoria.getLista);
 *     HTTP/1.1 200 OK
 *     id
 */
-api.post('/producto', producto.create);
+permisos.add('/producto/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/producto/', autentication.isAuth, producto.create);
 
 /**
 * @api {get} /producto/ filtra categorias por id de categoria
@@ -304,7 +333,8 @@ api.get('/producto', producto.getLista);
 * @apiParam {number} id identificador de producto
 * @apiSuccess {Boolean} respuesta
 */
-api.delete('/producto', producto.deleteR);
+permisos.add('/producto/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.delete('/producto', autentication.isAuth, producto.deleteR);
 
 /**
 * @api {post} /pedido/ Crea un pedido
@@ -315,7 +345,8 @@ api.delete('/producto', producto.deleteR);
 *     HTTP/1.1 200 OK
 *     id
 */
-api.post('/pedido', pedido.create);
+permisos.add('/pedido/', 'POST', [permisos.USUSARIO])
+api.post('/pedido/', autentication.isAuth, pedido.create);
 
 /**
 * @api {put} /pedido/ actuliza estatus pedido
@@ -324,10 +355,11 @@ api.post('/pedido', pedido.create);
 * @apiParam {number} estatus
 * @apiSuccess {Boolean} success
 */
-api.put('/pedido-estatus', pedido.setEstatus);
+permisos.add('/pedido-estatus/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.put('/pedido-estatus/', autentication.isAuth, pedido.setEstatus);
 
 /**
-* @api {put} /pedido/ Crea un pedido
+* @api {put} /pedido-repartidor/ asigna un pedio a un repartidor
 * @apiGroup producto
 * @apiParam {number} id_pedido
 * @apiSuccess {number} id_repartidor
@@ -335,7 +367,8 @@ api.put('/pedido-estatus', pedido.setEstatus);
 *     HTTP/1.1 200 OK
 *     id
 */
-api.put('/pedido-repartidor', pedido.asignarRepartidor);
+permisos.add('/pedido-repartidor/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.put('/pedido-repartidor', autentication.isAuth, pedido.asignarRepartidor);
 
 /**
 * @api {put} /pedido/ Crea un pedido
@@ -346,7 +379,8 @@ api.put('/pedido-repartidor', pedido.asignarRepartidor);
 *     HTTP/1.1 200 OK
 *     id
 */
-api.put('/pedido-calificacion', pedido.calificar);
+permisos.add('/pedido-calificacion/', 'PUT', [permisos.USUSARIO])
+api.put('/pedido-calificacion', autentication.isAuth, pedido.calificar);
 
 /**
 * @api {get} /pedido/ obtiene lista de pedidos
@@ -364,15 +398,16 @@ api.get('/pedido', pedido.getListaPorUnidad);
 * @apiParam {Number} id_repartidor
 * @apiSuccess {Pedido[]}
 */
-api.get('/pedido-repartidor/', pedido.getListaPorRepartidor);
+permisos.add('/pedido-calificacion/', 'GET', [permisos.REPARTIDOR])
+api.get('/pedido-repartidor/', autentication.isAuth, pedido.getListaPorRepartidor);
 
 /**
-* @api {get} /pedido/ obtiene lista de pedidos
+* @api {get} /pedido/ obtiene lista de pedidos por usuario
 * @apiGroup pedido
 * @apiParam {number} id_usuario
 * @apiSuccess {Object[]} lista de pedidos
 */
-api.get('/pedido-usuario', pedido.getListaPorUsuario);
+api.get('/pedido-usuario',autentication.isAuth, pedido.getListaPorUsuario);
 
 api.post('/test', function (req, res) {
   console.log(req.body)

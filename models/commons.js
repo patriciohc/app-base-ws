@@ -51,10 +51,14 @@ function getSqlInsert(object, model, table) {
 
 function getSqlFind(model, query, table, limit) {
     var where = getWhere(query.where, model);
+    var select = '*'
+    if (query.select) {
+      select = query.select.join(" ")
+    }
     if (where != "") {
-        return `SELECT * FROM ${table} WHERE ${where} limit ${limit}`;
+        return `SELECT ${select} FROM ${table} WHERE ${where} limit ${limit}`;
     } else {
-        return `SELECT * FROM ${table} limit ${limit}`;
+        return `SELECT ${select} FROM ${table} limit ${limit}`;
     }
 }
 
