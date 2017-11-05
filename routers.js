@@ -221,7 +221,7 @@ api.post('/cliente', autentication.isAuth, cliente.create);
 * @apiSuccess {Number} id de objeto Cliente
 *
 */
-api.post('/login-cliente', cliente.login);
+api.post('/login-cliente/', cliente.login);
 
 //api.put('/cliente', controllers.updateCliente);
 
@@ -261,7 +261,7 @@ api.post('/login-admin/', usuario.login_admin);
 *     id
 *
 */
-api.post('/usuario', usuario.create);
+api.post('/usuario/', usuario.create);
 
 /**
 * @api {post} /categoria/ Crea una categoria

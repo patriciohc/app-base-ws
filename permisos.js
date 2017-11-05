@@ -35,7 +35,7 @@ function checkPermisos(url, method, rol) {
   if (!permisosRol) return false; // el rol no existe
   var urlPermitida = permisosRol[url]
   if (!urlPermitida) return false // la url no esta permitida
-  if (urlPermitida.indexOf(method)){
+  if (urlPermitida.indexOf(method) != -1){
     return true;
   } else {
     return false; // metodo no permitido

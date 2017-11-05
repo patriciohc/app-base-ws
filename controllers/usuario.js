@@ -9,7 +9,6 @@ const utils = require('./utils');
 
 function login(req, res) {
     usuario.findOne({
-      select: ['id', 'correo_electronico', 'nombre', 'telefono', 'recibir_promociones'],
       where:{correo_electronico: req.body.correo_electronico}
     })
     .then(function(result) {

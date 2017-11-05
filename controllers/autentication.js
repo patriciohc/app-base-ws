@@ -18,15 +18,17 @@ function isAuth(req, res, next) {
   if (!req.headers.authorization) {
     return res.status(400).send({message: 'usuario no autorizado'})
   }
-  var token = req.headers.autorization.split(' ')[1]
+  var token = req.headers.authorization.split(' ')[1]
   try {
     var decoded = jwt.verify(token, settings.SECRET_KEY);
     if(decoded.exp <= moment().unix()) {
       return res.status(401).send({message: "El token ha expirado"});
     }
+    console.log(decoded)
     if (permisos.checkPermisos(req.url, req.method, decoded.rol)) {
-      req.usuario = payload.id
+      req.usuario = decoded.id
       next()
+      return
     } else {
       return res.status(400).send({message: 'usuario no autorizado'})
     }
@@ -34,9 +36,6 @@ function isAuth(req, res, next) {
     console.log(err);
     return res.status(400).send({message: 'usuario no autorizado'})
   }
-  console.log(req.url)
-  console.log(req.method)
-  return res.status(200).send({message: 'se ingreso conrrectamente'})
 }
 
 module.exports = {
