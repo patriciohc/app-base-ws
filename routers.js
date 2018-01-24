@@ -407,7 +407,8 @@ api.get('/pedido-repartidor/', autentication.isAuth, pedido.getListaPorRepartido
 * @apiParam {number} id_usuario
 * @apiSuccess {Object[]} lista de pedidos
 */
-api.get('/pedido-usuario',autentication.isAuth, pedido.getListaPorUsuario);
+permisos.add('/pedido-usuario/', 'GET', [permisos.USUSARIO])
+api.get('/pedido-usuario/',autentication.isAuth, pedido.getListaPorUsuario);
 
 api.post('/test', function (req, res) {
   console.log(req.body)

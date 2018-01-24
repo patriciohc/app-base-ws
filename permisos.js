@@ -8,7 +8,7 @@ const REPARTIDOR = 1
 const OPERADOR_UNIDAD = 2
 const CLIENTE = 3
 const USUSARIO = 4
-const ADMINISTRADOR = 4
+const ADMINISTRADOR = 5
 // permisos
 var permisos = {
   [REPARTIDOR]: {},
@@ -19,7 +19,6 @@ var permisos = {
 }
 
 function add(url, method, roles) {
-  console.log(roles)
   for (let i = 0; i < roles.length; i++) {
     let rol = roles[i];
     console.log(rol)
@@ -31,6 +30,10 @@ function add(url, method, roles) {
 }
 
 function checkPermisos(url, method, rol) {
+  if (!url) return false;
+  if (url.indexOf("?") != -1) {
+    url = url.split("?")[0];
+  }
   var permisosRol = permisos[rol]
   if (!permisosRol) return false; // el rol no existe
   var urlPermitida = permisosRol[url]
