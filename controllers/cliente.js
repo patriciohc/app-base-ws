@@ -45,7 +45,6 @@ function create(req, res) {
 
 function login(req, res) {
     cliente.findOne({
-      select: ['id', 'razon_social', 'representante_legal', 'telefono', 'direccion', 'correo_electronico'],
       where: {correo_electronico: req.body.correo_electronico}
     })
     .then(function(result) {

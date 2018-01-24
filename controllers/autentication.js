@@ -25,9 +25,11 @@ function isAuth(req, res, next) {
     if(decoded.exp <= moment().unix()) {
       return res.status(401).send({message: "El token ha expirado"});
     }
+    console.log(decoded)
     if (permisos.checkPermisos(req.url, req.method, decoded.rol)) {
       req.usuario = decoded.id;
       next()
+      return
     } else {
       return res.status(400).send({message: 'usuario no autorizado'})
     }
@@ -35,9 +37,6 @@ function isAuth(req, res, next) {
     console.log(err);
     return res.status(400).send({message: 'usuario no autorizado'})
   }
-  console.log(req.url)
-  console.log(req.method)
-  return res.status(200).send({message: 'se ingreso conrrectamente'})
 }
 
 module.exports = {

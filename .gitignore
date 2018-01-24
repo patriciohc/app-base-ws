@@ -3,3 +3,4 @@ npm-debug.log
 kml/*
 cer/
 package-lock.json
+.vscode
