@@ -9,7 +9,7 @@ const utils = require('./utils');
 
 function login(req, res) {
     usuario.findOne({
-      select: ['id', 'correo_electronico', 'nombre', 'telefono', 'recibir_promociones'],
+      select: ['id', 'correo_electronico', 'nombre', 'telefono', 'recibir_promociones', 'password'],
       where:{correo_electronico: req.body.correo_electronico}
     })
     .then(function(result) {
@@ -19,7 +19,8 @@ function login(req, res) {
         } else {
           let shaPass = SHA256(req.body.password)
           if (shaPass == result.password) {
-            result.token = Auth.createToken(result.id, permisos.CLIENTE)
+            delete result.password;
+            result.token = Auth.createToken(result.id, permisos.USUSARIO)
             return res.status(200).send(result);
           } else {
             return res.status(401).send({message: "usuario no autorizado"});

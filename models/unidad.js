@@ -54,6 +54,9 @@ const columns = [
     }, {
         name: "palabras_clave",
         type: "VARCHAR(250)"
+    }, {
+        name: "descripcion",
+        type: "VARCHAR(250)"
     }
 ]
 

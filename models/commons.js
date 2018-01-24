@@ -53,7 +53,7 @@ function getSqlFind(model, query, table, limit) {
     var where = getWhere(query.where, model);
     var select = '*'
     if (query.select) {
-      select = query.select.join(" ")
+      select = query.select.join(", ")
     }
     if (where != "") {
         return `SELECT ${select} FROM ${table} WHERE ${where} limit ${limit}`;
