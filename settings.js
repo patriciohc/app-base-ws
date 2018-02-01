@@ -1,6 +1,8 @@
 
-const SECRET_KEY = "secrete_key"
+const SECRET_KEY = "secrete_key";
 
-module.exports  = {
+module.exports = {
   SECRET_KEY
 }
+
+

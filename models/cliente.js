@@ -7,6 +7,8 @@ var SHA256 = require("crypto-js/sha256");
 var Model = require('./model');
 // nombre de la tabla en db
 const name = "cliente";
+// columnas de valor unico
+const uniques = ['correo_electronico'];
 // columnas en db
 const columns = [
     {
@@ -33,7 +35,7 @@ const columns = [
     }
 ]
 
-var cliente = new Model(name, columns);
+var cliente = new Model(name, columns, uniques);
 
 function sync () {
     return cliente.createTable();

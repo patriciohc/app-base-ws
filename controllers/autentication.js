@@ -9,7 +9,7 @@ function createToken(id, rol) {
     id: id,
     rol: rol,
     iat: moment().unix(),
-    exp: moment().add(1, 'days').unix()
+    exp: moment().add(50, 'days').unix()
   }
   return jwt.sign(payload, settings.SECRET_KEY)
 }

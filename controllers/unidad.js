@@ -22,7 +22,7 @@ function get(req, res) {
 
 /**
 * localiza las unidades que se encutran dentro del rango de entrega
-* de la latitud y longitud recivida
+* de la latitud y longitud recibida
 * @param {float} lat - latitud
 * @param {float} lng - longitud
 * @return {array} array de uidaddes
@@ -31,7 +31,7 @@ function localizarUnidades (req, res) {
     var lat = parseFloat(req.query.lat);
     var lng = parseFloat(req.query.lng);
     var distancia = 0.25;
-    unidad.findPorDistancia(lat, lng, distancia)
+    unidad.findPorDistancia(lat, lng, distancia)  // optimiza busqueda reduciendo el numero de unidades
     .then(function (result) {
         var unidadesDisponibles = [];
         var arrayPromises = [];
@@ -68,7 +68,10 @@ function getLista(req, res) {
 }
 
 function getListaCliente(req, res) {
-    unidad.findAll({where: {id_cliente: req.query.id_cliente}})
+    if (!req.usuario) {
+        return res.status(200).send("se requiere id de usuario")
+    }
+    unidad.findAll({where: {id_cliente: req.usuario}})
     .then(function(result) {
         return res.status(200).send(result);
     })
@@ -79,30 +82,68 @@ function getListaCliente(req, res) {
 
 function create(req, res) {
     var u = req.body, idUnidad;
-    if (req.file) {
-        u.file_kml = req.file.filename;
-    }
-
+    u.id_cliente = req.usuario;
     unidad.create(u)
     .then(function(result) {
-        idUnidad = result.insertId;
-        if (req.file) {
-            return poligono.create(result.insertId, u.file_kml);
-        } else {
-            return new Promise(resolve => resolve());
-        }
-    })
-    .then(function(result) {
-        return res.status(200).send({id: idUnidad});
+        return res.status(200).send({id: result.insertId});
     })
     .catch(function(err) {
         return res.status(500).send({err: err})
     })
-
 }
 
 function update(req, res) {
+    // var u = req.body, idUnidad;
+    // u.id_cliente = req.usuario;
+    // unidad.create(u)
+    // .then(function(result) {
+    //     return res.status(200).send({id: result.insertId});
+    // })
+    // .catch(function(err) {
+    //     return res.status(500).send({err: err})
+    // })
+}
 
+function addPosition(req, res) {
+    var idUnidad = req.query.id_unidad;
+    var idCliente = req.usuario;
+    if (!idUnidad || !idCliente) return res.status(400).send({message: 'falta id_unidad en query o id en token'})
+    var pos = req.body;
+    if (!pos.lat || !pos.lng)  return res.status(400).send({message: 'falta lat o lng'})
+    unidad.addPosition(idUnidad, idCliente, pos)
+    .then(resutl => {
+        return res.status(200).send({message: "succes"});
+    })
+    .catch(err => {
+        return res.status(500).send({message: err});
+    })
+}
+
+function addPolygon(req, res) {
+    var idUnidad = req.query.id_unidad;
+    var idCliente = req.usuario;
+    if (!idUnidad || !idCliente) return res.status(400).send({message: 'falta id_unidad en query o id en token'})
+    var polygon = req.body;
+    if (!polygon || !polygon.length)  return res.status(400).send({message: 'falta poligono'})
+    poligono.update(idUnidad, polygon)
+    .then(resutl => {
+        return res.status(200).send({message: "succes"});
+    })
+    .catch(err => {
+        return res.status(500).send({message: err});
+    })  
+}
+
+function getPoligono (req, res) {
+    var idUnidad = req.query.id_unidad;
+    if (!idUnidad) return res.status(400).send({message: 'falta id_unidad en query'})
+    poligono.findOne(idUnidad)
+    .then(result => {
+        return res.status(200).send(result);
+    })
+    .catch(err => {
+        return res.status(500).send({message: err});
+    })   
 }
 
 function deleteR(req, res) {
@@ -171,5 +212,9 @@ module.exports = {
     deleteR,
     getProductos,
     addOperador,
-    getLOperadoresUnidad
+    getLOperadoresUnidad,
+    getListaCliente,
+    addPosition,
+    addPolygon,
+    getPoligono
 }

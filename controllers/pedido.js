@@ -37,12 +37,12 @@ function getListaPorUnidad(req, res) { // forbidden for users
 }
 
 function getListaPorUsuario(req, res) {
-  var params = ["id_usuario"];
-  if (!utils.orValidate(params, req.query)) {
+//   var params = ["id_usuario"];
+    if (!req.usuario) {
       return res.status(400).send({err: "se requiere: id_usuario"});
-  }
-  var where = utils.minimizarObjeto(params, req.query);
-    Pedido.findAllWithDependencies({where})
+    }
+    //var where = utils.minimizarObjeto(params, req.query);
+    Pedido.findAllWithDependencies({where: {id_usuario: req.usuario}})
     .then(function(result) {
       console.log(result);
       return res.status(200).send(result);

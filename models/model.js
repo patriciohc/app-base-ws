@@ -5,18 +5,21 @@ const utils = require('./commons');
 
 class Model {
 
-    constructor(name, model) {
+    constructor(name, model, uniques = [], keys = ['id']) {
         this.name = name;
         this.model = model;
+        this.uniques = uniques;
+        this.keys = keys;
     }
 
-    createTable (callback) {
+    createTable () {
         var self = this;
-        return new Promise(function(resolve, reject){
+        return new Promise(function(resolve, reject) {
             db.connect()
             .then(function(con) {
                 var columns = utils.concat(self.model);
-                var sql = `CREATE TABLE IF NOT EXISTS ${self.name} (${columns}, PRIMARY KEY(id));`;
+                var keys = utils.concatKeys(self.keys, self.uniques);
+                var sql = `CREATE TABLE IF NOT EXISTS ${self.name} (${columns}, ${keys});`;
                 console.log(sql);
                 con.query(sql, function (err, result) {
                     if (err) return reject(err);;
@@ -30,27 +33,12 @@ class Model {
     }
 
     createTableLlaveCompuesta (key1, key2) {
-      var self = this;
-      return new Promise(function(resolve, reject){
-          db.connect()
-          .then(function(con) {
-              var columns = utils.concat(self.model);
-              var sql = `CREATE TABLE IF NOT EXISTS ${self.name} (${columns},
-                PRIMARY KEY(${key1}, ${key2}));`;
-              console.log(sql);
-              con.query(sql, function (err, result) {
-                  if (err) return reject(err);;
-                  return resolve(result);
-              });
-          })
-          .catch(function(err) {
-              reject(err);
-          });
-      })
+      this.keys = [key1, key2];
+      return createTable();
     }
 
-    create(user) {
-        var sql = utils.getSqlInsert(user, this.model, this.name);
+    create(obj) {
+        var sql = utils.getSqlInsert(obj, this.model, this.name);
         console.log(sql);
         return new Promise((resolve, reject) => {
             if (sql) {

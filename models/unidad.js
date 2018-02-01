@@ -4,7 +4,6 @@
 *
 */
 var Model = require('./model');
-var Poligono = require('./poligono');
 // nombre de la tabla en db
 const name = "unidad";
 // columnas en db
@@ -46,9 +45,6 @@ const columns = [
         name: "id_cliente", // dueño establecimiento
         type: "INT NOT NULL"
     }, {
-        name: "file_kml",
-        type: "VARCHAR(250)"
-    }, {
         name: "imagen",
         type: "VARCHAR(250)"
     }, {
@@ -70,20 +66,27 @@ function create (obj) {
     return unidad.create(obj);
 }
 
-function findOne (query) {
-    var unidad;
-    unidad.findOne(query)
-    .then(function (result) {
-        unidad = result;
-        return Poligono.findOne(result.id);
-    })
-    .then(function (result) {
-
-    })
-    .catch(function () {
-
-    });
+function addPosition(idUnidad, idCliente, obj) {
+    var query = `UPDATE ${name} 
+    SET lat = ${obj.lat}, lng = ${obj.lng} 
+    WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
+    return unidad.rawQuery(query);
 }
+
+// function findOne (query) {
+//     var unidad;
+//     unidad.findOne(query)
+//     .then(function (result) {
+//         unidad = result;
+//         return Poligono.findOne(result.id);
+//     })
+//     .then(function (result) {
+
+//     })
+//     .catch(function () {
+
+//     });
+// }
 
 /**
 * Regresa todas las unidades que se encuentran a una determinada distancia de lat, lng
@@ -119,9 +122,9 @@ module.exports = {
     sync,
     create,
     deleteR,
-    findOne,
     findById,
     findAll,
     findPorDistancia,
     addRelation: unidad.addRelation,
+    addPosition
 }

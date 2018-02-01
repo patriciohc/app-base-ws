@@ -3,12 +3,12 @@
 * Poligono que conrresponde a un establecimiento
 *
 */
-const fs = require('fs');
-const tj = require('togeojson');
-const DOMParser = require('xmldom').DOMParser;
+// const fs = require('fs');
+// const tj = require('togeojson');
+// const DOMParser = require('xmldom').DOMParser;
 const inside = require('point-in-polygon');
 
-const DIR_KML = "./kml/"
+// const DIR_KML = "./kml/"
 
 var Model = require('./model');
 // nombre de la tabla en db
@@ -42,28 +42,49 @@ function sync () {
  * @param {string} kml nombre de kml del poligono
  * @returns {Promise}
  */
-function create (idUnidad, kml) {
-    var stringxml = fs.readFileSync(DIR_KML + kml, 'utf8');
-    var kml = new DOMParser().parseFromString(stringxml);
-    var converted = tj.kml(kml);
-    if (!converted.features || !converted.features.length || converted.features.length == 0) {
-        return;
-    }
-    var tmp = converted.features[0];
-    if (!tmp.geometry || !tmp.geometry.coordinates) {
-        return;
-    }
-    var cordenadas = tmp.geometry.coordinates[0];
+function create (idUnidad, cordenadas) {
+    // var stringxml = fs.readFileSync(DIR_KML + kml, 'utf8');
+    // var kml = new DOMParser().parseFromString(stringxml);
+    // var converted = tj.kml(kml);
+    // if (!converted.features || !converted.features.length || converted.features.length == 0) {
+    //     return;
+    // }
+    // var tmp = converted.features[0];
+    // if (!tmp.geometry || !tmp.geometry.coordinates) {
+    //     return;
+    // }
+    // var cordenadas = tmp.geometry.coordinates[0];
     var values = [];
     for (let i = 0; i < cordenadas.length; i++) {
         var cordenada = cordenadas[i];
         values.push([
             idUnidad,
-            cordenada[0],
-            cordenada[1]
+            cordenada.lat,
+            cordenada.lng
         ]);
     }
     return poligono.insertBulk('id_unidad, lat, lng', values);
+}
+
+function update(id_unidad, polygon) {
+    return new Promise((resolve, reject) => {
+        deleteR(id_unidad)
+        .then(function(result) {
+            return create(id_unidad, polygon);
+        })
+        .then(function(result) {
+            return resolve(result);
+        })       
+        .catch(function(err) {
+            return reject(err);
+        });
+    })
+}
+
+// obtiene un poligono con todas sus cordenadas
+function findOne(id_unidad) {
+    var query = "SELECT lat, lng FROM poligono WHERE id_unidad=" + id_unidad;
+    return poligono.rawQuery(query);
 }
 
 /**
@@ -94,13 +115,15 @@ function isInsade (lat, lng, unidad, isInsadeUnidades) {
     });
 }
 
-function deleteU (idUnidad) {
-    return unidad.delte({id_unidad: idUnidad});
+function deleteR (idUnidad) {
+    return poligono.deleteR({id_unidad: idUnidad});
 }
 
 module.exports = {
     sync,
     create,
     isInsade,
-    deleteU
+    deleteR,
+    update,
+    findOne
 }

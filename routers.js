@@ -5,7 +5,6 @@ const api = express.Router();
 const cliente = require('./controllers/cliente');
 const unidad = require('./controllers/unidad');
 const usuario = require('./controllers/usuario');
-const poligono = require('./controllers/poligono');
 const categoria = require('./controllers/categoria');
 const producto = require('./controllers/producto');
 const pedido = require('./controllers/pedido');
@@ -22,25 +21,6 @@ var upload = multer({ dest: './kml' });
 api.get('/catalogos', catalogos.get)
 
 /**
-* @api {get} /unidad/:id Obtiene una unidad
-* @apiGroup Unidad
-* @apiParam {Number} id identificador unico
-* @apiSuccess {Object} obejto Unidad
-* @apiSuccessExample {json} Success-Response:
-*   HTTP/1.1 200 OK
-*   {
-*
-*   }
-* @apiError UserNotFound The id of the User was not found.
-* @apiErrorExample Error-Response:
-*     HTTP/1.1 404 Not Found
-*     {
-*
-*     }
-*/
-// api.get('/unidad/:id', unidad.get);
-
-/**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
 * @apiGroup Unidad
 * @apiParam {number} id_cliente identificador unico de cliente
@@ -55,6 +35,17 @@ permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE])
 api.get('/unidad-cliente/', autentication.isAuth, unidad.get);
 
 /**
+* @api {get} /unidad/ Obtitene lista de unidades de un cliente (informacion general)
+*
+* @apiName GetUnidad
+* @apiGroup Unidad
+*
+* @apiSuccess {Unidad[]} lista de objetos unidad
+*/
+permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/unidad-cliente/', unidad.getListaCliente);
+
+/**
 * @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
 * pasados por query.
 *
@@ -66,18 +57,25 @@ api.get('/unidad-cliente/', autentication.isAuth, unidad.get);
 * @apiSuccess {Unidad} lista de objetos unidad
 */
 // -- no requiere permisos
-api.get('/unidad', unidad.getLista);
+api.get('/unidad/', unidad.getLista);
 
 /**
-* @api {post} /unidad crea una unidad nueva recibe los parametros
-* en un form-data
+* @api {get} /unidad/:id Obtiene una unidad
+* @apiGroup Unidad
+* @apiParam {number} id de unidad
+* @apiSuccess {Object} obejto Unidad
+*/
+api.get('/unidad/:id', unidad.get);
+
+/**
+* @api {post} /unidad crea una unidad nueva
 *
 * @apiGroup Unidad
-* @apiParam {Object} objeto de tipo Unidad
+* @apiParam {Object} objeto de tipo Unidad en body
 * @apiSuccess {number} id de la unidad creada
 */
 permisos.add('/unidad/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/unidad/', autentication.isAuth, upload.single('file_kml'), unidad.create);
+api.post('/unidad/', autentication.isAuth, unidad.create);
 
 /**
 * @api {post} /unidad-producto agrega productos a la unidad
@@ -93,10 +91,41 @@ api.post('/unidad-producto/', autentication.isAuth, unidad.addProducto);
 * @api {get} /unidad-producto obtiene todos los productos en una unidad
 *
 * @apiGroup Unidad
-* @apiParam {Number} id_unidad
+* @apiParam {Number} id_unidad in query 
 * @apiSuccess {Object[]} lista de productos
 */
 api.get('/unidad-producto/', unidad.getProductos);
+
+/**
+* @api {post} /unidad-posicion agrega o actuliza la posicion de la unidad
+*
+* @apiGroup Unidad
+* @apiParam {number} id_unidad en query
+* @apiParam {Object} {lat, lng} en body
+* @apiSuccess {Object} success
+*/
+permisos.add('/unidad-posicion/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/unidad-posicion/', autentication.isAuth, unidad.addPosition);
+
+/**
+* @api {post} /unidad-poligono agrega o actuliza el poligono de reparto
+*
+* @apiGroup Unidad
+* @apiParam {number} id_unidad en query
+* @apiParam {Object[]} [{lat, lng}...] posiciones en body
+* @apiSuccess {Object} success
+*/
+permisos.add('/unidad-poligono/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.post('/unidad-poligono/', autentication.isAuth, unidad.addPolygon);
+
+/**
+* @api {get} /unidad-poligono obtiene el poligono de la unidad
+*
+* @apiGroup Unidad
+* @apiParam {number} id_unidad en query
+* @apiSuccess {Object} success
+*/
+api.get('/unidad-poligono/', unidad.getPoligono);
 
 /**
 * @api {post} /unidad-operador agrega operadores a unidad
@@ -172,8 +201,8 @@ api.post('/login-operador/', operador.login);
 *
 * @apiSuccess {Boolean}
 */
-permisos.add('/poligono/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.put('/poligono/', autentication.isAuth, poligono.update);
+// permisos.add('/poligono/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+// api.put('/poligono/', autentication.isAuth, poligono.update);
 
 
 /**

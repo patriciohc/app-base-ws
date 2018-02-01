@@ -19,6 +19,22 @@ function concat(model) {
 }
 
 /**
+* Concatena los elemetos de un objeto model, para la creacion de la tabla
+* @param {model} - objeto model, contiene los nombres de columnas y tipos
+* @return {string} - string que contiene el formato para crear la tabla
+*/
+function concatKeys(keys, uniques) {
+    var result = ""
+    if (uniques.length >= 1) {
+        result = ` UNIQUE KEY(${uniques.join(',')}),`;
+    }
+    if (keys.length >= 1) {
+        result += ` PRIMARY KEY(${keys.join(',')}) `;
+    }
+    return result;
+}
+
+/**
 * crea el formato para insercion en la tabla
 * @param {model} - modelo del objeto que se insertara
 * @param {object} - objeto que se insertara
@@ -124,5 +140,7 @@ module.exports = {
     getSqlInsert,
     getSqlFind,
     getSqlFindAll,
-    getWhere
+    getWhere,
+    concatKeys,
+    concatKeys
 }

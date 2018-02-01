@@ -2,7 +2,7 @@
   "name": "app-base-ws",
   "version": "1.0.0",
   "description": "Wbservice base e-comerce de propósito general",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
@@ -30,7 +30,6 @@
     "mysql": "^2.14.1",
     "point-in-polygon": "^1.0.1",
     "socket.io": "^2.0.3",
-    "togeojson": "^0.16.0",
     "xmldom": "^0.1.27"
   },
   "engines": {
