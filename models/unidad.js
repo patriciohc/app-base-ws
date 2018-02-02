@@ -15,9 +15,6 @@ const columns = [
         name: "nombre",
         type: "VARCHAR(250)"
     }, {
-        name: "estado",
-        type: "VARCHAR(100)"
-    }, {
         name: "direccion", // colonia, calle, numerovarchar(100)
         type: "VARCHAR(200)"
     }, {
@@ -26,9 +23,6 @@ const columns = [
     }, {
         name: "lng", // longitud
         type: "DOUBLE"
-    }, {
-        name: "referencia", // referencia para encontrar establecimiento
-        type: "VARCHAR(200)"
     }, {
         name: "telefono",
         type: "VARCHAR(20)"
@@ -64,6 +58,27 @@ function sync () {
 
 function create (obj) {
     return unidad.create(obj);
+}
+
+function update(idUnidad, idCliente, obj) {
+    var columnsUpdate = [
+        'nombre',
+        'telefono',
+        'hora_apetura',
+        'hora_cierre',
+        'imagen',
+        'palabras_clave',
+        'descripcion'
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = ${obj[columnsUpdate[i]]}, `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    qeury += ` WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
+    
+    return unidad.rawQuery(query);
 }
 
 function addPosition(idUnidad, idCliente, obj) {
@@ -126,5 +141,6 @@ module.exports = {
     findAll,
     findPorDistancia,
     addRelation: unidad.addRelation,
-    addPosition
+    addPosition,
+    update
 }

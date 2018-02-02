@@ -92,16 +92,16 @@ function create(req, res) {
     })
 }
 
-function update(req, res) {
-    // var u = req.body, idUnidad;
-    // u.id_cliente = req.usuario;
-    // unidad.create(u)
-    // .then(function(result) {
-    //     return res.status(200).send({id: result.insertId});
-    // })
-    // .catch(function(err) {
-    //     return res.status(500).send({err: err})
-    // })
+function updateInfoBasic(req, res) {
+    var infoUnidad = req.body
+    u.id_cliente = req.usuario;
+    unidad.update(u)
+    .then(function(result) {
+        return res.status(200).send({id: result.insertId});
+    })
+    .catch(function(err) {
+        return res.status(500).send({err: err})
+    })
 }
 
 function addPosition(req, res) {
@@ -206,7 +206,7 @@ module.exports = {
     get,
     localizarUnidades,
     create,
-    update,
+    updateInfoBasic,
     getLista,
     addProducto,
     deleteR,

@@ -32,7 +32,7 @@ api.get('/catalogos', catalogos.get)
 *     }
 */
 permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE])
-api.get('/unidad-cliente/', autentication.isAuth, unidad.get);
+api.get('/unidad-cliente/', autentication.isAuth, unidad.getListaCliente);
 
 /**
 * @api {get} /unidad/ Obtitene lista de unidades de un cliente (informacion general)
@@ -76,6 +76,16 @@ api.get('/unidad/:id', unidad.get);
 */
 permisos.add('/unidad/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.post('/unidad/', autentication.isAuth, unidad.create);
+
+/**
+* @api {post} /unidad actuliza la informacion basica de una unidad
+*  nombre, telefono, hora_apetura, hora_cierre, imagen, palabras_clave, descripcion
+* @apiGroup Unidad
+* @apiParam {Object} objeto de tipo Unidad en body
+* @apiSuccess {number} id de la unidad creada
+*/
+permisos.add('/unidad/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.put('/unidad/', autentication.isAuth, unidad.updateInfoBasic);
 
 /**
 * @api {post} /unidad-producto agrega productos a la unidad
