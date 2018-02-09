@@ -15,7 +15,7 @@ const columns = [
         name: "nombre",
         type: "VARCHAR(250)"
     }, {
-        name: "codigo_barras",
+        name: "codigo",
         type: "VARCHAR(100)"
     }, {
         name: "descripcion",

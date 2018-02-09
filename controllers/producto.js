@@ -30,6 +30,17 @@ function getLista(req, res) {
     })
 }
 
+function getListaCliente(req, res) {
+    var usuario = req.usuario;
+    producto.findAll({where: {id_cliente: usuario}})
+    .then(function(result) {
+        return res.status(200).send(result);
+    })
+    .catch(function(err){
+        return res.status(500).send({err: err});
+    })
+}
+
 function create(req, res) {
     producto.create(req.body)
     .then(function(result) {
@@ -61,5 +72,6 @@ module.exports = {
     create,
     update,
     getLista,
-    deleteR
+    deleteR,
+    getListaCliente
 }

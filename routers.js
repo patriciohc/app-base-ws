@@ -11,6 +11,7 @@ const pedido = require('./controllers/pedido');
 const operador = require('./controllers/operador');
 const catalogos = require('./controllers/catalogos');
 const autentication =  require('./controllers/autentication');
+const imagen =  require('./controllers/imagen');
 const permisos = require('./permisos');
 const multer  = require('multer');
 
@@ -25,11 +26,6 @@ api.get('/catalogos', catalogos.get)
 * @apiGroup Unidad
 * @apiParam {number} id_cliente identificador unico de cliente
 * @apiSuccess {Object} obejto de tipo unidad
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*
-*     }
 */
 permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE])
 api.get('/unidad-cliente/', autentication.isAuth, unidad.getListaCliente);
@@ -161,10 +157,10 @@ api.get('/unidad-operador/', autentication.isAuth, unidad.getLOperadoresUnidad);
 * @api {delete} /unidad elimina unidad
 *
 * @apiGroup Unidad
-* @apiParam {Number} id de uniad por query
+* @apiParam {number} id_unidad de uniad por query
 * @apiSuccess {Object} success
 */
-permisos.add('/unidad/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+permisos.add('/unidad/', 'DELETE', [permisos.CLIENTE])
 api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 
 /**
@@ -196,24 +192,6 @@ api.post('/operador/', autentication.isAuth, operador.create);
 */
 api.post('/login-operador/', operador.login);
 
-//api.put('/unidad', controllers.updateUnidad);
-
-/**
-* @{put} /poligono actualiza poligono
-*
-* @api {put} /unidad/ Obtitene lista de unidades, en base a los parametros
-* pasados por query.
-*
-* @apiName GetUnidad
-* @apiGroup Unidad
-* @apiParam {File} mkl archivo con poligono
-* @apiParam {Number} id_unidad
-*
-* @apiSuccess {Boolean}
-*/
-// permisos.add('/poligono/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-// api.put('/poligono/', autentication.isAuth, poligono.update);
-
 
 /**
 * @{get} /cliente obtiene cliente por id de cliente
@@ -222,9 +200,6 @@ api.post('/login-operador/', operador.login);
 * @apiGroup Cliente
 * @apiParam {number} id identificado unico de cliente
 * @apiSuccess {Object} obejto de tipo Cliente
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
 */
 permisos.add('/cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.get('/cliente/:id', autentication.isAuth, cliente.get);
@@ -234,8 +209,6 @@ api.get('/cliente/:id', autentication.isAuth, cliente.get);
 * @apiGroup Cliente
 * @apiSuccess {Object[]} arrya de tipo Cliente
 * @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     []
 */
 permisos.add('/cliente/', 'GET', [permisos.ADMINISTRADOR])
 api.get('/cliente/', autentication.isAuth, cliente.getLista);
@@ -359,10 +332,6 @@ api.post('/producto/', autentication.isAuth, producto.create);
 * @apiGroup producto
 * @apiParam {number} id identificador de categoria
 * @apiSuccess {array} array de productos
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
-*
 */
 api.get('/producto', producto.getLista);
 
@@ -372,8 +341,18 @@ api.get('/producto', producto.getLista);
 * @apiParam {number} id identificador de producto
 * @apiSuccess {Boolean} respuesta
 */
+permisos.add('/producto-cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/producto-cliente', autentication.isAuth, producto.getListaCliente);
+
+/**
+* @api {delete} /producto/ elimina producto por id
+* @apiGroup producto
+* @apiParam {number} id identificador de producto
+* @apiSuccess {Boolean} respuesta
+*/
 permisos.add('/producto/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.delete('/producto', autentication.isAuth, producto.deleteR);
+
 
 /**
 * @api {post} /pedido/ Crea un pedido
@@ -448,6 +427,23 @@ api.get('/pedido-repartidor/', autentication.isAuth, pedido.getListaPorRepartido
 */
 permisos.add('/pedido-usuario/', 'GET', [permisos.USUSARIO])
 api.get('/pedido-usuario/',autentication.isAuth, pedido.getListaPorUsuario);
+
+/**
+* @api {get} /signed-request-image/ 
+* @apiGroup image
+* @apiSuccess {}
+*/
+permisos.add('/signed-request-image/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/signed-request-image/', autentication.isAuth, imagen.getUrlUploadImage);
+
+/**
+* @api {get} /image/ obtiene lista de imagenes en base a cliente
+* @apiGroup image
+* @apiSuccess {Image[]}
+*/
+permisos.add('/image/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/image/', autentication.isAuth, imagen.getImageListCliente);
+
 
 api.post('/test', function (req, res) {
   console.log(req.body)

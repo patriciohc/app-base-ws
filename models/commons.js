@@ -103,13 +103,12 @@ function getSelect (select, model) {
     var selectQ = "";
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
-        if (select[column]) {
+        if (select.indexOf(column) != -1) {
             selectQ += ` ${column}, ` ;
         }
     }
-    if (and != "") {
-        var sql = and.substring(0, values.length - 2);
-        return sql;
+    if (selectQ != "") {
+        return selectQ.substring(0, selectQ.length - 2);
     } else {
         return " * ";
     }
@@ -117,7 +116,7 @@ function getSelect (select, model) {
 
 function getSqlFindAll(model, query, table) {
     var p = query.where;
-    var select = getSelect(query.select);
+    var select = getSelect(query.select, model);
     if (!p) return `SELECT ${select} FROM ${table} limit 1000`;
     var and = "", sql;
     for (var i = 0; i < model.length; i++) {

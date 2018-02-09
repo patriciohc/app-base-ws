@@ -34,7 +34,7 @@ class Model {
 
     createTableLlaveCompuesta (key1, key2) {
       this.keys = [key1, key2];
-      return createTable();
+      return this.createTable();
     }
 
     create(obj) {

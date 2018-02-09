@@ -73,10 +73,10 @@ function update(idUnidad, idCliente, obj) {
     var query = `UPDATE ${name} SET `;
     for (let i = 0; i < columnsUpdate.length - 1; i++) {
         if (obj[columnsUpdate[i]])
-            query += `${columnsUpdate[i]} = ${obj[columnsUpdate[i]]}, `;
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
     }
     query = query.substring(0, query.length -2); // se quita coma
-    qeury += ` WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
+    query += ` WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
     
     return unidad.rawQuery(query);
 }
@@ -129,8 +129,8 @@ function findById (id) {
     return unidad.findById(id);
 }
 
-function deleteR (id) {
-    return unidad.deleteR({id});
+function deleteR (id, id_cliente) {
+    return unidad.deleteR({id, id_cliente});
 }
 
 module.exports = {

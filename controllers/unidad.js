@@ -71,7 +71,10 @@ function getListaCliente(req, res) {
     if (!req.usuario) {
         return res.status(200).send("se requiere id de usuario")
     }
-    unidad.findAll({where: {id_cliente: req.usuario}})
+    unidad.findAll({
+        select: ['id', 'nombre', 'direccion', 'telefono', 'hora_apetura', 'hora_cierre', 'descripcion'],
+        where: {id_cliente: req.usuario}
+    })
     .then(function(result) {
         return res.status(200).send(result);
     })
@@ -94,10 +97,11 @@ function create(req, res) {
 
 function updateInfoBasic(req, res) {
     var infoUnidad = req.body
-    u.id_cliente = req.usuario;
-    unidad.update(u)
+    var idUnidad = req.query.id_unidad
+    var idCliente = req.usuario;
+    unidad.update(idUnidad, idCliente, infoUnidad)
     .then(function(result) {
-        return res.status(200).send({id: result.insertId});
+        return res.status(200).send({code: 'OK', message:"success", affected: result.affectedRows});
     })
     .catch(function(err) {
         return res.status(500).send({err: err})
@@ -127,7 +131,7 @@ function addPolygon(req, res) {
     if (!polygon || !polygon.length)  return res.status(400).send({message: 'falta poligono'})
     poligono.update(idUnidad, polygon)
     .then(resutl => {
-        return res.status(200).send({message: "succes"});
+        return res.status(200).send({code: 'OK', message: "succes"});
     })
     .catch(err => {
         return res.status(500).send({message: err});
@@ -147,13 +151,15 @@ function getPoligono (req, res) {
 }
 
 function deleteR(req, res) {
-  unidad.deleteR(req.query.id)
-  .then(result => {
-    res.status(200).send(result);
-  })
-  .catch(err => {
-    console.log(err);
-  })
+    var idUnidad = req.query.id_unidad;
+    var idUsuario = req.usuario;
+    unidad.deleteR(idUnidad, idUsuario)
+    .then(result => {
+        res.status(200).send(result);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 }
 
 function addProducto(req, res) {
