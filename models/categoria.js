@@ -36,6 +36,23 @@ function create (obj) {
     return categoria.create(obj);
 }
 
+function update (id, idCliente, obj) {
+    var columnsUpdate = [
+        'nombre',
+        'descripcion',
+        'imagen',
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    query += ` WHERE id = ${id} AND id_cliente = ${idCliente}`;
+    
+    return categoria.rawQuery(query);
+}
+
 function findOne (query) {
     return categoria.findOne(query);
 }
@@ -70,5 +87,6 @@ module.exports = {
     findAll,
     addRelation: categoria.addRelation,
     findAllPorUnidad,
-    deleteR
+    deleteR,
+    update
 }

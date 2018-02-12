@@ -280,13 +280,19 @@ api.post('/usuario/', usuario.create);
 * @apiGroup Categoria
 * @apiParam {Cliente} objeto de tipo cliente
 * @apiSuccess {number} id de objeto insertado
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
-*
 */
 permisos.add('/categoria/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.post('/categoria/', autentication.isAuth, categoria.create);
+
+/**
+* @api {post} /categoria/ actualiza una categoria
+* @apiGroup Categoria
+* @apiParam {Categoria} objeto de tipo categoria
+* @apiParam {id} identificador de categoria
+* @apiSuccess {number}
+*/
+permisos.add('/categoria/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.put('/categoria/', autentication.isAuth, categoria.update);
 
 /**
 * @api {delete} /categoria/ elimina categoria por id
@@ -304,28 +310,34 @@ api.delete('/categoria/', autentication.isAuth, categoria.deleteR);
 * @apiParam {number} id identificador de cliente
 * @apiSuccess {array} array de categorias
 */
-api.get('/categoria', categoria.getListaPorUnidad);
+// api.get('/categoria', categoria.getListaPorUnidad);
 
 /**
-* @api {get} /categoria/ filtra categorias por id de cliente
+* @api {get} /categoria/ filtra categorias, parametros por query
 * @apiGroup Categoria
-* @apiParam {number} id identificador de unidad
-* @apiParam {number} id identificador de cliente
+* @apiParam {number} id_unidad identificador de unidad por query 
+* @apiParam {number} id_cliente identificador de cliente
 * @apiSuccess {array} array de categorias
 */
-api.get('/categoria-cliente', categoria.getLista);
+api.get('/categoria/', categoria.getLista);
 
 /**
 * @api {post} /producto/ Crea un producto
 * @apiGroup producto
 * @apiParam {Producto} objeto de tipo Producto
 * @apiSuccess {number} id de objeto insertado
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
 */
 permisos.add('/producto/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.post('/producto/', autentication.isAuth, producto.create);
+
+/**
+* @api {put} /producto/ actualiza producto
+* @apiGroup producto
+* @apiParam {Producto} objeto de tipo Producto
+* @apiParam {number} id de objeto
+*/
+permisos.add('/producto/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.put('/producto/', autentication.isAuth, producto.update);
 
 /**
 * @api {get} /producto/ filtra categorias por id de categoria
@@ -334,6 +346,15 @@ api.post('/producto/', autentication.isAuth, producto.create);
 * @apiSuccess {array} array de productos
 */
 api.get('/producto', producto.getLista);
+
+/**
+* @api {get} /producto/ detalle de producto para consulta de clientes
+* @apiGroup producto
+* @apiParam {number} id identificador
+* @apiSuccess {Producto} array de productos
+*/
+permisos.add('/producto-detalle/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/producto-detalle/', autentication.isAuth, producto.getDetalle);
 
 /**
 * @api {delete} /producto/ elimina producto por id

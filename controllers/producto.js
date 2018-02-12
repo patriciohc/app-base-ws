@@ -30,6 +30,22 @@ function getLista(req, res) {
     })
 }
 
+function getDetalle(req, res) { 
+    var id_cliente = req.usuario;
+    var id = req.query.id_producto;
+    if (!id_cliente || !id) {
+        return res.status(400).send({err: "se requiere: id_cliente || id"});
+    }
+    var where = {id_cliente, id}
+    producto.findAll({where})
+    .then(function(result) {
+        return res.status(200).send(result);
+    })
+    .catch(function(err){
+        return res.status(500).send({err: err});
+    })
+}
+
 function getListaCliente(req, res) {
     var usuario = req.usuario;
     producto.findAll({where: {id_cliente: usuario}})
@@ -42,7 +58,9 @@ function getListaCliente(req, res) {
 }
 
 function create(req, res) {
-    producto.create(req.body)
+    var obj = req.body;
+    obj.id_cliente = req.usuario;
+    producto.create(obj)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
     })
@@ -52,7 +70,16 @@ function create(req, res) {
 }
 
 function update(req, res) {
-
+    var obj = req.body
+    var idProducto = req.query.id_producto
+    var idCliente = req.usuario;
+    producto.update(idProducto, idCliente, obj)
+    .then(function(result) {
+        return res.status(200).send({code: 'OK', message:"success", affected: result.affectedRows});
+    })
+    .catch(function(err) {
+        return res.status(500).send({err: err})
+    })
 }
 
 function deleteR(req, res) {
@@ -73,5 +100,6 @@ module.exports = {
     update,
     getLista,
     deleteR,
-    getListaCliente
+    getListaCliente,
+    getDetalle
 }

@@ -14,10 +14,10 @@ const columns = [
     }, {
         name: "nombre",
         type: "VARCHAR(250)"
-    }, {
+    }, /*{
         name: "codigo",
         type: "VARCHAR(100)"
-    }, {
+    },*/ {
         name: "descripcion",
         type: "VARCHAR(100)"
     }, {
@@ -64,6 +64,26 @@ function deleteR (query) {
     return producto.deleteR(query.where);
 }
 
+function update (id, idCliente, obj) {
+    var columnsUpdate = [
+        'nombre',
+        'descripcion',
+        'imagen',
+        'precio',
+        'precio_publico',
+        'id_categoria',
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    query += ` WHERE id = ${id} AND id_cliente = ${idCliente}`;
+    
+    return producto.rawQuery(query);
+}
+
 module.exports = {
     sync,
     create,
@@ -72,4 +92,5 @@ module.exports = {
     findAll,
     addRelation: producto.addRelation,
     deleteR,
+    update
 }

@@ -18,10 +18,7 @@ function get(req, res) {
 }
 
 function getLista(req, res) {
-    if (!req.query.id_cliente) {
-        return res.status(400).send({err: "se requiere id_cliente"});
-    }
-    var where = utils.minimizarObjeto(["id_cliente"], req.query);
+    var where = utils.minimizarObjeto(["id_cliente", "id"], req.query);
     categoria.findAll({where})
     .then(function(result) {
         return res.status(200).send(result);
@@ -31,21 +28,23 @@ function getLista(req, res) {
     })
 }
 
-function getListaPorUnidad(req, res) {
-  if (!req.query.id_unidad) {
-      return res.status(400).send({err: "se requiere id_unidad"});
-  }
-  categoria.findAllPorUnidad(req.query.id_unidad)
-  .then(function(result) {
-      return res.status(200).send(result);
-  })
-  .catch(function(err){
-      return res.status(500).send({err: err});
-  })
-}
+// function getLista(req, res) {
+//   if (!req.query.id_unidad) {
+//       return res.status(400).send({err: "se requiere id_unidad"});
+//   }
+//   categoria.findAllPorUnidad(req.query.id_unidad)
+//   .then(function(result) {
+//       return res.status(200).send(result);
+//   })
+//   .catch(function(err){
+//       return res.status(500).send({err: err});
+//   })
+// }
 
 function create(req, res) {
-    categoria.create(req.body)
+    var obj = req.body;
+    obj.id_cliente = req.usuario;
+    categoria.create(obj)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
     })
@@ -55,7 +54,16 @@ function create(req, res) {
 }
 
 function update(req, res) {
-
+    var obj = req.body
+    var id = req.query.id_categoria
+    var idCliente = req.usuario;
+    categoria.update(id, idCliente, obj)
+    .then(function(result) {
+        return res.status(200).send({code: 'OK', message:"success", affected: result.affectedRows});
+    })
+    .catch(function(err) {
+        return res.status(500).send({err: err})
+    })
 }
 
 function deleteR(req, res) {
@@ -75,6 +83,6 @@ module.exports = {
     create,
     update,
     getLista,
-    getListaPorUnidad,
+    // getListaPorUnidad,
     deleteR
 }

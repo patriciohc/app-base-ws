@@ -38,6 +38,7 @@ class Model {
     }
 
     create(obj) {
+        obj = this.cleanObj(obj); 
         var sql = utils.getSqlInsert(obj, this.model, this.name);
         console.log(sql);
         return new Promise((resolve, reject) => {
@@ -191,6 +192,22 @@ class Model {
                 }
             })
         });
+    }
+
+/**
+* elimina parametros que no pertenecen a esta objeto
+* @param {Object} obj - tabla fuente
+* @return {Object} objeto limpio
+*/    
+    cleanObj(obj) {
+        var objClean = {};
+        for (let i = 0; i < this.model.length; i++) {
+            var item = this.model[i];
+            if (obj[item.name]) {
+                objClean[item.name] = obj[item.name];
+            }
+        }
+        return objClean;
     }
 
 }
