@@ -46,7 +46,7 @@ function getSqlInsert(object, model, table) {
     var values = "";
     for (let i = 0; i < model.length; i++) {
         var column = model[i];
-        if (object[column.name]) {
+        if (typeof(object[column.name]) != 'undefined') {
             columns += `${column.name} ,`;
             var type = column.type.split(" ")[0];
             if (NUMBER.indexOf(type.toUpperCase()) != -1) {

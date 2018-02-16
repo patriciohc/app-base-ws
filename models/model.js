@@ -203,7 +203,7 @@ class Model {
         var objClean = {};
         for (let i = 0; i < this.model.length; i++) {
             var item = this.model[i];
-            if (obj[item.name]) {
+            if (typeof(obj[item.name]) != 'undefined') {
                 objClean[item.name] = obj[item.name];
             }
         }

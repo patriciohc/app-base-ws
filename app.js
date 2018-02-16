@@ -31,7 +31,7 @@ app.use('/api', api);
 // var certificate = fs.readFileSync(rootPath+'/https/396b94f1a9c1d5b9.crt');
 // var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
-// app.use('/public', express.static("./public"));
+app.use('/public', express.static("./public"));
 const port = process.env.PORT || 8088;
 server.listen(port, () =>{
     console.log("servidor corriendo en http://localhost: " + port);

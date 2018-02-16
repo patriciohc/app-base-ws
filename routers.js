@@ -394,7 +394,7 @@ api.post('/pedido/', autentication.isAuth, pedido.create);
 * @apiParam {number} estatus
 * @apiSuccess {Boolean} success
 */
-permisos.add('/pedido-estatus/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+permisos.add('/pedido-estatus/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.put('/pedido-estatus/', autentication.isAuth, pedido.setEstatus);
 
 /**
@@ -428,7 +428,8 @@ api.put('/pedido-calificacion', autentication.isAuth, pedido.calificar);
 * @apiParam {number} id_unidad
 * @apiSuccess {Object[]} lista de pedidos
 */
-api.get('/pedido', pedido.getListaPorUnidad);
+permisos.add('/pedido/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+api.get('/pedido/', pedido.getListaPorUnidad);
 
 /**
 * @api {get} /operador-repartidor obitene los pedidos asignados a un repartidor

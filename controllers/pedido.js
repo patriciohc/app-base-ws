@@ -20,11 +20,13 @@ const utils = require('./utils');
 //
 
 function getListaPorUnidad(req, res) { // forbidden for users
-  var params = ["id_unidad", "id_cliente"];
-  if (!utils.orValidate(params, req.query)) {
-      return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
-  }
-  var where = utils.minimizarObjeto(params, req.query);
+    var id_cliente = req.usuario;
+    var params = ["id_unidad", "id_cliente"];
+    // if (!utils.orValidate(params, req.query)) {
+    //     return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
+    // }
+    // var where = utils.minimizarObjeto({id_cliente, id_unidad: req.query.id_unidad}, req.query);
+    var where = {id_cliente, id_unidad: req.query.id_unidad};
     Pedido.findAllWithDependencies({where})
     .then(function(result) {
       console.log(result);
