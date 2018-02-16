@@ -1,3 +1,4 @@
+importScripts('https://cdn.onesignal.com/sdks/OneSignalSDK.js');
 var CACHE = 'version-0';
 var filesToCache = [
   // 'index.html',
