@@ -10,15 +10,15 @@ self.addEventListener('install', function(e) {
   e.waitUntil(precache());
 });
 
-self.addEventListener('activate', function(e) {
-  console.log('[ServiceWorker] Activate');
-  e.waitUntil(cleanCache());
-  return self.clients.claim();
-});
+// self.addEventListener('activate', function(e) {
+//   console.log('[ServiceWorker] Activate');
+//   e.waitUntil(cleanCache());
+//   return self.clients.claim();
+// });
 
-self.addEventListener('fetch', function (e) {
-  e.respondWith(fromCache(e.request));
-});
+// self.addEventListener('fetch', function (e) {
+//   e.respondWith(fromCache(e.request));
+// });
 
 function precache() {
   return caches.open(CACHE).then(function (cache) {
