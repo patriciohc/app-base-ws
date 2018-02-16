@@ -32,6 +32,10 @@ app.use('/api', api);
 // var credentials = {key: privateKey, cert: certificate};
 // var httpsServer = https.createServer(credentials, app);
 app.use(express.static("./public"));
+app.use('/admin-client/*', function(req, res, next) {
+    // Just send the index.html for other files to support HTML5Mode
+    res.sendFile('./public/admin-client/index.html');
+});
 const port = process.env.PORT || 8088;
 server.listen(port, () =>{
     console.log("servidor corriendo en http://localhost: " + port);
