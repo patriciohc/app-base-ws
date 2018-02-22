@@ -247,9 +247,18 @@ api.post('/login-cliente/', cliente.login);
 * @apiGroup usuario
 * @apiParam {string} correo_electronico
 * @apiParam {string} password
-* @apiSuccess {Usuario} obejto de tipo cliente
+* @apiSuccess {Usuario} obejto de tipo usuario
 */
 api.post('/login/', usuario.login);
+
+/**
+* @api {post} /login-facebook/
+* @apiGroup usuario
+* @apiParam {string} token token de facebook
+* @apiParam {string} id id de facebook
+* @apiSuccess {Usuario} obejto de tipo usuario
+*/
+api.post('/login-facebook/', usuario.loginFacebook);
 
 /**
 * Administrador

@@ -29,7 +29,13 @@ const columns = [
     }, {
         name: "recibir_promociones",
         type: "TINYINT" // 1 true, 0 false
-    },
+    }, {
+        name: "id_push",
+        type: "VARCHAR(100)"
+    }, {
+        name: "type_login",
+        type: "VARCHAR(100)"
+    }
 ]
 
 var usuario = new Model(name, columns);
