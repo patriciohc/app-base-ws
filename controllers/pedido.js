@@ -3,6 +3,7 @@ const DireccionSolicitud = require('../models').direccionSolicitud;
 const ListaPedido = require('../models').listaPedido;
 const Pedido = require('../models').pedido;
 const utils = require('./utils');
+const notification = require('./push-notification');
 
 // function get(req, res) {
 //     categoria.findById(req.params.id)
@@ -95,7 +96,29 @@ function create(req, res) {
 }
 
 function setEstatus(req, res) {
-    Pedido.setEstatus(req.query.id, req.body.estatus)
+    var status = req.body.estatus;
+    var idUser = req.body.id_usuario;
+    switch (status) {
+        case 2:
+            notification.sendPushOneUser(
+                'Su pedido ha sido recibido', 
+                'Gracias por su compra, su pedido se esta preparando', 
+                idUser)
+            break;
+        case 3:
+            notification.sendPushOneUser(
+                'Su pedido esta en camino', 
+                'Gracias por esperar, su pedido ha sido enviado', 
+                idUser)
+        break;
+        case 4:
+            notification.sendPushOneUser(
+                'Su pedido ha sido entregado', 
+                'Gracias por su compra, ayudanos a mejorar calificando el servicio', 
+                idUser)
+        break;
+    }
+    Pedido.setEstatus(req.query.id, status)
     .then( result => {
         return res.status(200).send({success: result});
     })

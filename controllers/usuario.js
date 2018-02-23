@@ -7,6 +7,7 @@ const Auth = require('./autentication');
 const permisos = require('../permisos');
 const utils = require('./utils');
 const graph = require('fbgraph');
+var GoogleAuth = require('google-auth-library');
 
 function getProfileFacebook(tokenFace) {
     var options = { timeout: 3000, pool: { maxSockets: Infinity }, headers: { connection: 'keep-alive' } }
@@ -46,6 +47,23 @@ async function loginFacebook(req, res) {
         console.log(e);
         return res.status(500).send({code: "error", message: "Error en el servidor" , error: e});
     }
+}
+
+async function loginGoogle(req, res) {
+    var token = req.token;
+    var auth = new GoogleAuth;
+    var client = new auth.OAuth2(CLIENT_ID, '', '');
+    client.verifyIdToken(
+        token,
+        CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
+        function(e, login) {
+          var payload = login.getPayload();
+          var userid = payload['sub'];
+          // If request specified a G Suite domain:
+          //var domain = payload['hd'];
+        });
 }
 
 
@@ -109,5 +127,6 @@ module.exports = {
     create,
     update,
     login_admin,
-    loginFacebook
+    loginFacebook,
+    loginGoogle
 }

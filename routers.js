@@ -12,6 +12,7 @@ const operador = require('./controllers/operador');
 const catalogos = require('./controllers/catalogos');
 const autentication =  require('./controllers/autentication');
 const imagen =  require('./controllers/imagen');
+const notification = require('./controllers/push-notification');
 const permisos = require('./permisos');
 const multer  = require('multer');
 
@@ -261,6 +262,15 @@ api.post('/login/', usuario.login);
 api.post('/login-facebook/', usuario.loginFacebook);
 
 /**
+* @api {post} /login-google/
+* @apiGroup usuario
+* @apiParam {string} token token de facebook
+* @apiParam {string} id id de facebook
+* @apiSuccess {Usuario} obejto de tipo usuario
+*/
+api.post('/login-google/', usuario.loginGoogle);
+
+/**
 * Administrador
 */
 /**
@@ -474,6 +484,14 @@ api.get('/signed-request-image/', autentication.isAuth, imagen.getUrlUploadImage
 */
 permisos.add('/image/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.get('/image/', autentication.isAuth, imagen.getImageListCliente);
+
+/**
+* @api {get} /suscribe-notification/ notificaciones para usaurio especificos
+* @apiGroup suscribe-notification
+* @apiSuccess {Image[]}
+*/
+permisos.add('/suscribe-notification/', 'POST', [permisos.USUSARIO])
+api.post('/suscribe-notification/', autentication.isAuth, notification.suscribe);
 
 
 api.post('/test', function (req, res) {

@@ -61,6 +61,27 @@ function findById (id) {
     return usuario.findById(id);
 }
 
+
+function update(id, obj) {
+    var columnsUpdate = [
+        'nombre',
+        'password',
+        'telefono',
+        'recibir_promociones',
+        'id_push',
+        'type_login'
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    query += ` WHERE id = ${id}`;
+    
+    return unidad.rawQuery(query);
+}
+
 module.exports = {
     sync,
     create,
