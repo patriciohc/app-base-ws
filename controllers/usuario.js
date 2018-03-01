@@ -7,7 +7,7 @@ const Auth = require('./autentication');
 const permisos = require('../permisos');
 const utils = require('./utils');
 const graph = require('fbgraph');
-var GoogleAuth = require('google-auth-library');
+var {OAuth2Client} = require('google-auth-library');
 
 function getProfileFacebook(tokenFace) {
     var options = { timeout: 3000, pool: { maxSockets: Infinity }, headers: { connection: 'keep-alive' } }
@@ -34,7 +34,7 @@ async function loginFacebook(req, res) {
         if (!userdb) {
             var newUser = {
                 nombre: profile.name,
-                correo_electronico: profile.correo_electronico,
+                correo_electronico: profile.email,
                 // fechaNacimiento: resp.birthday,
                 // sexo: resp.gender,
                 type_login: 'facebook',
@@ -49,21 +49,53 @@ async function loginFacebook(req, res) {
     }
 }
 
+function getProfileGoogle(token) {
+    var CLIENT_ID = '823286805-hve74e4r5aao8s08cera30s2jbvdhtjs.apps.googleusercontent.com';
+    var client = new OAuth2Client(CLIENT_ID, '', '');
+
+    return new Promise((resolve, reject) => {
+        client.verifyIdToken({
+                idToken: token,
+                audience: CLIENT_ID
+            }, 
+            function(err, login) {
+                if (err) {
+                    return reject(err);
+                }
+                var payload = login.getPayload();
+                var userid = payload['sub'];
+                // If request specified a G Suite domain:
+                var domain = payload['hd'];
+                resolve({
+                    nombre: payload['name'],
+                    email: payload['email'],
+                    picture: payload['picture'],
+                })
+            }
+        )
+    });
+} 
+
 async function loginGoogle(req, res) {
-    var token = req.token;
-    var auth = new GoogleAuth;
-    var client = new auth.OAuth2(CLIENT_ID, '', '');
-    client.verifyIdToken(
-        token,
-        CLIENT_ID,  // Specify the CLIENT_ID of the app that accesses the backend
-        // Or, if multiple clients access the backend:
-        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3],
-        function(e, login) {
-          var payload = login.getPayload();
-          var userid = payload['sub'];
-          // If request specified a G Suite domain:
-          //var domain = payload['hd'];
-        });
+    // var idFace = req.body.id;
+    try {
+        var profile = await getProfileGoogle(req.body.token);
+        if (!profile.email) return res.status(400).send({code: "error", message: "falta email", error:""})
+        var userdb = await usuario.findOne({where: {email: profile.email}});
+        if (!userdb) {
+            var newUser = {
+                nombre: profile.name,
+                correo_electronico: profile.email,
+                type_login: 'google',
+            };
+            userdb = await usuario.create(newUser);
+        }
+        userdb.token = Auth.createToken(userdb.id, permisos.USUSARIO)
+        return res.status(200).send(userdb);
+    } catch(e) {
+        console.log(e);
+        return res.status(500).send({code: "error", message: "Error en el servidor" , error: e});
+    }
 }
 
 

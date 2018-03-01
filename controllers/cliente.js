@@ -43,27 +43,28 @@ function create(req, res) {
 
 }
 
-function login(req, res) {
-    cliente.findOne({
-      where: {correo_electronico: req.body.correo_electronico}
-    })
-    .then(function(result) {
-        console.log(result);
-        if (!result) {
-          return res.status(404).send({message: "not found"});
+async function login(req, res) {
+    try {
+        var usr = await cliente.findOne({
+            where: {correo_electronico: req.body.correo_electronico}
+        })
+        if (!usr) return res.status(404).send({message: "not found"});
+        let shaPass = SHA256(req.body.password);
+        if (shaPass == usr.password) {
+            var sesion = {
+                id_usuario: usr.id,
+                token: Auth.createToken(usr.id, permisos.CLIENTE),
+                nombre_usuario: usr.representante_legal,
+                id_cliente: usr.id,
+                rol: permisos.CLIENTE
+            }
+            return res.status(200).send(sesion);
         } else {
-          let shaPass = SHA256(req.body.password)
-          if (shaPass == result.password) {
-            result.token = Auth.createToken(result.id, permisos.CLIENTE)
-            return res.status(200).send(result);
-          } else {
-              return res.status(401).send({message: "usuario no autorizado"});
-          }
+            return res.status(401).send({code:'SUCCESS', message: 'usuario no autorizado'});
         }
-    })
-    .catch(function(err) {
-        return res.status(500).send({err});
-    });
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
 }
 
 function update(req, res) {

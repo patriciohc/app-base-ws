@@ -1,6 +1,7 @@
 'use strict'
 
 const operador = require('../models').operador;
+const permisos = require('../permisos')
 
 function get(req, res) {
     operador.findById(req.params.id)
@@ -60,10 +61,30 @@ function update(req, res) {
 
 }
 
+function getRoles(req, res) {
+    return res.status(200).send([
+        {
+            id: permisos.REPARTIDOR,
+            nombre: 'Repartidor'
+        }, {
+            id: permisos.OPERADOR_UNIDAD,
+            nombre: 'Operador de unidad'
+        }, {
+            id: permisos.ADMIN_UNIDAD,
+            nombre: 'Administrador de unidad'
+        }, {
+            id: permisos.ADMIN_CLIENTE,
+            nombre: 'Administrador'           
+        }
+    ])
+
+}
+
 module.exports = {
     get,
     getLista,
     create,
     update,
     login,
+    getRoles
 }

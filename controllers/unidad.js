@@ -4,6 +4,7 @@ const unidad = require('../models').unidad;
 const poligono = require('../models').poligono;
 const unidadProducto = require('../models').unidadProducto;
 const unidadOperador = require('../models').unidadOperador;
+const operador = require('../models').operador;
 const utils = require('./utils');
 
 function get(req, res) {
@@ -68,12 +69,12 @@ function getLista(req, res) {
 }
 
 function getListaCliente(req, res) {
-    if (!req.usuario) {
+    if (!req.query.id_cliente) {
         return res.status(200).send("se requiere id de usuario")
     }
     unidad.findAll({
         select: ['id', 'nombre', 'direccion', 'telefono', 'hora_apetura', 'hora_cierre', 'descripcion'],
-        where: {id_cliente: req.usuario}
+        where: {id_cliente: req.query.id_cliente}
     })
     .then(function(result) {
         return res.status(200).send(result);
@@ -172,8 +173,13 @@ function addProducto(req, res) {
     });
 }
 
-function addOperador(req, res) {
-    unidadOperador.insertBulk("id_unidad, id_operador",req.body)
+async function addOperador(req, res) {
+    var correo_electronico = req.body.correo_electronico;
+    var rol = req.body.rol;
+    var id_unidad = req.body.id_unidad;
+    var op = await operador.findOne({where: {correo_electronico}});
+
+    unidadOperador.create({id_unidad, id_operador: op.id, rol})
     .then(result => {
         return res.status(200).send({success: true});
     })

@@ -29,12 +29,6 @@ const columns = [
         name: "password",
         type: "VARCHAR(50) NOT NULL"
     }, {
-        name: "rol",
-        // 1 repartidor,
-        // 2 operador de unidad
-        // 3 administrador
-        type: "TINYINT NOT NULL"
-    }, {
         name: "foto",
         type: "VARCHAR(100)"
     }, {

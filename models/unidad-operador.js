@@ -14,6 +14,9 @@ const columns = [
     }, {
         name: "id_operador",
         type: "INT"
+    }, {
+        name: "rol",
+        type: "INT"
     }
 ]
 

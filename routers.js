@@ -14,13 +14,6 @@ const autentication =  require('./controllers/autentication');
 const imagen =  require('./controllers/imagen');
 const notification = require('./controllers/push-notification');
 const permisos = require('./permisos');
-const multer  = require('multer');
-
-var upload = multer({ dest: './kml' });
-//const middleware = require('../middleware');
-
-// -- no require permisos
-api.get('/catalogos', catalogos.get)
 
 /**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
@@ -28,8 +21,7 @@ api.get('/catalogos', catalogos.get)
 * @apiParam {number} id_cliente identificador unico de cliente
 * @apiSuccess {Object} obejto de tipo unidad
 */
-permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE])
-api.get('/unidad-cliente/', autentication.isAuth, unidad.getListaCliente);
+api.get('/unidad-cliente/', unidad.getListaCliente);
 
 /**
 * @api {get} /unidad/ Obtitene lista de unidades de un cliente (informacion general)
@@ -138,10 +130,12 @@ api.get('/unidad-poligono/', unidad.getPoligono);
 * @api {post} /unidad-operador agrega operadores a unidad
 *
 * @apiGroup Unidad
-* @apiParam {Number[][]} id_unidad, id_operador
-* @apiSuccess {Boolean} success
+* @apiParam {number} id_unidad 
+* @apiParam {String} correo_electronico - email operador 
+* @apiParam {number} rol - rol del operador 
+* @apiSuccess {Object} success
 */
-permisos.add('/unidad-operador/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+permisos.add('/unidad-operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
 api.post('/unidad-operador/', autentication.isAuth, unidad.addOperador);
 
 /**
@@ -171,7 +165,7 @@ api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 * @apiParam {Object} Operador
 * @apiSuccess {Boolean} success
 */
-permisos.add('/operador/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+permisos.add('/operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
 api.post('/operador/', autentication.isAuth, operador.create);
 
 /**
@@ -179,9 +173,26 @@ api.post('/operador/', autentication.isAuth, operador.create);
 *
 * @apiGroup Operador
 * @apiParam {Number} id_unidad
-* @apiSuccess {Boolean} success
+* @apiSuccess {} success
 */
-// api.get('/operador/', operador.getLista);
+api.get('/operador/', operador.getLista);
+
+/**
+* @api {get} /operador obitiene los roles que puede tener un operador
+*
+* @apiGroup Operador
+* @apiSuccess {Array} success
+*/
+api.get('/roles/', operador.getRoles);
+
+/**
+* @api {get} /operador obitiene operadores por unidad
+*
+* @apiGroup Operador
+* @apiParam {Number} id_unidad
+* @apiSuccess {} success
+*/
+api.get('/operador/:id', operador.getLista);
 
 /**
 * @api {post} /login-operador logue operador
@@ -256,7 +267,6 @@ api.post('/login/', usuario.login);
 * @api {post} /login-facebook/
 * @apiGroup usuario
 * @apiParam {string} token token de facebook
-* @apiParam {string} id id de facebook
 * @apiSuccess {Usuario} obejto de tipo usuario
 */
 api.post('/login-facebook/', usuario.loginFacebook);
