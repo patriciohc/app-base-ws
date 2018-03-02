@@ -127,26 +127,14 @@ api.post('/unidad-poligono/', autentication.isAuth, unidad.addPolygon);
 api.get('/unidad-poligono/', unidad.getPoligono);
 
 /**
-* @api {post} /unidad-operador agrega operadores a unidad
-*
-* @apiGroup Unidad
-* @apiParam {number} id_unidad 
-* @apiParam {String} correo_electronico - email operador 
-* @apiParam {number} rol - rol del operador 
-* @apiSuccess {Object} success
-*/
-permisos.add('/unidad-operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
-api.post('/unidad-operador/', autentication.isAuth, unidad.addOperador);
-
-/**
 * @api {get} /unidad-operador obtiene todos los operadores en una unidad
 *
 * @apiGroup Unidad
 * @apiParam {Number} id_unidad
 * @apiSuccess {Object[]} lista de operadores
 */
-permisos.add('/unidad-operador/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/unidad-operador/', autentication.isAuth, unidad.getLOperadoresUnidad);
+// permisos.add('/unidad-operador/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+// api.get('/unidad-operador/', autentication.isAuth, unidad.getLOperadoresUnidad);
 
 /**
 * @api {delete} /unidad elimina unidad
@@ -159,7 +147,30 @@ permisos.add('/unidad/', 'DELETE', [permisos.CLIENTE])
 api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 
 /**
-* @api {post} /operador crea un operador
+* @api {post} /clienten-operador/ agrega operadores a un cliente
+*
+* @apiGroup Unidad
+* @apiParam {number} id_unidad 
+* @apiParam {number} id_clienten 
+* @apiParam {String} correo_electronico - email operador 
+* @apiParam {number} rol - rol del operador 
+* @apiSuccess {Object} success
+*/
+permisos.add('/clienten-operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
+api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
+
+/**
+* @api {get} /operador obitiene operadores por cliente
+*
+* @apiGroup Operador
+* @apiParam {Number} id_cliente
+* @apiSuccess {} success
+*/
+permisos.add('/clienten-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
+api.get('/clienten-operador/', cliente.getListOperadores);
+
+/**
+* @api {post} /operador/ crea un operador
 *
 * @apiGroup Operador
 * @apiParam {Object} Operador
@@ -168,14 +179,6 @@ api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 permisos.add('/operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
 api.post('/operador/', autentication.isAuth, operador.create);
 
-/**
-* @api {get} /operador obitiene operadores por unidad
-*
-* @apiGroup Operador
-* @apiParam {Number} id_unidad
-* @apiSuccess {} success
-*/
-api.get('/operador/', operador.getLista);
 
 /**
 * @api {get} /operador obitiene los roles que puede tener un operador

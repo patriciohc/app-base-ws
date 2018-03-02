@@ -67,6 +67,35 @@ async function login(req, res) {
     }
 }
 
+async function addOperador(req, res) {
+    var correo_electronico = req.body.correo_electronico;
+    var rol = req.body.rol;
+    var id_unidad = req.body.id_unidad;
+    var op = await operador.findOne({where: {correo_electronico}});
+
+    clienteOperador.create({id_unidad, id_operador: op.id, rol})
+    .then(result => {
+        return res.status(200).send({success: true});
+    })
+    .catch(err => {
+        return res.status(500).send({err: err});
+    });
+}
+
+function getListOperadores(req, res) {
+    var id_usuario = req.usuario;
+    var rol = req.rol;
+    if (rol == permisos.CLIENTE) {
+        clienteOperador.findAllOperadores(req.query.id_cliente)
+        .then(result => {
+            return res.status(200).send(result);
+        })
+        .catch(err => {
+            return res.status(500).send({err});
+        });
+    }
+}
+
 function update(req, res) {
 
 }
@@ -77,4 +106,5 @@ module.exports = {
     create,
     update,
     login,
+    addOperador
 }

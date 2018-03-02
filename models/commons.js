@@ -141,5 +141,4 @@ module.exports = {
     getSqlFindAll,
     getWhere,
     concatKeys,
-    concatKeys
 }

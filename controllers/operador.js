@@ -1,7 +1,8 @@
 'use strict'
 
 const operador = require('../models').operador;
-const permisos = require('../permisos')
+const clienteOperador = require('../models').clienteOperador;
+const permisos = require('../permisos');
 
 function get(req, res) {
     operador.findById(req.params.id)
@@ -15,16 +16,6 @@ function get(req, res) {
     .catch(function(err) {
         return res.status(500).send({err});
     });
-}
-
-function getLista(req, res) {
-    operador.findAll()
-    .then(function(result){
-        return res.status(200).send(result);
-    })
-    .catch(function(err){
-        return res.status(500).send({err: err});
-    })
 }
 
 function create(req, res) {

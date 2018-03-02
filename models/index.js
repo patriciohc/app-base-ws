@@ -11,7 +11,7 @@ var listaPedido = require('../models/lista-pedido');
 var operador = require('../models/operador');
 var pedido = require('../models/pedido');
 var unidadProducto = require('../models/unidad-producto');
-var unidadOperador = require('../models/unidad-operador');
+var clienteOperador = require('../models/cliente-operador');
 var imagen = require('../models/imagen');
 
 cliente.sync()
@@ -46,7 +46,7 @@ cliente.sync()
     return unidadProducto.sync();
 })
 .then(function (result) {
-    return unidadOperador.sync();
+    return clienteOperador.sync();
 })
 .then(function (result) {
     return imagen.sync();
@@ -101,11 +101,11 @@ function createForeingKey () {
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
-  unidadOperador.addRelation('unidad_operador', 'id_operador', 'operador')
+  clienteOperador.addRelation('cliente_operador', 'id_operador', 'operador')
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
-  unidadOperador.addRelation('unidad_operador', 'id_unidad', 'unidad')
+  clienteOperador.addRelation('cliente_operador', 'id_cliente', 'cliente')
   .then(result => console.log(result))
   .catch(err => console.log(err));
 }
@@ -122,6 +122,6 @@ module.exports = {
     operador,
     pedido,
     unidadProducto,
-    unidadOperador,
+    clienteOperador,
     imagen
 }

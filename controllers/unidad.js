@@ -3,9 +3,10 @@
 const unidad = require('../models').unidad;
 const poligono = require('../models').poligono;
 const unidadProducto = require('../models').unidadProducto;
-const unidadOperador = require('../models').unidadOperador;
+const clienteOperador = require('../models').clienteOperador;
 const operador = require('../models').operador;
 const utils = require('./utils');
+const permisos = require('../permisos');
 
 function get(req, res) {
     unidad.findById(req.params.id)
@@ -173,33 +174,19 @@ function addProducto(req, res) {
     });
 }
 
-async function addOperador(req, res) {
-    var correo_electronico = req.body.correo_electronico;
-    var rol = req.body.rol;
-    var id_unidad = req.body.id_unidad;
-    var op = await operador.findOne({where: {correo_electronico}});
-
-    unidadOperador.create({id_unidad, id_operador: op.id, rol})
-    .then(result => {
-        return res.status(200).send({success: true});
-    })
-    .catch(err => {
-        return res.status(500).send({err: err});
-    });
-}
-
-function getLOperadoresUnidad(req, res) {
-  if (!req.query.id_unidad) {
-      return res.status(400).send({err: "se require id_unidad"});
-  }
-  unidadOperador.findAllOperadores(req.query.id_unidad)
-  .then(result => {
-      return res.status(200).send(result);
-  })
-  .catch(err => {
-      return res.status(500).send({err});
-  });
-}
+// function getLOperadoresUnidad(req, res) {
+//     var id_usuario = req.usuario;
+//     var rol = req.rol;
+//     if (rol == permisos.CLIENTE) {
+//         unidadOperador.findAllOperadores(req.query.id_unidad)
+//         .then(result => {
+//             return res.status(200).send(result);
+//         })
+//         .catch(err => {
+//             return res.status(500).send({err});
+//         });
+//     }
+// }
 
 function getProductos(req, res) {
   if (!req.query.id_unidad) {
@@ -223,7 +210,6 @@ module.exports = {
     addProducto,
     deleteR,
     getProductos,
-    addOperador,
     getLOperadoresUnidad,
     getListaCliente,
     addPosition,
