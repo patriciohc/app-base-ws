@@ -60,35 +60,58 @@ const columns = [
     }, {
         name: "id_usuario",
         type: "INT NOT NULL"
+    }, {
+        name: "payment_id",
+        type: "VARCHAR(100) NOT NULL"
+    }, {
+        name: "payer_id",
+        type: "VARCHAR(100) NOT NULL"
     }
 ]
 
-var pedido = new Model(name, columns);
+var model = new Model(name, columns);
 
 function sync () {
-    return pedido.createTable();
+    return model.createTable();
 }
 
 function create (obj) {
-    return pedido.create(obj);
+    return model.create(obj);
 }
 
 function findOne (query) {
-    return pedido.findOne(query);
+    return model.findOne(query);
 }
 
 function findAll (query) {
-    return pedido.findAll(query);
+    return model.findAll(query);
 }
 
 function findById (id) {
-    return pedido.findById(id);
+    return model.findById(id);
 }
 
+function update (id, obj) {
+    var columnsUpdate = [
+        "estatus",
+        "calificacion",
+        "payment_id",
+        "payer_id"
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    query += ` WHERE id = ${id}`;
+    
+    return categoria.rawQuery(query);
+}
 
-function getListaProductos(pedido) {
+function getListaProductos(idPedido) {
   return new Promise ((resolve, reject) => {
-    listaPedido.findAllListaPedido(pedido.id)
+    listaPedido.findAllListaPedido(idPedido)
     .then(result => {
       pedido.productos = result;
       resolve();
@@ -123,7 +146,7 @@ function findAllWithDependencies(query) {
   var promises = [];
   var lista;
   return new Promise((resolve, reject) => {
-    pedido.findAll(query)
+    model.findAll(query)
     .then(result => {
       var lista = result;
       for (let i = 0; i < lista.length; i++) {
@@ -145,7 +168,7 @@ function setEstatus(id, estatus) {
     var query = `UPDATE pedido
         SET estatus=${estatus}
         WHERE id=${id}`;
-    return pedido.rawQuery(query);
+    return model.rawQuery(query);
 }
 
 function asignarRepartidor(id, idRepartidor) {
@@ -153,14 +176,14 @@ function asignarRepartidor(id, idRepartidor) {
         SET id_operador_entrega=${idRepartidor},
         estatus=3
         WHERE id=${id}`;
-    return pedido.rawQuery(query);
+    return model.rawQuery(query);
 }
 
 function calificar(id, calificacion) {
     var query = `UPDATE pedido
         SET calificacion=${calificacion}
         WHERE id=${id}`;
-    return pedido.rawQuery(query);
+    return model.rawQuery(query);
 }
 
 module.exports = {
@@ -169,9 +192,11 @@ module.exports = {
     findOne,
     findById,
     findAll,
+    update,
     setEstatus,
     asignarRepartidor,
     calificar,
-    addRelation: pedido.addRelation,
-    findAllWithDependencies
+    addRelation: model.addRelation,
+    findAllWithDependencies,
+    getListaProductos
 }

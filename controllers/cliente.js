@@ -106,5 +106,6 @@ module.exports = {
     create,
     update,
     login,
-    addOperador
+    addOperador,
+    getListOperadores
 }

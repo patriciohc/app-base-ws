@@ -210,7 +210,7 @@ module.exports = {
     addProducto,
     deleteR,
     getProductos,
-    getLOperadoresUnidad,
+    // getLOperadoresUnidad,
     getListaCliente,
     addPosition,
     addPolygon,

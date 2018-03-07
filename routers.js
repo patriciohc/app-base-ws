@@ -13,8 +13,12 @@ const catalogos = require('./controllers/catalogos');
 const autentication =  require('./controllers/autentication');
 const imagen =  require('./controllers/imagen');
 const notification = require('./controllers/push-notification');
+const payments = require('./controllers/payments');
 const permisos = require('./permisos');
 
+
+api.post('/create-payment/', payments.create);
+api.post('/execute-payment/', payments.execute);
 /**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
 * @apiGroup Unidad
@@ -195,7 +199,7 @@ api.get('/roles/', operador.getRoles);
 * @apiParam {Number} id_unidad
 * @apiSuccess {} success
 */
-api.get('/operador/:id', operador.getLista);
+// api.get('/operador/:id', operador.getLista);
 
 /**
 * @api {post} /login-operador logue operador

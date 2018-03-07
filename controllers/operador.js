@@ -73,7 +73,7 @@ function getRoles(req, res) {
 
 module.exports = {
     get,
-    getLista,
+    // getLista,
     create,
     update,
     login,

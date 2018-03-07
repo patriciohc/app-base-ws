@@ -56,43 +56,45 @@ function getListaPorUsuario(req, res) {
     })
 }
 
-function create(req, res) {
+async function create(req, res) {
     console.log(req.body);
-    var idPedido;
+    var pedido = await createPedido(req.body);
+    if (pedido.id) {
+        return res.status(200).send({id_pedido: pedido.id})
+    } else {
+        return res.status(500).send({code: 'ERROR', message: 'error', error: pedido})
+    }
+}
+
+async function createPedido(pedido) {
     var date = new Date();
-    DireccionSolicitud.create(req.body.direccion_entrega)
-    .then( result => {
-        console.log(result);
-        var pedido = {
+    var response;
+    try {
+        var response = await DireccionSolicitud.create(pedido.direccion_entrega);
+        var pedidoJson = {
             estatus: 1, // en espera de aceptacion por parte de la la unidad
-            comentarios: req.body.comentarios,
+            comentarios: pedido.comentarios,
             fecha_recibido: utils.getDateMysql(date),
             hora_recibido: utils.getTimeMysql(date),
             calificacion: 0, // no ha recibido calificacion
-            id_direccion_solicitud: result.insertId,
-            id_unidad: req.body.id_unidad,
-            id_usuario: req.body.id_usuario,
+            id_direccion_solicitud: response.insertId,
+            id_unidad: pedido.id_unidad,
+            id_usuario: pedido.id_usuario,
             //id_operador_entrega: // no se ha asignado repartidor
         }
-        console.log(pedido);
-        return Pedido.create(pedido);
-    })
-    .then( result => {
+        response = await Pedido.create(pedidoJson);
+        pedidoJson.id = response.insertId;
         var values = [];
-        idPedido = result.insertId;
-        for (let i = 0; i < req.body.pedido.length; i++) {
-            values.push([idPedido, req.body.pedido[i].id_producto, req.body.pedido[i].cantidad]);
+        for (let i = 0; i < pedido.pedido.length; i++) {
+            values.push([pedidoJson.id, pedido.pedido[i].id_producto, pedido.pedido[i].cantidad]);
         }
-        return ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
-    })
-    .then( result => {
-        if (result) // verificar que se inserto corretamente
-        return res.status(200).send({id_pedido: idPedido})
-    })
-    .catch( err => {
-        console.log(err);
-        return res.status(200).send({err: err});
-    })
+        response = ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
+        if (response) {
+            return pedidoJson;
+        }
+    } catch (err) {
+        return err;
+    }
 }
 
 function setEstatus(req, res) {
@@ -175,4 +177,5 @@ module.exports = {
     asignarRepartidor,
     calificar,
     getListaPorRepartidor,
+    createPedido
 }
