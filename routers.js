@@ -18,7 +18,7 @@ const permisos = require('./permisos');
 
 
 api.post('/create-payment/', payments.create);
-api.post('/execute-payment/', payments.execute);
+api.post('/execute-payment/', payments.onAuthorize);
 /**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
 * @apiGroup Unidad

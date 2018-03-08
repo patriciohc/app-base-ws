@@ -64,16 +64,27 @@ async function create(req, res) {
 
     var json = getConfigPayment(listProducts);
     var newPayment = await createPayment(json);
-    var response = await Pedido.update(pedido.id, {payment_id: newPayment.id});
+    var response = await Pedido.update(pedido.id, {payment_id: newPayment.id}); // affectedRows
     return res.status(200).send(newPayment);
+}
 
+async function onAuthorize(req, res) {
+    var paymentID = req.body.paymentID;
+    var payerID = req.body.payerID;
+    try {
+        var response = await Pedido.update(paymentID, {payer_id: payerID}, 'payment_id');
+        return res.status(200).send({code:"SUCCESS", message: "Se guardo con exito"})
+    } catch(err) {
+        return res.status(500).send({code:"ERROR", message:"",  error: err});
+    }
 }
 
 function execute(req, res) {
+    var pedido = req.body;
     var create_payment_json = {
         payer_id: req.body.payer_id,
     }
-    Paypal.payment.create(req.body.payment_id, create_payment_json, function (error, payment) {
+    Paypal.payment.execute(req.body.payment_id, create_payment_json, function (error, payment) {
         if (error) {
             return res.status(500).send(error)
         } else {
@@ -86,5 +97,6 @@ function execute(req, res) {
 
 module.exports = {
     create,
-    execute
+    execute,
+    onAuthorize
 }

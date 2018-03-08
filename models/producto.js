@@ -84,6 +84,12 @@ function update (id, idCliente, obj) {
     return producto.rawQuery(query);
 }
 
+function findListByIds (ids) {
+    var query = `SELECT * FROM producto
+      WHERE id in [${ids}]`
+      return producto.rawQuery(query);
+}
+
 module.exports = {
     sync,
     create,
@@ -92,5 +98,6 @@ module.exports = {
     findAll,
     addRelation: producto.addRelation,
     deleteR,
-    update
+    update,
+    findListByIds
 }

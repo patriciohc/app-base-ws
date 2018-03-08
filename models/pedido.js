@@ -62,10 +62,10 @@ const columns = [
         type: "INT NOT NULL"
     }, {
         name: "payment_id",
-        type: "VARCHAR(100) NOT NULL"
+        type: "VARCHAR(100)"
     }, {
         name: "payer_id",
-        type: "VARCHAR(100) NOT NULL"
+        type: "VARCHAR(100)"
     }
 ]
 
@@ -91,7 +91,7 @@ function findById (id) {
     return model.findById(id);
 }
 
-function update (id, obj) {
+function update (id, obj, keyUpdate = 'id') {
     var columnsUpdate = [
         "estatus",
         "calificacion",
@@ -99,14 +99,14 @@ function update (id, obj) {
         "payer_id"
     ];
     var query = `UPDATE ${name} SET `;
-    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+    for (let i = 0; i < columnsUpdate.length; i++) {
         if (obj[columnsUpdate[i]])
             query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
     }
     query = query.substring(0, query.length -2); // se quita coma
-    query += ` WHERE id = ${id}`;
+    query += ` WHERE ${keyUpdate} = '${id}'`;
     
-    return categoria.rawQuery(query);
+    return model.rawQuery(query);
 }
 
 function getListaProductos(idPedido) {
