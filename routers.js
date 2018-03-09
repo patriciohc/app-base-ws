@@ -465,7 +465,7 @@ api.put('/pedido-calificacion', autentication.isAuth, pedido.calificar);
 * @apiSuccess {Object[]} lista de pedidos
 */
 permisos.add('/pedido/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/pedido/', pedido.getListaPorUnidad);
+api.get('/pedido/',  autentication.isAuth, pedido.getListaPorUnidad);
 
 /**
 * @api {get} /operador-repartidor obitene los pedidos asignados a un repartidor

@@ -109,9 +109,9 @@ function update (id, obj, keyUpdate = 'id') {
     return model.rawQuery(query);
 }
 
-function getListaProductos(idPedido) {
+function getListaProductos(pedido) {
   return new Promise ((resolve, reject) => {
-    listaPedido.findAllListaPedido(idPedido)
+    listaPedido.findAllListaPedido(pedido.id)
     .then(result => {
       pedido.productos = result;
       resolve();
@@ -197,6 +197,5 @@ module.exports = {
     asignarRepartidor,
     calificar,
     addRelation: model.addRelation,
-    findAllWithDependencies,
-    getListaProductos
+    findAllWithDependencies
 }
