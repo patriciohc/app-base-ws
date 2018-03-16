@@ -47,10 +47,7 @@ const columns = [
     }, {
         name: "descripcion",
         type: "VARCHAR(250)"
-    }/*, {
-        name: "id_push",
-        type: "VARCHAR(100)"
-    }*/
+    }
 ]
 
 var unidad = new Model(name, columns);

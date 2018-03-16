@@ -3,6 +3,8 @@
 const operador = require('../models').operador;
 const clienteOperador = require('../models').clienteOperador;
 const permisos = require('../permisos');
+const SHA256 = require("crypto-js/sha256");
+const Auth = require('./autentication');
 
 function get(req, res) {
     operador.findById(req.params.id)
@@ -26,26 +28,63 @@ function create(req, res) {
     .catch(function(err) {
         return res.status(500).send({err: err})
     })
-
 }
 
-function login(req, res) {
-    operador.findOne({where:{correo_electronico: req.body.correo_electronico}})
-    .then(function(result) {
-        console.log(result);
-        if (!result) {
-            return res.status(404).send({message: "not found"});
-        } else {
-            if (req.body.password == result.password) {
-                return res.status(200).send(result);
-            } else {
-                return res.status(401).send({message: "usuario no autorizado"});
+async function siginUnidad(req, res) {
+    var id_usuario = req.usuario;
+    var id_unidad = req.query.id_unidad;
+    try {
+        var usr = await operador.findById(id_usuario)
+        if (!usr) return res.status(404).send({message: "not found"});
+        var unidad = await clienteOperador.findOne({where: {id_operador: usr.id, id_unidad: id_unidad}})
+            var sesion = {
+                id_usuario: usr.id,
+                token: Auth.createToken(usr.id, unidad.rol),
+                nombre_usuario: usr.nombre,
+                id_unidad: unidad.id_unidad,
+                id_cliente: unidad.id_cliente,
+                rol: unidad.rol
             }
+            return res.status(200).send(sesion);
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
+}
+
+async function getListUnidades(req, res) {
+    var id_usuario = req.usuraio;
+    try {
+        var unidades = await clienteOperador.findAll({where: {id_operador: id_usuario}})
+        return res.status(200).send(unidades);
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
+}
+
+async function login(req, res) {
+    try {
+        var usr = await operador.findOne({
+            where: {correo_electronico: req.body.correo_electronico}
+        })
+        if (!usr) return res.status(404).send({message: "not found"});
+        var sha = SHA256(req.body.password).toString();
+        console.log(sha)
+        if (sha == usr.password) {
+            var unidades = await clienteOperador.findAll({where: {id_operador: usr.id}})
+            var sesion = {
+                id_usuario: usr.id,
+                token: Auth.createToken(usr.id, permisos.OPERADOR_UNIDAD),
+                nombre_usuario: usr.nombre,
+                unidades: unidades,
+                rol: permisos.OPERADOR_UNIDAD
+            }
+            return res.status(200).send(sesion);
+        } else {
+            return res.status(401).send({code:'SUCCESS', message: 'usuario no autorizado'});
         }
-    })
-    .catch(function(err) {
-        return res.status(500).send({err});
-    });
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
 }
 
 function update(req, res) {
@@ -77,5 +116,7 @@ module.exports = {
     create,
     update,
     login,
-    getRoles
+    getRoles,
+    siginUnidad,
+    getListUnidades
 }

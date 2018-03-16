@@ -57,15 +57,20 @@ function createPayment(json) {
 }
 
 async function create(req, res) {
-    if (!req.body.pedido) return res.status(401).send({code:"ERROR", message:"falta pedido"});
-    var p = JSON.parse(req.body.pedido); 
-    var pedido = await ctrlPedido.createPedido(p);
-    var listProducts = await ListaPedido.findAllListaPedido(pedido.id);
+    try {
+        if (!req.body.pedido) return res.status(401).send({code:"ERROR", message:"falta pedido"});
+        var p = JSON.parse(req.body.pedido); 
+        var pedido = await ctrlPedido.createPedido(p);
+        var listProducts = await ListaPedido.findAllListaPedido(pedido.id);
+    
+        var json = getConfigPayment(listProducts);
+        var newPayment = await createPayment(json);
+        var response = await Pedido.update(pedido.id, {payment_id: newPayment.id}); // affectedRows
+        return res.status(200).send(newPayment);
+    } catch (err) {
+        console.log(err);
+    }
 
-    var json = getConfigPayment(listProducts);
-    var newPayment = await createPayment(json);
-    var response = await Pedido.update(pedido.id, {payment_id: newPayment.id}); // affectedRows
-    return res.status(200).send(newPayment);
 }
 
 async function onAuthorize(req, res) {

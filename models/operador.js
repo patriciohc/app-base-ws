@@ -4,6 +4,8 @@
 *
 */
 var Model = require('./model');
+var SHA256 = require("crypto-js/sha256");
+
 // nombre de la tabla en db
 const name = "operador";
 // columnas de valor unico
@@ -27,36 +29,60 @@ const columns = [
         type: "VARCHAR(100) NOT NULL"
     }, {
         name: "password",
-        type: "VARCHAR(50) NOT NULL"
+        type: "VARCHAR(100) NOT NULL"
     }, {
         name: "foto",
         type: "VARCHAR(100)"
     }, {
         name: "estatus",
         type: "TINYINT"
+    }, {
+        name: "id_device",
+        type: "VARCHAR(100)"
     }
 ]
 
-var operador = new Model(name, columns);
+var model = new Model(name, columns);
 
 function sync () {
-    return operador.createTable();
+    return model.createTable();
 }
 
 function create (obj) {
-    return operador.create(obj);
+    obj.password = SHA256(obj.password);
+    return model.create(obj);
 }
 
 function findOne (query) {
-    return operador.findOne(query);
+    return model.findOne(query);
 }
 
 function findAll (query) {
-    return operador.findAll(query);
+    return model.findAll(query);
 }
 
 function findById (id) {
-    return operador.findById(id);
+    return model.findById(id);
+}
+
+function update(id, obj) {
+    var columnsUpdate = [
+        'nombre',
+        'apellido_paterno',
+        'apellido_materno',
+        'estatus',
+        'foto',
+        'id_device'
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    query += ` WHERE id = ${id}`;
+    
+    return model.rawQuery(query);
 }
 
 module.exports = {
@@ -65,5 +91,6 @@ module.exports = {
     findOne,
     findById,
     findAll,
-    addRelation: operador.addRelation,
+    addRelation: model.addRelation,
+    update
 }

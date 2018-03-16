@@ -5,6 +5,8 @@ const utils = require('./utils');
 const SHA256 = require("crypto-js/sha256");
 const Auth = require('./autentication');
 const permisos = require('../permisos');
+const clienteOperador = require('../models/cliente-operador');
+const operador = require('../models/operador');
 
 function get(req, res) {
     cliente.findById(req.params.id)
@@ -71,22 +73,24 @@ async function addOperador(req, res) {
     var correo_electronico = req.body.correo_electronico;
     var rol = req.body.rol;
     var id_unidad = req.body.id_unidad;
-    var op = await operador.findOne({where: {correo_electronico}});
-
-    clienteOperador.create({id_unidad, id_operador: op.id, rol})
-    .then(result => {
-        return res.status(200).send({success: true});
-    })
-    .catch(err => {
-        return res.status(500).send({err: err});
-    });
+    var id_usuario = req.usuario;
+    try {
+        var op = await operador.findOne({where: {correo_electronico}});
+        if (!op) return res.status(404).send({code:"ERROR", message:"Usurio no encontrado"})
+        if (req.rol == permisos.CLIENTE) {
+            var response = await clienteOperador.create({id_cliente: id_usuario, id_unidad, id_operador: op.id, rol})
+            return res.status(200).send({code: "SUCCESS", message:""});
+        }
+    } catch(err) {
+        return res.status(500).send({code:"ERROR", message: "", error: err});
+    }
 }
 
 function getListOperadores(req, res) {
     var id_usuario = req.usuario;
     var rol = req.rol;
     if (rol == permisos.CLIENTE) {
-        clienteOperador.findAllOperadores(req.query.id_cliente)
+        clienteOperador.findAllOperadores(id_usuario)
         .then(result => {
             return res.status(200).send(result);
         })

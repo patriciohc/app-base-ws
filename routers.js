@@ -19,6 +19,16 @@ const permisos = require('./permisos');
 
 api.post('/create-payment/', payments.create);
 api.post('/execute-payment/', payments.onAuthorize);
+
+/**
+* @api {post} /suscribe suscribe al un usuario a las notificaciones 
+* @apiGroup Notification
+* @apiParam {string} id_device
+* @apiSuccess {number} 
+*/
+permisos.add('/suscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
+api.post('/suscribe/', autentication.isAuth, notification.suscribe);
+
 /**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
 * @apiGroup Unidad
@@ -138,7 +148,7 @@ api.get('/unidad-poligono/', unidad.getPoligono);
 * @apiSuccess {Object[]} lista de operadores
 */
 // permisos.add('/unidad-operador/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-// api.get('/unidad-operador/', autentication.isAuth, unidad.getLOperadoresUnidad);
+// api.get('/unidad-operador/', autentication.isAuth, unidad.getListOperadoresUnidad);
 
 /**
 * @api {delete} /unidad elimina unidad
@@ -171,7 +181,7 @@ api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
 * @apiSuccess {} success
 */
 permisos.add('/clienten-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
-api.get('/clienten-operador/', cliente.getListOperadores);
+api.get('/clienten-operador/', autentication.isAuth, cliente.getListOperadores);
 
 /**
 * @api {post} /operador/ crea un operador
@@ -180,8 +190,17 @@ api.get('/clienten-operador/', cliente.getListOperadores);
 * @apiParam {Object} Operador
 * @apiSuccess {Boolean} success
 */
-permisos.add('/operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
-api.post('/operador/', autentication.isAuth, operador.create);
+api.post('/operador/', operador.create);
+
+/**
+* @api {post} /list-unidad-operador/ obtiene la lista de unidades a la que esta asignado el operador
+*
+* @apiGroup Operador
+* @apiSuccess {Boolean} success
+*/
+permisos.add('/list-unidad-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR])
+api.get('/list-unidad-operador/', autentication.isAuth, operador.getListUnidades);
+
 
 
 /**
@@ -210,6 +229,17 @@ api.get('/roles/', operador.getRoles);
 * @apiSuccess {Operador} success
 */
 api.post('/login-operador/', operador.login);
+
+
+/**
+* @api {post} /login-unidad-operador genera un nuevo token para llamar ws 
+*
+* @apiGroup Operador
+* @apiParam {string} id_sucursal
+* @apiSuccess {Operador} success
+*/
+permisos.add('/login-unidad-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR])
+api.get('/login-unidad-operador/', autentication.isAuth, operador.siginUnidad);
 
 
 /**

@@ -56,10 +56,12 @@ function getListaPorUsuario(req, res) {
     })
 }
 
+// pedido pago en efectivo
 async function create(req, res) {
     console.log(req.body);
     var pedido = await createPedido(req.body);
     if (pedido.id) {
+        notification.sendPushUnidad(pedido.id_unidad)
         return res.status(200).send({id_pedido: pedido.id})
     } else {
         return res.status(500).send({code: 'ERROR', message: 'error', error: pedido})

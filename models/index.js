@@ -77,7 +77,7 @@ function createForeingKey () {
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
-  pedido.addRelation('pedido', 'id_operador', 'operador')
+  pedido.addRelation('pedido', 'id_operador_entrega', 'operador')
   .then(result => console.log(result))
   .catch(err => console.log(err));
 
@@ -106,6 +106,18 @@ function createForeingKey () {
   .catch(err => console.log(err));
 
   clienteOperador.addRelation('cliente_operador', 'id_cliente', 'cliente')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+  poligono.addRelation('poligono', 'id_unidad', 'unidad')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+  imagen.addRelation('image', 'id_cliente', 'cliente')
+  .then(result => console.log(result))
+  .catch(err => console.log(err));
+
+  categoria.addRelation('categoria', 'id_cliente', 'cliente')
   .then(result => console.log(result))
   .catch(err => console.log(err));
 }

@@ -43,12 +43,19 @@ function findAll (query) {
     return model.findAll(query);
 }
 
-function findAllOperadores (id_cliente) {
+function findAllOperadores (id, key_find = 'id_cliente') {
   var query = `SELECT * FROM operador o
     INNER JOIN cliente_operador co ON co.id_operador = o.id
-    WHERE co.id_cliente = ${id_cliente}`
+    WHERE co.${key_find} = ${id}`
     return model.rawQuery(query);
 }
+
+function findOneCliente (id, key_find = 'id_unidad') {
+    var query = `SELECT * FROM cliente c
+      INNER JOIN cliente_operador co ON co.id_cliente = c.id
+      WHERE co.${key_find} = ${id} LIMIT 1`
+      return model.rawQuery(query);
+  }
 
 function findById (id) {
     return model.findById(id);

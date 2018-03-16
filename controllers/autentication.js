@@ -28,6 +28,7 @@ function isAuth(req, res, next) {
     console.log(decoded)
     if (permisos.checkPermisos(req.url, req.method, decoded.rol)) {
       req.usuario = decoded.id;
+      req.rol = decoded.rol;
       next()
       return
     } else {

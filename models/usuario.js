@@ -35,6 +35,9 @@ const columns = [
     }, {
         name: "type_login",
         type: "VARCHAR(100)"
+    }, {
+        name: "id_device",
+        type: "VARCHAR(100)"
     }
 ]
 

@@ -125,5 +125,6 @@ module.exports = {
     isInsade,
     deleteR,
     update,
-    findOne
+    findOne,
+    addRelation: poligono.addRelation,
 }

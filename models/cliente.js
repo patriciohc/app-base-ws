@@ -32,30 +32,53 @@ const columns = [
     }, {
         name: "password",
         type: "VARCHAR(100)"
+    }, {
+        name: "id_device",
+        type: "VARCHAR(100)"
     }
 ]
 
-var cliente = new Model(name, columns, uniques);
+var model = new Model(name, columns, uniques);
 
 function sync () {
-    return cliente.createTable();
+    return model.createTable();
 }
 
 function create (obj) {
   obj.password = SHA256(obj.password);
-  return cliente.create(obj);
+  return model.create(obj);
 }
 
 function findOne (query) {
-    return cliente.findOne(query);
+    return model.findOne(query);
 }
 
 function findAll (query) {
-    return cliente.findAll(query);
+    return model.findAll(query);
 }
 
 function findById (id) {
-    return cliente.findById(id);
+    return model.findById(id);
+}
+
+function update(id, obj) {
+    var columnsUpdate = [
+        'razon_social',
+        'representante_legal',
+        'telefono',
+        'direccion',
+        'password',
+        'id_device'
+    ];
+    var query = `UPDATE ${name} SET `;
+    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+        if (obj[columnsUpdate[i]])
+            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+    }
+    query = query.substring(0, query.length -2); // se quita coma
+    query += ` WHERE id = ${id}`;
+    
+    return model.rawQuery(query);
 }
 
 module.exports = {
@@ -64,4 +87,5 @@ module.exports = {
     findOne,
     findById,
     findAll,
+    update
 }

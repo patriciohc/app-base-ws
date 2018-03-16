@@ -23,10 +23,10 @@ const columns = [
     }
 ]
 
-var obj = new Model(name, columns);
+var model = new Model(name, columns);
 
 function sync () {
-    return obj.createTable();
+    return model.createTable();
 }
 
 /**
@@ -36,7 +36,7 @@ function sync () {
  * @returns {Promise}
  */
 function create (id_cliente, url, type_image) {
-    return obj.create({id_cliente, url, type_image});
+    return model.create({id_cliente, url, type_image});
 }
 
 // obtiene un poligono con todas sus cordenadas
@@ -45,11 +45,11 @@ function findOne(id_unidad) {
 }
 
 function findAll (query) {
-    return obj.findAll(query);
+    return model.findAll(query);
 }
 
 function deleteR (idUnidad) {
-    return obj.deleteR({id_unidad: idUnidad});
+    return model.deleteR({id_unidad: idUnidad});
 }
 
 module.exports = {
@@ -57,5 +57,6 @@ module.exports = {
     create,
     deleteR,
     findOne,
-    findAll
+    findAll,
+    addRelation: model.addRelation,
 }
