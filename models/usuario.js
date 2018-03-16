@@ -75,7 +75,7 @@ function update(id, obj) {
         'type_login'
     ];
     var query = `UPDATE ${name} SET `;
-    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+    for (let i = 0; i < columnsUpdate.length; i++) {
         if (obj[columnsUpdate[i]])
             query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
     }

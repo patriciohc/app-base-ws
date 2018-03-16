@@ -73,5 +73,6 @@ module.exports = {
     findAll,
     addRelation: model.addRelation,
     insertBulk,
-    findAllOperadores
+    findAllOperadores,
+    findOneCliente
 }

@@ -1,9 +1,9 @@
 
-const http = require('http');
+const https = require('https');
 const permisos = require('../permisos');
-const cliente = require('../models').cliente;
-const operador = require('../models').operador;
-const usuario = require('../models').usuario;
+const Cliente = require('../models').cliente;
+const Operador = require('../models').operador;
+const Usuario = require('../models').usuario;
 const clienteOperador = require('../models').clienteOperador;
 
 async function suscribe (req, res) {
@@ -13,11 +13,11 @@ async function suscribe (req, res) {
     var response;
     try {
         if (rol == permisos.CLIENTE) {
-            response = cliente.update(id_usuario, {id_device})
+            response = await Cliente.update(id_usuario, {id_device})
         } else if (rol == permisos.USUSARIO) {
-            response = usuario.update(id_usuario, {id_device})
+            response = await Usuario.update(id_usuario, {id_device})
         } else {
-            response = operador.update(id_usuario, {id_device})
+            response = await Operador.update(id_usuario, {id_device})
         }
     } catch(err) {
         return res.status(500).send({code: "ERROR", message: "", error: err})
@@ -31,20 +31,26 @@ async function suscribe (req, res) {
 }
 
 async function sendPushUnidad(id_unidad) {
-    var idsDevices = [];
-    var operadores = await clienteOperador.findAllOperadores(id_unidad, 'id_unidad');
-    var cliente = await cliente.clienteOperador(id_unidad, 'id_unidad')
-    for (var i = 0; i < operadores.length; i++) {
-        idsDevices.push(operadores.id_device)
+    var idsDevices = [], operadores, cliente;
+    try {
+        operadores = await clienteOperador.findAllOperadores(id_unidad, 'id_unidad');
+        cliente = await clienteOperador.findOneCliente(id_unidad, 'id_unidad')
+    } catch(err) {
+        return err;
     }
-    idsDevices.push(cliente.id_device)
-    sendPush('Nuevo pedido!!!', 'Ha recibido un nuevo pedido', idsDevices)
+
+    for (var i = 0; i < operadores.length; i++) {
+        if (operadores[i].id_device) idsDevices.push(operadores[i].id_device)
+    }
+    if (cliente.length && cliente[0].id_device) idsDevices.push(cliente[0].id_device)
+
+    if (idsDevices.length > 0) sendPush('Nuevo pedido!!!', 'Ha recibido un nuevo pedido', idsDevices)
 }
 
 async function sendPush(title, message, idDevices) {
-
+    var response = '';
     var data = {
-        app_id: "",
+        app_id: "d4f6ac11-64cc-451d-8471-e8552ef57f86",
         // included_segments: [segment],
         include_player_ids: idDevices,
         data: {},
@@ -56,7 +62,7 @@ async function sendPush(title, message, idDevices) {
     };
     var headers = {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization": "Basic YjMyMjMzMGMtMGUxZC00NmQwLWFhOTMtYzAwMzhmODVhOTM0"
+        "Authorization": "Basic ZWFmNTNmYjEtZDA0ZS00YTg3LWI4YmEtNWUwMzQ1NjUzOTRi"
       };
       
       var options = {
@@ -67,11 +73,15 @@ async function sendPush(title, message, idDevices) {
         headers: headers
       };
       
-      var req = https.request(options, function(res) {  
+      var req = https.request(options, function(res) {
         res.on('data', function(data) {
-          console.log("Response:");
-          console.log(JSON.parse(data));
+            response += data;
         });
+
+        res.on('end', () => {
+            console.log(JSON.parse(data).explanation);
+        });
+
       });
       
       req.on('error', function(e) {
@@ -84,7 +94,7 @@ async function sendPush(title, message, idDevices) {
 }
 
 async function sendPushOneUser(title, message, idUser) {
-    var user = await usuario.findById(idUser)
+    var user = await Usuario.findById(idUser)
     sendPush(title, message, user.id_device)
 }
 
