@@ -21,13 +21,13 @@ api.post('/create-payment/', payments.create);
 api.post('/execute-payment/', payments.onAuthorize);
 
 /**
-* @api {post} /suscribe suscribe al un usuario a las notificaciones 
+* @api {post} /subscribe suscribe al un usuario a las notificaciones 
 * @apiGroup Notification
 * @apiParam {string} id_device
 * @apiSuccess {number} 
 */
-permisos.add('/suscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
-api.post('/suscribe/', autentication.isAuth, notification.suscribe);
+permisos.add('/subscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
+api.post('/subscribe/', autentication.isAuth, notification.suscribe);
 
 /**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente

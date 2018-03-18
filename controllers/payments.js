@@ -60,7 +60,7 @@ async function create(req, res) {
     try {
         if (!req.body.pedido) return res.status(401).send({code:"ERROR", message:"falta pedido"});
         var p = JSON.parse(req.body.pedido); 
-        var pedido = await ctrlPedido.createPedido(p);
+        var pedido = await ctrlPedido.createPedido(p, 0);
         var listProducts = await ListaPedido.findAllListaPedido(pedido.id);
     
         var json = getConfigPayment(listProducts);
@@ -70,7 +70,6 @@ async function create(req, res) {
     } catch (err) {
         console.log(err);
     }
-
 }
 
 async function onAuthorize(req, res) {

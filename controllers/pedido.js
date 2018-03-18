@@ -22,13 +22,16 @@ const notification = require('./push-notification');
 
 function getListaPorUnidad(req, res) { // forbidden for users
     var id_cliente = req.usuario;
-    var params = ["id_unidad", "id_cliente"];
     // if (!utils.orValidate(params, req.query)) {
     //     return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
     // }
     // var where = utils.minimizarObjeto({id_cliente, id_unidad: req.query.id_unidad}, req.query);
-    var where = {id_cliente, id_unidad: req.query.id_unidad};
-    Pedido.findAllWithDependencies({where})
+    var where = {
+        id_cliente, 
+        id_unidad: req.query.id_unidad,
+        _raw: "estatus != 0 AND estatus != 4"
+    };
+    Pedido.findAllWithDependencies({where, order_by: {value: 'fecha_recibido', order: 'DESC'}})
     .then(function(result) {
       console.log(result);
       return res.status(200).send(result);
@@ -68,16 +71,15 @@ async function create(req, res) {
     }
 }
 
-async function createPedido(pedido) {
+async function createPedido(pedido, estatus = 1) {
     var date = new Date();
     var response;
     try {
         var response = await DireccionSolicitud.create(pedido.direccion_entrega);
         var pedidoJson = {
-            estatus: 1, // en espera de aceptacion por parte de la la unidad
+            estatus: estatus, // en espera de aceptacion por parte de la la unidad
             comentarios: pedido.comentarios,
-            fecha_recibido: utils.getDateMysql(date),
-            hora_recibido: utils.getTimeMysql(date),
+            fecha_recibido: utils.getDateTimeMysql(date),
             calificacion: 0, // no ha recibido calificacion
             id_direccion_solicitud: response.insertId,
             id_unidad: pedido.id_unidad,

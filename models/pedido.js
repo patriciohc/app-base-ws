@@ -30,10 +30,10 @@ const columns = [
         name: "id",
         type: "INT AUTO_INCREMENT"
     }, {
-        // 0: en espera de aceptacion de la tienda
-        // 1: aceptado por la tienda, preparando envio
-        // 2: en ruta
-        // 3: entregado
+        // 1: en espera de aceptacion de la tienda
+        // 2: aceptado por la tienda, preparando envio
+        // 3: en ruta
+        // 4: entregado
         name: "estatus",
         type: "TINYINT"
     }, {
@@ -41,10 +41,7 @@ const columns = [
         type: "VARCHAR(100)"
     }, {
         name: "fecha_recibido",
-        type: "DATE NOT NULL"
-    }, {
-        name: "hora_recibido",
-        type: "TIME NOT NULL"
+        type: "DATETIME"
     }, {
         name: "calificacion",
         type: "INT"

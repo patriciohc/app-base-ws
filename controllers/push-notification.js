@@ -50,7 +50,7 @@ async function sendPushUnidad(id_unidad) {
 async function sendPush(title, message, idDevices) {
     var response = '';
     var data = {
-        app_id: "d4f6ac11-64cc-451d-8471-e8552ef57f86",
+        app_id: "f1809dc0-2ff4-4560-8f82-38ee0c57a5e5",
         // included_segments: [segment],
         include_player_ids: idDevices,
         data: {},
@@ -62,7 +62,7 @@ async function sendPush(title, message, idDevices) {
     };
     var headers = {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization": "Basic ZWFmNTNmYjEtZDA0ZS00YTg3LWI4YmEtNWUwMzQ1NjUzOTRi"
+        "Authorization": "Basic YjMyMjMzMGMtMGUxZC00NmQwLWFhOTMtYzAwMzhmODVhOTM0"
       };
       
       var options = {
@@ -79,7 +79,7 @@ async function sendPush(title, message, idDevices) {
         });
 
         res.on('end', () => {
-            console.log(JSON.parse(data).explanation);
+            console.log(JSON.parse(response).explanation);
         });
 
       });

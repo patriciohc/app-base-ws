@@ -4,6 +4,13 @@ const NUMBER = [
     'INT',
     'TINYINT',
 ]
+
+const COMPARATORS = {
+    'eq': '=',
+    'st': '<',
+    'gt': '>',
+    'neq':'<>'
+}
 /**
 * Concatena los elemetos de un objeto model, para la creacion de la tabla
 * @param {model} - objeto model, contiene los nombres de columnas y tipos
@@ -83,16 +90,21 @@ function getSqlFind(model, query, table, limit) {
 * @return{string} cadena sql
 */
 function getWhere(where, model) {
-    var and = "";
+    var and = [], sqlWhere;
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
-        if (where[column]) {
-            and += `${column} = '${where[column]}' AND ` ;
+        var comparation = where[column]
+        if (comparation) {
+            and.push(`${column} = '${comparation}'`);
         }
     }
-    if (and != "") {
-        var sqlWhere = and.substring(0, and.length - 5);
-        return sqlWhere;
+
+    if (where._raw) {
+        and.push(where._raw);
+    }
+
+    if (and.length > 0) {
+        return  and.join(' AND ')
     } else {
         return "";
     }
@@ -114,22 +126,21 @@ function getSelect (select, model) {
     }
 }
 
+function getOrderBy (orderBy) {
+    if (!orderBy || !orderBy.value) return '';
+    return 'ORDER BY ' + orderBy.value + ' ' + (orderBy.order || '');
+}
+
 function getSqlFindAll(model, query, table) {
     var p = query.where;
     var select = getSelect(query.select, model);
     if (!p) return `SELECT ${select} FROM ${table} limit 1000`;
-    var and = "", sql;
-    for (var i = 0; i < model.length; i++) {
-        var column = model[i].name;
-        if (p[column]) {
-            and += `${column} = ${p[column]} AND ` ;
-        }
-    }
-    if (and != "") {
-        var where = and.substring(0, and.length - 5);
-        return `SELECT ${select} FROM ${table} WHERE ${where}`;
+    var where = getWhere(query.where, model);
+    var orderBy = getOrderBy(query.order_by)
+    if (where != "") {
+        return `SELECT ${select} FROM ${table} WHERE ${where} ${orderBy}`;
     } else {
-        return `SELECT ${select} FROM ${table} limit 1000`;
+        return `SELECT ${select} FROM ${table} ${orderBy} limit 1000`;
     }
 }
 

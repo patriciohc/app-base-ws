@@ -45,7 +45,16 @@ function andValidate(parametros, json) {
 }
 
 /**
-* Convierte un objeto Date de javascript a un string fecha compatible con mysql
+* Convierte un objeto DATETIEM de javascript a un string fecha compatible con mysql
+* @param {Date} fecha - objeto Date javascript
+* @return {String} fecha formato mysql
+*/
+function getDateTimeMysql(date) {
+    return getDateMysql(date) + " " +  getTimeMysql(date);
+  }
+
+/**
+* Convierte un objeto DATE de javascript a un string fecha compatible con mysql
 * @param {Date} fecha - objeto Date javascript
 * @return {String} fecha formato mysql
 */
@@ -54,7 +63,7 @@ function getDateMysql(date) {
 }
 
 /**
-* Convierte un objeto Date de javascript a un string fecha compatible con mysql
+* Convierte un objeto TIME de javascript a un string fecha compatible con mysql
 * @param {Date} fecha - objeto Date javascript
 * @return {String} fecha formato mysql
 */
@@ -68,5 +77,6 @@ module.exports = {
     getDateMysql,
     getTimeMysql,
     orValidate,
-    andValidate
+    andValidate,
+    getDateTimeMysql
 }
