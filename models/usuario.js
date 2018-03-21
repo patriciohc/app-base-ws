@@ -71,7 +71,7 @@ function update(id, obj) {
         'password',
         'telefono',
         'recibir_promociones',
-        'id_push',
+        'id_device',
         'type_login'
     ];
     var query = `UPDATE ${name} SET `;
@@ -82,7 +82,7 @@ function update(id, obj) {
     query = query.substring(0, query.length -2); // se quita coma
     query += ` WHERE id = ${id}`;
     
-    return unidad.rawQuery(query);
+    return usuario.rawQuery(query);
 }
 
 module.exports = {
@@ -91,4 +91,5 @@ module.exports = {
     findOne,
     findById,
     findAll,
+    update
 }

@@ -26,7 +26,7 @@ api.post('/execute-payment/', payments.onAuthorize);
 * @apiParam {string} id_device
 * @apiSuccess {number} 
 */
-permisos.add('/subscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE])
+permisos.add('/subscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.USUSARIO])
 api.post('/subscribe/', autentication.isAuth, notification.suscribe);
 
 /**

@@ -79,7 +79,7 @@ async function sendPush(title, message, idDevices) {
         });
 
         res.on('end', () => {
-            console.log(JSON.parse(response).explanation);
+            console.log(JSON.parse(response));
         });
 
       });
