@@ -95,7 +95,7 @@ async function sendPush(title, message, idDevices) {
 
 async function sendPushOneUser(title, message, idUser) {
     var user = await Usuario.findById(idUser)
-    sendPush(title, message, user.id_device)
+    sendPush(title, message, [user.id_device])
 }
 
 module.exports = {

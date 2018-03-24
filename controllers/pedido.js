@@ -101,30 +101,33 @@ async function createPedido(pedido, estatus = 1) {
     }
 }
 
-function setEstatus(req, res) {
+async function setEstatus(req, res) {
     var status = req.body.estatus;
-    var idUser = req.body.id_usuario;
+    var idPedido = req.query.id;
+    if (!status || !idPedido) return res.status.statu(400).send({code:"ERROR", message: "Faltan parametros"})
+    // var idUser = req.body.id_usuario;
+    var pedido = await Pedido.findById(idPedido);
     switch (status) {
         case 2:
             notification.sendPushOneUser(
                 'Su pedido ha sido recibido', 
                 'Gracias por su compra, su pedido se esta preparando', 
-                idUser)
+                pedido.id_usuario)
             break;
         case 3:
             notification.sendPushOneUser(
                 'Su pedido esta en camino', 
                 'Gracias por esperar, su pedido ha sido enviado', 
-                idUser)
+                pedido.id_usuario)
         break;
         case 4:
             notification.sendPushOneUser(
                 'Su pedido ha sido entregado', 
                 'Gracias por su compra, ayudanos a mejorar calificando el servicio', 
-                idUser)
+                pedido.id_usuario)
         break;
     }
-    Pedido.setEstatus(req.query.id, status)
+    Pedido.setEstatus(idPedido, status)
     .then( result => {
         return res.status(200).send({success: result});
     })
