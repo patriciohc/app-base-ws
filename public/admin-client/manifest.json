@@ -6,5 +6,8 @@
   "background_color": "#3E4EB8",
   "theme_color": "#2F3BA2",
   "gcm_sender_id": "482941778795",
-  "gcm_sender_id_comment": "Do not change the GCM Sender ID"
+  "gcm_sender_id_comment": "Do not change the GCM Sender ID",
+  "permissions": [
+    "notifications"
+  ]
 }
