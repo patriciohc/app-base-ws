@@ -76,11 +76,22 @@ async function addOperador(req, res) {
     var id_usuario = req.usuario;
     try {
         var op = await operador.findOne({where: {correo_electronico}});
-        if (!op) return res.status(404).send({code:"ERROR", message:"Usurio no encontrado"})
+        if (!op || !op.id) return res.status(404).send({code:"ERROR", message:"Usurio no encontrado"})
         if (req.rol == permisos.CLIENTE) {
             var response = await clienteOperador.create({id_cliente: id_usuario, id_unidad, id_operador: op.id, rol})
             return res.status(200).send({code: "SUCCESS", message:""});
         }
+    } catch(err) {
+        return res.status(500).send({code:"ERROR", message: "", error: err});
+    }
+}
+
+async function deleteOperador(req, res) {
+    var idOperador = req.query.id_operador;
+    var idCliente = req.usuario;
+    try {
+        var response = await clienteOperador.deleteR(idOperador, idCliente)
+        return res.status(200).send({code: "SUCCESS", message:"", affectedRows: response.affectedRows});
     } catch(err) {
         return res.status(500).send({code:"ERROR", message: "", error: err});
     }
@@ -111,5 +122,6 @@ module.exports = {
     update,
     login,
     addOperador,
-    getListOperadores
+    getListOperadores,
+    deleteOperador
 }

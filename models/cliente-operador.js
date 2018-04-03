@@ -65,6 +65,10 @@ function insertBulk (columns, values) {
     return model.insertBulk (columns, values);
 }
 
+function deleteR (id_operador, id_cliente) {
+    return model.deleteR({id_operador, id_operador})
+}
+
 module.exports = {
     sync,
     create,
@@ -74,5 +78,6 @@ module.exports = {
     addRelation: model.addRelation,
     insertBulk,
     findAllOperadores,
-    findOneCliente
+    findOneCliente,
+    deleteR
 }

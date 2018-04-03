@@ -183,6 +183,20 @@ api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
 permisos.add('/clienten-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
 api.get('/clienten-operador/', autentication.isAuth, cliente.getListOperadores);
 
+
+/**
+* @api {delte} /clienten-operador/ elimina operador de cliente
+*
+* @apiGroup Unidad
+* @apiParam {number} id_unidad 
+* @apiParam {number} id_clienten 
+* @apiParam {String} correo_electronico - email operador 
+* @apiParam {number} rol - rol del operador 
+* @apiSuccess {Object} success
+*/
+permisos.add('/clienten-operador/', 'DELETE', [permisos.CLIENTE])
+api.delete('/clienten-operador/', autentication.isAuth, cliente.deleteOperador);
+
 /**
 * @api {post} /operador/ crea un operador
 *
@@ -496,6 +510,15 @@ api.put('/pedido-calificacion', autentication.isAuth, pedido.calificar);
 */
 permisos.add('/pedido/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.get('/pedido/',  autentication.isAuth, pedido.getListaPorUnidad);
+
+/**
+* @api {get} /pedido-grafica-semana/ obtiene informacion para grafica por semana
+* @apiGroup pedido
+* @apiParam {number} id_unidad
+* @apiSuccess {Object} lista de pedidos
+*/
+permisos.add('/pedido-grafica-semana/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_CLIENTE, permisos.ADMIN_UNIDAD])
+api.get('/pedido-grafica-semana/',  autentication.isAuth, pedido.getNPedidosXWeek);
 
 /**
 * @api {get} /operador-repartidor obitene los pedidos asignados a un repartidor

@@ -1,7 +1,8 @@
 'use strict'
 var listaPedido = require('./lista-pedido');
 var direccionSolicitud = require('./direccion-solicitud');
-var usuario = require('./usuario')
+var usuario = require('./usuario');
+var moment = require('moment');
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
 * json pedido
@@ -183,6 +184,20 @@ function calificar(id, calificacion) {
     return model.rawQuery(query);
 }
 
+
+function getNPedidosXWeek(stringDate) {
+    var date = moment(stringDate)
+    var day = date.day();
+    var dateInit = date.subtract(day, 'days').format('YYYY-MM-DD');
+    var dateEnd = date.add((7-day), 'days').format('YYYY-MM-DD');
+    var sql = `
+        SELECT DAYOFWEEK(fecha_recibido) as day , count(*) as total
+        FROM pedido 
+        WHERE fecha_recibido BETWEEN '${dateInit}' AND '${dateEnd}'
+        GROUP BY day`;
+    return model.rawQuery(query);
+}
+
 module.exports = {
     sync,
     create,
@@ -194,5 +209,6 @@ module.exports = {
     asignarRepartidor,
     calificar,
     addRelation: model.addRelation,
-    findAllWithDependencies
+    findAllWithDependencies,
+    getNPedidosXWeek
 }

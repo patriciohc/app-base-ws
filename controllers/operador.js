@@ -21,6 +21,8 @@ function get(req, res) {
 }
 
 function create(req, res) {
+    if (!req.body.correo_electronico) 
+        return res.status(400).send({code: 'ERROR', message: 'falta correo electronico'});
     operador.create(req.body)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});

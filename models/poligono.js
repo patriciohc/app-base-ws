@@ -5,7 +5,6 @@
 */
 // const fs = require('fs');
 // const tj = require('togeojson');
-// const DOMParser = require('xmldom').DOMParser;
 const inside = require('point-in-polygon');
 
 // const DIR_KML = "./kml/"

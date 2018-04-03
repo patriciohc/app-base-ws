@@ -174,6 +174,16 @@ function getListaPorRepartidor(req, res) {
     });
 }
 
+function getNPedidosXWeek(req, res) {
+    var date = req.query.date || new Date()
+    try {
+        var response = Pedido.getNPedidosXWeek(date);
+        return res.status(200).send(response);
+    } catch (err) {
+        return resizeBy.status(500).send({code: 'ERROR', message:''})
+    }
+}
+
 module.exports = {
     //get,
     create,
@@ -184,5 +194,6 @@ module.exports = {
     asignarRepartidor,
     calificar,
     getListaPorRepartidor,
-    createPedido
+    createPedido,
+    getNPedidosXWeek
 }

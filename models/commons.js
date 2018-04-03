@@ -93,9 +93,9 @@ function getWhere(where, model) {
     var and = [], sqlWhere;
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
-        var comparation = where[column]
-        if (comparation) {
-            and.push(`${column} = '${comparation}'`);
+        if (where.hasOwnProperty(column)) {
+            let com = typeof(where[column]) === 'undefined' ? '' : where[column];
+            and.push(`${column} = '${com}'`);
         }
     }
 
