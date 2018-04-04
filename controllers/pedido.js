@@ -47,8 +47,11 @@ function getListaPorUsuario(req, res) {
     if (!req.usuario) {
       return res.status(400).send({err: "se requiere: id_usuario"});
     }
-    //var where = utils.minimizarObjeto(params, req.query);
-    Pedido.findAllWithDependencies({where: {id_usuario: req.usuario}})
+    var where = {
+        id_usuario: req.usuario,
+        _raw: "estatus != 0 AND estatus != 4"
+    }
+    Pedido.findAllWithDependencies({where})
     .then(function(result) {
       console.log(result);
       return res.status(200).send(result);
