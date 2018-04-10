@@ -69,6 +69,14 @@ function deleteR (id_operador, id_cliente) {
     return model.deleteR({id_operador, id_operador})
 }
 
+function update (id_cliente, id_operador, obj) {
+    var columnsUpdate = [
+        'id_unidad',
+        'rol'
+    ];
+    return model.update(obj, columnsUpdate, {id_cliente, id_operador});
+}
+
 module.exports = {
     sync,
     create,
@@ -79,5 +87,6 @@ module.exports = {
     insertBulk,
     findAllOperadores,
     findOneCliente,
-    deleteR
+    deleteR,
+    update
 }

@@ -160,6 +160,29 @@ class Model {
 
 /**
 * agrega una relacion entre tablas
+* @param {String} obj - datos
+* @param {String} columnsUpdate - columnas que se actulizaran
+* @param {String} where - condicion
+* @return {Promise}
+*/
+    update (obj, columnsUpdate, where) {
+        var where;
+        var query = `UPDATE ${this.name} SET `;
+        var sets = [];
+        for (let i = 0; i < columnsUpdate.length; i++) {
+            if (obj[columnsUpdate[i]])
+                sets.push(`${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}'`);
+        }
+        if (sets.length == 0) return Promise.resolve('no hay datos para actualizar');
+        where = utils.getWhere(where, this.model);
+        if (!where) return Promise.resolve('no hay condicion para actulizar');
+        query += sets.join(',');
+        query += ' where ' + where;
+        return this.rawQuery(query);
+    }
+
+/**
+* agrega una relacion entre tablas
 * @param {String} tableSrc - tabla fuente
 * @param {String} fieldSrc - campo en tabla fuente
 * @param {String} tableRef - tabla destino, siempre se usa campo id

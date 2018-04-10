@@ -163,7 +163,7 @@ api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 /**
 * @api {post} /clienten-operador/ agrega operadores a un cliente
 *
-* @apiGroup Unidad
+* @apiGroup Cliente
 * @apiParam {number} id_unidad 
 * @apiParam {number} id_clienten 
 * @apiParam {String} correo_electronico - email operador 
@@ -172,6 +172,18 @@ api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 */
 permisos.add('/clienten-operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
 api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
+
+/**
+* @api {put} /clienten-operador/ actuliza 
+*
+* @apiGroup Cliente
+* @apiParam {number} id_operador query
+* @apiParam {number} rol - rol 
+* @apiParam {number} id_unidad - id_unidad 
+* @apiSuccess {Object} success
+*/
+permisos.add('/clienten-operador/', 'PUT', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
+api.put('/clienten-operador/', autentication.isAuth, cliente.updateOperador);
 
 /**
 * @api {get} /operador obitiene operadores por cliente
@@ -466,6 +478,17 @@ api.delete('/producto', autentication.isAuth, producto.deleteR);
 */
 permisos.add('/pedido/', 'POST', [permisos.USUSARIO])
 api.post('/pedido/', autentication.isAuth, pedido.create);
+
+/**
+* @api {post} /pedido/ elimina pedido
+* @apiGroup pedido
+* @apiParam {number} id identificador de pedido
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+permisos.add('/pedido/', 'DELETE', [permisos.USUSARIO])
+api.delete('/pedido/', autentication.isAuth, pedido.deleteR);
 
 /**
 * @api {put} /pedido/ actuliza estatus pedido

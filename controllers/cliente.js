@@ -86,6 +86,24 @@ async function addOperador(req, res) {
     }
 }
 
+async function updateOperador(req, res) {
+    var id_cliente;
+    var rol = req.rol;
+    var id_operador = req.query.id_operador
+    if (rol == permisos.CLIENTE) {
+        id_cliente = req.usuario;
+        try {
+            var response = await clienteOperador.update(id_cliente, id_operador, req.body);
+            return res.status(200).send({code: "SUCCESS", message:""});
+        } catch(err) {
+            return res.status(500).send({code:"ERROR", message: "", error: err});
+        }
+         
+    } else {
+        return res.status(404).send({code: "SUCCESS", message:"serivicio en construccion"});
+    }
+}
+
 async function deleteOperador(req, res) {
     var idOperador = req.query.id_operador;
     var idCliente = req.usuario;
@@ -123,5 +141,6 @@ module.exports = {
     login,
     addOperador,
     getListOperadores,
-    deleteOperador
+    deleteOperador,
+    updateOperador
 }

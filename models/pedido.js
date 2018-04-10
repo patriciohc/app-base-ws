@@ -107,6 +107,10 @@ function update (id, obj, keyUpdate = 'id') {
     return model.rawQuery(query);
 }
 
+function deleteR (query) {
+    return model.deleteR(query.where);
+}
+
 function getListaProductos(pedido) {
   return new Promise ((resolve, reject) => {
     listaPedido.findAllListaPedido(pedido.id)
@@ -210,5 +214,6 @@ module.exports = {
     calificar,
     addRelation: model.addRelation,
     findAllWithDependencies,
-    getNPedidosXWeek
+    getNPedidosXWeek,
+    deleteR
 }

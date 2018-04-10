@@ -27,6 +27,10 @@ function create (obj) {
     return unidadProducto.create(obj);
 }
 
+function update() {
+
+}
+
 function findOne (query) {
     return unidadProducto.findOne(query);
 }

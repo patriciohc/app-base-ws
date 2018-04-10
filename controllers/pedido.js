@@ -74,6 +74,21 @@ async function create(req, res) {
     }
 }
 
+function deleteR(req, res) {
+    var id_usuario = req.usuario;
+    var id = req.query.id;
+    if (!id) {
+        return res.status(400).send({err: "se requiere id de pedido"})
+    }
+    Pedido.deleteR({where: {id, id_usuario}})
+    .then(result => {
+      return res.status(200).send({success: true})
+    })
+    .catch(err => {
+      return res.status(500).send({err})
+    });
+  }
+
 async function createPedido(pedido, estatus = 1) {
     var date = new Date();
     var response;
@@ -180,10 +195,10 @@ function getListaPorRepartidor(req, res) {
 function getNPedidosXWeek(req, res) {
     var date = req.query.date || new Date()
     try {
-        var response = Pedido.getNPedidosXWeek(date);
-        return res.status(200).send(response);
+        //var response = Pedido.getNPedidosXWeek(date);
+        return res.status(200).send({code: 'OK', message: 'metodo en construccion'});
     } catch (err) {
-        return resizeBy.status(500).send({code: 'ERROR', message:''})
+        return res.status(500).send({code: 'ERROR', message:''})
     }
 }
 
@@ -198,5 +213,6 @@ module.exports = {
     calificar,
     getListaPorRepartidor,
     createPedido,
-    getNPedidosXWeek
+    getNPedidosXWeek,
+    deleteR
 }
