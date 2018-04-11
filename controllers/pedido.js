@@ -82,10 +82,10 @@ function deleteR(req, res) {
     }
     Pedido.deleteR({where: {id, id_usuario}})
     .then(result => {
-      return res.status(200).send({success: true})
+      return res.status(200).send({code:'OK', message:"success", affected_rows: result.affectedRows})
     })
     .catch(err => {
-      return res.status(500).send({err})
+      return res.status(500).send({code:'ERROR', message:"", error: err})
     });
   }
 
