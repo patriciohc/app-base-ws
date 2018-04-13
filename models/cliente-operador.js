@@ -6,29 +6,30 @@
 var Model = require('./model');
 // nombre de la tabla en db
 const name = "cliente_operador";
-// llave compuesta
-const keys = ["id_cliente", "id_operador"];
 // columnas en db
 const columns = [
     {
+        name: "id",
+        type: "INT AUTO_INCREMENT"
+    }, {
         name: "id_cliente",
-        type: "INT"
+        type: "INT NOT NULL"
     }, {
         name: "id_unidad",
         type: "INT"
     }, {
         name: "id_operador",
-        type: "INT"
+        type: "INT NOT NULL"
     }, {
         name: "rol",
-        type: "INT"
+        type: "INT NOT NULL"
     }
 ]
 
 var model = new Model(name, columns);
 
 function sync () {
-    return model.createTableLlaveCompuesta('id_unidad', 'id_operador');
+    return model.createTable();
 }
 
 function create (obj) {

@@ -2,6 +2,7 @@
 
 // roles
 // TABLA OPERADOR
+const SIN_ROL = 0 // tiene permiso solo a ws muy especificos
 const REPARTIDOR = 1 // tiene acceso a la app de repartidor - operador
 const OPERADOR_UNIDAD = 2 // tiene permisos para ver y cambiar de estatus los pedidos - operedor
 const ADMIN_UNIDAD = 3; // tiene permisos de edicion en una unidad especifica - operador
@@ -15,6 +16,7 @@ const ADMINISTRADOR = 7 // tiene permisos para registrar nuevos clientes - admin
 
 // permisos
 var permisos = {
+  [SIN_ROL]: {},
   [REPARTIDOR]: {},
   [OPERADOR_UNIDAD]: {},
   [CLIENTE]: {},
@@ -27,7 +29,6 @@ var permisos = {
 function add(url, method, roles) {
   for (let i = 0; i < roles.length; i++) {
     let rol = roles[i];
-    console.log(rol)
     if (!permisos[rol][url])
       permisos[rol][url] = [method]
     else
@@ -59,5 +60,6 @@ module.exports = {
   USUSARIO,
   ADMINISTRADOR,
   ADMIN_UNIDAD,
-  ADMIN_CLIENTE
+  ADMIN_CLIENTE,
+  SIN_ROL
 }

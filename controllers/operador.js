@@ -75,10 +75,36 @@ async function login(req, res) {
             var unidades = await clienteOperador.findAll({where: {id_operador: usr.id}})
             var sesion = {
                 id_usuario: usr.id,
-                token: Auth.createToken(usr.id, permisos.OPERADOR_UNIDAD),
+                token: Auth.createToken(usr.id, permisos.SIN_ROL),
                 nombre_usuario: usr.nombre,
                 unidades: unidades,
-                rol: permisos.OPERADOR_UNIDAD
+                rol: permisos.SIN_ROL
+            }
+            return res.status(200).send(sesion);
+        } else {
+            return res.status(401).send({code:'SUCCESS', message: 'usuario no autorizado'});
+        }
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
+}
+
+async function loginRepartidor(req, res) {
+    try {
+        var usr = await operador.findOne({
+            where: {correo_electronico: req.body.correo_electronico}
+        })
+        if (!usr) return res.status(404).send({message: "not found"});
+        var sha = SHA256(req.body.password).toString();
+        console.log(sha)
+        if (sha == usr.password) {
+            var repartidor = await clienteOperador.findOne({where: {id_operador: usr.id, rol: permisos.REPARTIDOR}})
+            if (!repartidor) return res.status(403).send({code:"ERROR", message:"usuario no autorizado"})
+            var sesion = {
+                id_usuario: usr.id,
+                token: Auth.createToken(usr.id, permisos.REPARTIDOR),
+                nombre_usuario: usr.nombre,
+                rol: permisos.REPARTIDOR
             }
             return res.status(200).send(sesion);
         } else {
@@ -120,5 +146,6 @@ module.exports = {
     login,
     getRoles,
     siginUnidad,
-    getListUnidades
+    getListUnidades,
+    loginRepartidor
 }

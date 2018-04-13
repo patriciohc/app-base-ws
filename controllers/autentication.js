@@ -25,7 +25,6 @@ function isAuth(req, res, next) {
     if(decoded.exp <= moment().unix()) {
       return res.status(401).send({message: "El token ha expirado"});
     }
-    console.log(decoded)
     if (permisos.checkPermisos(req.url, req.method, decoded.rol)) {
       req.usuario = decoded.id;
       req.rol = decoded.rol;

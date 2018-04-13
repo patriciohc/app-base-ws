@@ -156,9 +156,9 @@ async function setEstatus(req, res) {
 }
 
 function asignarRepartidor(req, res) {
-    Pedido.asignarRepartidor(req.query.id, req.body.id_repartidor)
+    Pedido.asignarRepartidor(req.query.id_pedido, req.body.id_repartidor)
     .then( result => {
-        return res.status(200).send({success: result});
+        return res.status(200).send({code: "OK", message: "success", response: result});
     })
     .catch( err => {
         console.log(err);
@@ -178,10 +178,10 @@ function calificar(req, res) {
 }
 
 function getListaPorRepartidor(req, res) {
-  if (!req.query.id_repartidor) return res.status(404).send({message: "se require id_repartidor"})
+    var id_usiario = req.usuario;
     Pedido.findAllWithDependencies({
         where: {
-            id_operador_entrega: req.query.id_repartidor,
+            id_operador_entrega: id_usiario,
             estatus: 3
         }})
     .then( result => {

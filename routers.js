@@ -264,8 +264,18 @@ api.post('/login-operador/', operador.login);
 * @apiParam {string} id_sucursal
 * @apiSuccess {Operador} success
 */
-permisos.add('/login-unidad-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR])
+permisos.add('/login-unidad-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR, permisos.SIN_ROL])
 api.get('/login-unidad-operador/', autentication.isAuth, operador.siginUnidad);
+
+/**
+* @api {post} /login-repartidor genera un nuevo token para llamar ws 
+*
+* @apiGroup Operador
+* @apiParam {string} correo_electronico
+* @apiParam {string} password
+* @apiSuccess {Operador} success
+*/
+api.post('/login-repartidor/', operador.loginRepartidor);
 
 
 /**
@@ -550,7 +560,7 @@ api.get('/pedido-grafica-semana/',  autentication.isAuth, pedido.getNPedidosXWee
 * @apiParam {Number} id_repartidor
 * @apiSuccess {Pedido[]}
 */
-permisos.add('/pedido-calificacion/', 'GET', [permisos.REPARTIDOR])
+permisos.add('/pedido-repartidor/', 'GET', [permisos.REPARTIDOR])
 api.get('/pedido-repartidor/', autentication.isAuth, pedido.getListaPorRepartidor);
 
 /**
