@@ -507,7 +507,7 @@ api.delete('/pedido/', autentication.isAuth, pedido.deleteR);
 * @apiParam {number} estatus
 * @apiSuccess {Boolean} success
 */
-permisos.add('/pedido-estatus/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+permisos.add('/pedido-estatus/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR])
 api.put('/pedido-estatus/', autentication.isAuth, pedido.setEstatus);
 
 /**
