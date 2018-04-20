@@ -111,51 +111,80 @@ function deleteR (query) {
     return model.deleteR(query.where);
 }
 
-function getListaProductos(pedido) {
-  return new Promise ((resolve, reject) => {
-    listaPedido.findAllListaPedido(pedido.id)
-    .then(result => {
-      pedido.productos = result;
-      resolve();
-    })
-    .catch(err => reject(err));
-  });
-}
+async function findAllWithDependencies(query) {
+  var lista = [];
+  var where = model.getWhere(query.where);
+  var orderBy = model.getOrderBy(query.orderBy) || '';
+  var query = `SELECT pedido.id as id, pedido.estatus as estatus, comentarios, fecha_recibido, calificacion,
+    usr.id as usuario_id, usr.correo_electronico as usuario_correo_electronico,  usr.nombre as usuario_nombre, usr.telefono as usuario_telefono,
+    u.id as unidad_id, u.nombre as unidad_nombre, u.lat as unidad_lat, u.lng as unidad_lng,
+    ds.id as ds_id, ds.nombre_direccion as ds_nombre_direccion, ds.direccion as ds_direccion, ds.lat as ds_lat, ds.lng as ds_lng, ds.referencia as ds_referencia,
+    op.id as op_id, op.nombre as op_nombre, op.apellido_paterno as op_apellido_paterno
+    FROM pedido
+    INNER JOIN usuario usr ON usr.id = pedido.id_usuario
+    INNER JOIN unidad u on u.id = pedido.id_unidad
+    LEFT JOIN direccion_solicitud ds ON ds.id = pedido.id_direccion_solicitud
+    LEFT JOIN  operador op ON op.id = pedido.id_operador_entrega
+    WHERE ${where} ${orderBy}`;
 
-function getDireccion(pedido) {
-  return new Promise ( (resolve, reject) => {
-    direccionSolicitud.findAll({where: {id: pedido.id_direccion_solicitud}})
-    .then(result => {
-      pedido.direccion_entrega = result[0];
-      resolve();
-    })
-    .catch(err => reject(err))
-  });
-}
+    try {
+        var response = await model.rawQuery(query);
+        for (var i = 0; i < response.length; i++) {
+            var record = response[i];
+            var direccion_entrega = {
+                id: record.ds_id,
+                nombre_direccion: record.ds_nombre_direccion,
+                direccion: record.ds_direccion, 
+                lat: record.ds_lat, 
+                lng: record.ds_lng, 
+                referencia: record.ds_referencia,
+            };
+            var usuario = {
+                id: record.usuario_id, 
+                correo_electronico: record.usuario_correo_electronico,  
+                nombre: record.usuario_nombre, 
+                telefono: record.usuario_telefono,
+            };
+            var unidad = {
+                id: record.unidad_id, 
+                nombre: record.unidad_nombre,
+                lat: record.unidad_lat,
+                lng: record.unidad_lng
+            };
+            var operador = {
+                id: record.op_id, 
+                nombre: record.op_nombre,
+                apellido_paterno: record.op_apellido_paterno
+            };
+            var productos = await listaPedido.findAllListaPedido(record.id);
 
-function getUsuario(pedido) {
-  return new Promise ( (resolve, reject) => {
-    usuario.findById(pedido.id_usuario)
-    .then(result => {
-      pedido.usuario = result;
-      resolve();
-    })
-    .catch(err => reject(err))
-  });
-}
+            lista.push({
+                id: record.id,
+                estatus: record.estatus,
+                comentarios: record.comentarios,
+                fecha_recibido: record.fecha_recibido,
+                calificacion: record.calificacion,
+                direccion_entrega,
+                usuario,
+                unidad,
+                operador,
+                productos
+            })
+        }
+        return lista
+    } catch (err) {
+        throw err;
+    }
 
-function findAllWithDependencies(query) {
-  var promises = [];
-  var lista;
   return new Promise((resolve, reject) => {
-    model.findAll(query)
+
+    model.rawQuery(query)
     .then(result => {
-      var lista = result;
       for (let i = 0; i < lista.length; i++) {
         var pedido = lista[i];
         promises.push(getListaProductos(pedido));
-        promises.push(getDireccion(pedido));
-        promises.push(getUsuario(pedido));
+        //promises.push(getDireccion(pedido));
+        //promises.push(getUsuario(pedido));
       }
       Promise.all(promises).then(() => {
         resolve(lista);

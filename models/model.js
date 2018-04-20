@@ -217,6 +217,14 @@ class Model {
         });
     }
 
+    getWhere(where) {
+        return utils.getWhere(where, this.model, this.name);
+    }
+
+    getOrderBy(orderBy) {
+        return utils.getOrderBy(orderBy, this.name);
+    }
+
 /**
 * elimina parametros que no pertenecen a esta objeto
 * @param {Object} obj - tabla fuente

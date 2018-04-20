@@ -29,7 +29,7 @@ function getListaPorUnidad(req, res) { // forbidden for users
     var where = {
         id_cliente, 
         id_unidad: req.query.id_unidad,
-        _raw: "estatus != 0 AND estatus != 4"
+        _raw: "pedido.estatus != 0 AND pedido.estatus != 4"
     };
     Pedido.findAllWithDependencies({where, order_by: {value: 'fecha_recibido', order: 'DESC'}})
     .then(function(result) {
@@ -49,7 +49,7 @@ function getListaPorUsuario(req, res) {
     }
     var where = {
         id_usuario: req.usuario,
-        _raw: "estatus != 0 AND estatus != 4"
+        _raw: "pedido.estatus != 0 AND pedido.estatus != 4"
     }
     Pedido.findAllWithDependencies({where})
     .then(function(result) {

@@ -89,13 +89,17 @@ function getSqlFind(model, query, table, limit) {
 * @param{Object} where - es un objeto de tipo {condicion1:value1, condicion2:value2 ...}
 * @return{string} cadena sql
 */
-function getWhere(where, model) {
+function getWhere(where, model, table) {
     var and = [], sqlWhere;
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
         if (where.hasOwnProperty(column)) {
             let com = typeof(where[column]) === 'undefined' ? '' : where[column];
-            and.push(`${column} = '${com}'`);
+            if (table) {
+                and.push(`${table}.${column} = '${com}'`);
+            } else {
+                and.push(`${column} = '${com}'`);
+            }
         }
     }
 
@@ -126,9 +130,13 @@ function getSelect (select, model) {
     }
 }
 
-function getOrderBy (orderBy) {
+function getOrderBy (orderBy, table) {
     if (!orderBy || !orderBy.value) return '';
-    return 'ORDER BY ' + orderBy.value + ' ' + (orderBy.order || '');
+    if (table) {
+        return `ORDER BY ${table}.${orderBy.value} ${(orderBy.order || '')}`;
+    } else {
+        return `ORDER BY ${orderBy.value} ${(orderBy.order || '')}`;
+    }
 }
 
 function getSqlFindAll(model, query, table) {
@@ -152,4 +160,5 @@ module.exports = {
     getSqlFindAll,
     getWhere,
     concatKeys,
+    getOrderBy
 }
