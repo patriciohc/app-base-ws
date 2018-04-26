@@ -3,14 +3,17 @@
 * DireccionSolicitud: es la direccion de donde el usuario a solicitado el servicio
 *
 */
-var Model = require('./model');
+var Model = require('../drive-db/model');
+var types = require('../drive-db/data-types');
+
 // nombre de la tabla en db
 const name = "direccion_solicitud";
 // columnas en db
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         name: "nombre_direccion",
         type: "VARCHAR(250)"
@@ -19,10 +22,10 @@ const columns = [
         type: "VARCHAR(200)"
     }, {
         name: "lat", // latitud
-        type: "DOUBLE"
+        type: types.DECIMAL
     }, {
         name: "lng", // longitud
-        type: "DOUBLE"
+        type: types.DECIMAL
     }, {
         name: "referencia", // referencia para encontrar establecimiento
         type: "VARCHAR(200)"

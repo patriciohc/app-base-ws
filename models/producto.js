@@ -3,14 +3,17 @@
 * Cliente representa un usuario dueño de uno o varios establecimientos..
 *
 */
-var Model = require('./model');
+var Model = require('../drive-db/model');
+var types = require('../drive-db/data-types');
+
 // nombre de la tabla en db
 const name = "producto";
 // columnas en db
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         name: "nombre",
         type: "VARCHAR(250)"
@@ -22,10 +25,10 @@ const columns = [
         type: "VARCHAR(100)"
     }, {
         name: "precio",
-        type: "FLOAT"
+        type: types.REAL
     }, {
         name: "precio_publico",
-        type: "FLOAT"
+        type: types.REAL
     }, {
         name: "imagen",
         type: "VARCHAR(100)"

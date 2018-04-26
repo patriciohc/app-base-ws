@@ -22,27 +22,30 @@ var moment = require('moment');
 *
 */
 
-var Model = require('./model');
+var Model = require('../drive-db/model');
+var types = require('../drive-db/data-types');
+
 // nombre de la tabla en db
 const name = "pedido";
 // columnas en db
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         // 1: en espera de aceptacion de la tienda
         // 2: aceptado por la tienda, preparando envio
         // 3: en ruta
         // 4: entregado
         name: "estatus",
-        type: "TINYINT"
+        type: types.SMALL_INT
     }, {
         name: "comentarios",
         type: "VARCHAR(100)"
     }, {
         name: "fecha_recibido",
-        type: "DATETIME"
+        type: types.DATETIME
     }, {
         name: "calificacion",
         type: "INT"

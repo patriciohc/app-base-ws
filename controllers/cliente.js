@@ -5,7 +5,7 @@ const utils = require('./utils');
 const SHA256 = require("crypto-js/sha256");
 const Auth = require('./autentication');
 const permisos = require('../permisos');
-const clienteOperador = require('../models/cliente-operador');
+const clienteOperador = require('../models/cliente-operador').default;
 const operador = require('../models/operador');
 
 function get(req, res) {

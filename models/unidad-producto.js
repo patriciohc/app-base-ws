@@ -3,7 +3,7 @@
 * productos que tiene cada unidad
 *
 */
-var Model = require('./model');
+var Model = require('../drive-db/model');
 // nombre de la tabla en db
 const name = "unidad_producto";
 // columnas en db

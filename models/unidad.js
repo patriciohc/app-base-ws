@@ -3,14 +3,17 @@
 * Unidad representa un establecimiento, consultorio, local ect.
 *
 */
-var Model = require('./model');
+var Model = require('../drive-db/model');
+var types = require('../drive-db/data-types');
+
 // nombre de la tabla en db
 const name = "unidad";
 // columnas en db
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         name: "nombre",
         type: "VARCHAR(250)"
@@ -19,10 +22,10 @@ const columns = [
         type: "VARCHAR(200)"
     }, {
         name: "lat", // latitud
-        type: "DOUBLE"
+        type: types.DECIMAL
     }, {
         name: "lng", // longitud
-        type: "DOUBLE"
+        type: types.DECIMAL
     }, {
         name: "telefono",
         type: "VARCHAR(20)"
@@ -34,7 +37,7 @@ const columns = [
         type: "TIME"
     }, {
         name: "estatus",
-        type: "TINYINT"
+        type: types.SMALL_INT
     }, {
         name: "id_cliente", // dueño establecimiento
         type: "INT NOT NULL"

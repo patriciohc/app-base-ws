@@ -6,26 +6,28 @@
 // const fs = require('fs');
 // const tj = require('togeojson');
 const inside = require('point-in-polygon');
+var types = require('../drive-db/data-types');
 
 // const DIR_KML = "./kml/"
 
-var Model = require('./model');
+var Model = require('../drive-db/model');
 // nombre de la tabla en db
 const name = "poligono";
 // columnas en db
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         name: "id_unidad",
         type: "INT"
     }, {
         name: "lat",
-        type: "DOUBLE"
+        type: types.DECIMAL
     }, {
         name: "lng",
-        type: "DOUBLE"
+        type: types.DECIMAL
     }
 ]
 

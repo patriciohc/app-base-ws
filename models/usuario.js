@@ -4,7 +4,9 @@
 *
 */
 var SHA256 = require("crypto-js/sha256");
-var Model = require('./model');
+var Model = require('../drive-db/model');
+var types = require('../drive-db/data-types');
+
 // nombre de la tabla en db
 const name = "usuario";
 // columnas de valor unico
@@ -13,7 +15,8 @@ const uniques = ['correo_electronico'];
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         name: "correo_electronico",
         type: "VARCHAR(250) NOT NULL"
@@ -28,7 +31,7 @@ const columns = [
         type: "varchar(200)"
     }, {
         name: "recibir_promociones",
-        type: "TINYINT" // 1 true, 0 false
+        type: types.SMALL_INT // 1 true, 0 false
     }, {
         name: "id_push",
         type: "VARCHAR(100)"

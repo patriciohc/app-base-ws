@@ -1,4 +1,5 @@
 'use strict'
+const engine = require('../settings').DATA_BASE.engine;
 
 const NUMBER = [
     'INT',
@@ -17,12 +18,32 @@ const COMPARATORS = {
 * @return {string} - string que contiene el formato para crear la tabla
 */
 function concat(model) {
-    var columns = ""
+    var columns = []
+    var inc = engine == 'mysql' ? 'AUTO_INCREMENT' : 'SERIAL';
     for (var i = 0; i < model.length; i++) {
-        columns += `${model[i].name} ${model[i].type}, `
+        var item = engine == 'mysql' ? createElementContactMysql(model[i]) : createElementContactPostgreSQL(model[i]);
+        columns.push(item);
+        //columns += `${model[i].name} ${model[i].type} ${model[i].auto_increment ? inc : ''}, `
     }
-    columns = columns.substring(0, columns.length - 2);
+    columns.join(', ')
+    // columns = columns.substring(0, columns.length - 2);
     return columns;
+}
+
+function createElementContactMysql(item) {
+    if (item.auto_increment) {
+        return `${item.name} ${item.type.toString()} AUTO_INCREMENT `
+    } else {
+        return `${item.name} ${item.type.toString()} `
+    }
+}
+
+function createElementContactPostgreSQL(item) {
+    if (item.auto_increment) {
+        return `${item.name} SERIAL `
+    } else {
+        return `${item.name} ${item.type.toString()} `
+    }
 }
 
 /**
@@ -31,9 +52,10 @@ function concat(model) {
 * @return {string} - string que contiene el formato para crear la tabla
 */
 function concatKeys(keys, uniques) {
+    var unique = engine == 'mysql' ? 'UNIQUE KEY' : 'UNIQUE';
     var result = ""
     if (uniques.length >= 1) {
-        result = ` UNIQUE KEY(${uniques.join(',')}),`;
+        result = ` ${unique}(${uniques.join(',')}),`;
     }
     if (keys.length >= 1) {
         result += ` PRIMARY KEY(${keys.join(',')}) `;

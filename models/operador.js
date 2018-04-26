@@ -3,8 +3,9 @@
 * OperadorEntrea representa un usuario repartidor
 *
 */
-var Model = require('./model');
+var Model = require('../drive-db/model');
 var SHA256 = require("crypto-js/sha256");
+var types = require('../drive-db/data-types');
 
 // nombre de la tabla en db
 const name = "operador";
@@ -14,7 +15,8 @@ const uniques = ['correo_electronico'];
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INTT",
+        auto_increment: true
     }, {
         name: "nombre",
         type: "VARCHAR(250) NOT NULL"
@@ -35,7 +37,7 @@ const columns = [
         type: "VARCHAR(100)"
     }, {
         name: "estatus",
-        type: "TINYINT"
+        type: types.SMALL_INT
     }, {
         name: "id_device",
         type: "VARCHAR(100)"

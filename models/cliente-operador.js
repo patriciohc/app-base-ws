@@ -3,14 +3,15 @@
 * operadores que tiene un cliente (administrador principal)
 *
 */
-var Model = require('./model');
+var Model = require('../drive-db/model');
 // nombre de la tabla en db
 const name = "cliente_operador";
 // columnas en db
 const columns = [
     {
         name: "id",
-        type: "INT AUTO_INCREMENT"
+        type: "INT",
+        auto_increment: true
     }, {
         name: "id_cliente",
         type: "INT NOT NULL"
