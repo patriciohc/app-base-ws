@@ -77,7 +77,7 @@ function getSqlInsert(object, model, table) {
         var column = model[i];
         if (typeof(object[column.name]) != 'undefined') {
             columns += `${column.name} ,`;
-            var type = column.type.split(" ")[0];
+            var type = column.type.toString();
             if (NUMBER.indexOf(type.toUpperCase()) != -1) {
                 values += `${object[column.name]} ,`;
             } else {

@@ -63,5 +63,6 @@ const DATETIME = {
 module.exports = {
     DECIMAL,
     REAL,
-    SMALL_INT
+    SMALL_INT,
+    DATETIME
 }

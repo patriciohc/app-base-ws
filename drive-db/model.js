@@ -54,12 +54,10 @@ class Model {
         if (!sql) return {};
         try {
             var results = await db.execute(sql);
-            return results.length > 0 ? resolve(results[0]) : resolve({});
+            return results.length > 0 ? results[0] : {};
         } catch (err) {
             throw err;
         }
-            
-
         // return new Promise((resolve, reject) => {
         //     if (sql) {
         //         db.conecction.query(sql, function(err, results){
@@ -105,7 +103,7 @@ class Model {
         if (!sql) return {};
         try {
             var results = await db.execute(sql);
-            return results.length > 0 ? resolve(results[0]) : resolve({});
+            return results.length > 0 ? results[0] : {};
         } catch (err) {
             throw err;
         }
@@ -137,7 +135,7 @@ class Model {
         if (!sql) return {};
         try {
             var results = await db.execute(sql);
-            return results.length > 0 ? resolve(results[0]) : resolve({});
+            return results.length > 0 ? results[0] : {};
         } catch (err) {
             throw err;
         }

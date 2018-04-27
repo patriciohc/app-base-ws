@@ -3,6 +3,9 @@ var listaPedido = require('./lista-pedido');
 var direccionSolicitud = require('./direccion-solicitud');
 var usuario = require('./usuario');
 var moment = require('moment');
+var Model = require('../drive-db/model');
+var types = require('../drive-db/data-types');
+
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
 * json pedido
@@ -21,9 +24,6 @@ var moment = require('moment');
 * }
 *
 */
-
-var Model = require('../drive-db/model');
-var types = require('../drive-db/data-types');
 
 // nombre de la tabla en db
 const name = "pedido";

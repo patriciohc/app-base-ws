@@ -11,7 +11,7 @@ var listaPedido = require('../models/lista-pedido');
 var operador = require('../models/operador');
 var pedido = require('../models/pedido');
 var unidadProducto = require('../models/unidad-producto');
-var clienteOperador = require('../models/cliente-operador').default;
+var clienteOperador = require('../models/cliente-operador');
 var imagen = require('../models/imagen');
 
 cliente.sync()

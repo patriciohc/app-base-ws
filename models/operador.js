@@ -15,7 +15,7 @@ const uniques = ['correo_electronico'];
 const columns = [
     {
         name: "id",
-        type: "INTT",
+        type: "INT",
         auto_increment: true
     }, {
         name: "nombre",

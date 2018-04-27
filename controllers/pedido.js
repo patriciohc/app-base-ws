@@ -26,6 +26,7 @@ function getListaPorUnidad(req, res) { // forbidden for users
     //     return res.status(400).send({err: "se requiere: id_unidad || id_cliente"});
     // }
     // var where = utils.minimizarObjeto({id_cliente, id_unidad: req.query.id_unidad}, req.query);
+    if (!req.query.id_unidad) return res.status(404).send({code:"ERROR", message:"Falta id de unidad"});
     var where = {
         id_cliente, 
         id_unidad: req.query.id_unidad,

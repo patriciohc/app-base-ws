@@ -37,8 +37,10 @@ async function executePostgreSQL(query, values) {
     try {
         var res = await conecction.query(query);
         console.log(res);
+        return res.rows;
     } catch (err) {
         console.log(err);
+        throw err;
     }
 }
 
