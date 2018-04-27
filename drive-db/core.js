@@ -55,7 +55,10 @@ function connect() {
         });
         isConected = true;
     } else if (config.engine == 'postgresql') {
-        conecction = new Pool();
+        conecction = new Pool({
+            connectionString: config.connectionString,
+            ssl: true,
+        });
         isConected = true;
     }
 }

@@ -1,4 +1,5 @@
 'use strict'
+const format = require('pg-format');
 const engine = require('../settings').DATA_BASE.engine;
 
 const NUMBER = [
@@ -174,6 +175,11 @@ function getSqlFindAll(model, query, table) {
     }
 }
 
+function getSqlInsertBulk(name, columns, values) {
+    var query = `INSERT INTO ${name} (${columns}) VALUES %L`;
+    return format(query, values);
+}
+
 
 module.exports = {
     concat,
@@ -182,5 +188,6 @@ module.exports = {
     getSqlFindAll,
     getWhere,
     concatKeys,
-    getOrderBy
+    getOrderBy,
+    getSqlInsertBulk
 }

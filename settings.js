@@ -11,6 +11,7 @@ const SECRET_KEY = "secrete_key";
 
 const DATA_BASE = {
   engine: 'postgresql',
+  connectionString: process.env.DATABASE_URL
 }
 
 // const DATE_BASE = {
