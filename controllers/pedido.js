@@ -111,7 +111,7 @@ async function createPedido(pedido, estatus = 1) {
         for (let i = 0; i < pedido.pedido.length; i++) {
             values.push([pedidoJson.id, pedido.pedido[i].id_producto, pedido.pedido[i].cantidad]);
         }
-        response = ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
+        response = await ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
         if (response) {
             return pedidoJson;
         }

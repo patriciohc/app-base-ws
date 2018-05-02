@@ -47,6 +47,9 @@ const columns = [
         name: "fecha_recibido",
         type: types.DATETIME
     }, {
+        name: "fecha_entrega",
+        type: types.DATETIME
+    }, {
         name: "calificacion",
         type: "INT"
     }, {

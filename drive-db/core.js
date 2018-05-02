@@ -34,9 +34,17 @@ function executeMySQL(query, values) {
 
 async function executePostgreSQL(query, values) {
     if (!isConected) connect();
+    query = query.trim();
+    var command = query.split(" ")[0];
+    if (command.toUpperCase() === 'INSERT') {
+        query.replace(";", "");
+        query = query  + ' RETURNING id;'
+    }
     try {
         var res = await conecction.query(query);
-        console.log(res);
+        if (res.command === 'INSERT' && res.rows.length === 1) {
+            return {insertId: res.rows[0].id};
+        }
         return res.rows;
     } catch (err) {
         console.log(err);
