@@ -1,4 +1,5 @@
 'use strict'
+const moment = require('moment');
 
 /**
 * extrae los parametros especificos de un objeto
@@ -51,7 +52,17 @@ function andValidate(parametros, json) {
 */
 function getDateTimeMysql(date) {
     return getDateMysql(date) + " " +  getTimeMysql(date);
-  }
+}
+
+/**
+* Convierte un objeto DATETIEM de javascript a un string fecha compatible con mysql
+* @param {Date} fecha - objeto Date javascript
+* @return {String} fecha formato mysql
+*/
+function getDateTimeMysqlNowUtc(date) {
+    var t = moment().utc();
+    return t.format('YYYY-MM-DD HH:mm:SS');
+}
 
 /**
 * Convierte un objeto DATE de javascript a un string fecha compatible con mysql
