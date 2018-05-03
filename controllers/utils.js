@@ -89,5 +89,6 @@ module.exports = {
     getTimeMysql,
     orValidate,
     andValidate,
-    getDateTimeMysql
+    getDateTimeMysql,
+    getDateTimeMysqlNowUtc
 }
