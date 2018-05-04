@@ -91,14 +91,12 @@ function deleteR(req, res) {
   }
 
 async function createPedido(pedido, estatus = 1) {
-    // var date = new Date();
     var response;
     try {
         var response = await DireccionSolicitud.create(pedido.direccion_entrega);
         var pedidoJson = {
             estatus: estatus, // en espera de aceptacion por parte de la la unidad
             comentarios: pedido.comentarios,
-            fecha_recibido: utils.getDateTimeMysqlNowUtc(),
             calificacion: 0, // no ha recibido calificacion
             id_direccion_solicitud: response.insertId,
             id_unidad: pedido.id_unidad,
@@ -112,6 +110,7 @@ async function createPedido(pedido, estatus = 1) {
             values.push([pedidoJson.id, pedido.pedido[i].id_producto, pedido.pedido[i].cantidad]);
         }
         response = await ListaPedido.insertBulk("id_pedido, id_producto, cantidad", values);
+        
         if (response) {
             return pedidoJson;
         }

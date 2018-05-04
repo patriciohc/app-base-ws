@@ -25,7 +25,7 @@ class Model {
       return this.createTable();
     }
 
-    create(obj) {
+    create(obj, returned) {
         obj = this.cleanObj(obj); 
         var sql = utils.getSqlInsert(obj, this.model, this.name);
         if (sql) {

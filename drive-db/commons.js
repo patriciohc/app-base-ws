@@ -72,24 +72,36 @@ function concatKeys(keys, uniques) {
 * @return {string} - string con el formato para insertar
 */
 function getSqlInsert(object, model, table) {
-    var columns = "";
-    var values = "";
+    var columns = [];
+    var values = [];
     for (let i = 0; i < model.length; i++) {
         var column = model[i];
         if (typeof(object[column.name]) != 'undefined') {
-            columns += `${column.name} ,`;
-            var type = column.type.toString();
-            if (NUMBER.indexOf(type.toUpperCase()) != -1) {
-                values += `${object[column.name]} ,`;
-            } else {
-                values += `'${object[column.name]}' ,`;
+            columns.push(column.name);
+            // var type = column.type.toString();
+            switch(typeof(object[column.name])) {
+                case 'number':
+                    values.push(object[column.name]);
+                    break;
+                case 'string':
+                    values.push(`'${object[column.name]}'`);
+                    break;
+                case 'object':
+                    if (object[column.name].type && object[column.name].value) {
+                        if (object[column.name].type == 'sql' || object[column.name].type == 'number') {
+                            values.push(object[column.name].value);
+                        } else {
+                            values.push(`'${object[column.name]}'`);
+                        }
+                    } else {
+                        values.push("''");
+                    }
+                break;
             }
         }
     }
-    if (columns != "") {
-        columns = columns.substring(0, columns.length - 2);
-        values = values.substring(0, values.length - 2);
-        return `INSERT INTO ${table} (${columns}) VALUES (${values})`
+    if (columns.length > 0) {
+        return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')})`
     } else {
         return null;
     }

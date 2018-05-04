@@ -15,6 +15,9 @@ const columns = [
         type: "INT",
         auto_increment: true
     }, {
+        name: "prefix",
+        type: "VARCHAR(20)"
+    }, {
         name: "nombre",
         type: "VARCHAR(250)"
     }, {

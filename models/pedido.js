@@ -34,6 +34,12 @@ const columns = [
         type: "INT",
         auto_increment: true
     }, {
+        name: "no_pedido",
+        type: "VARCHAR(50)"
+    }, {
+        name: "consecutivo",
+        type: "INT"
+    }, {
         // 1: en espera de aceptacion de la tienda
         // 2: aceptado por la tienda, preparando envio
         // 3: en ruta
@@ -80,7 +86,21 @@ function sync () {
 }
 
 function create (obj) {
-    return model.create(obj);
+    var now = moment().utc();
+    obj.fecha_recibido = now.format('YYYY-MM-DD HH:mm:ss');
+    obj.consecutivo = {
+        type: 'sql',
+        value: `coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and fecha_recibido::date = '${now.format('YYYY-MM-DD')}' ), 0)`
+    }
+    obj.no_pedido = {
+        type: 'sql',
+        value: `CONCAT(
+            (SELECT trim(prefix) FROM unidad WHERE id = ${obj.id_unidad}) , '-',
+            (SELECT TO_CHAR(NOW(), 'YYMMDD')), '-',
+            coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and fecha_recibido::date = '${now.format('YYYY-MM-DD')}' ), 0)
+        )`
+    };
+    return model.create(obj , ['id', 'no_pedido']);
 }
 
 function findOne (query) {
