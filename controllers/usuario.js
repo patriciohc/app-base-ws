@@ -37,10 +37,11 @@ async function loginFacebook(req, res) {
                 correo_electronico: profile.email,
                 // fechaNacimiento: resp.birthday,
                 // sexo: resp.gender,
-                type_login: 'facebook',
+                // type_login: 'facebook',
             };
             userdb = await usuario.create(newUser);
         }
+        userdb.type_login = 'facebook';
         userdb.token = Auth.createToken(userdb.id, permisos.USUSARIO)
         return res.status(200).send(userdb);
     } catch(e) {
@@ -86,10 +87,11 @@ async function loginGoogle(req, res) {
             var newUser = {
                 nombre: profile.name,
                 correo_electronico: profile.email,
-                type_login: 'google',
+                //type_login: 'google',
             };
             userdb = await usuario.create(newUser);
         }
+        userdb.type_login = 'google';
         userdb.token = Auth.createToken(userdb.id, permisos.USUSARIO)
         return res.status(200).send(userdb);
     } catch(e) {

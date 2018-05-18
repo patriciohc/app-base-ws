@@ -38,7 +38,7 @@ class Model {
     insertBulk(columns, values) {
         var sql = utils.getSqlInsertBulk(this.name, columns, values);
         // var sql = `INSERT INTO ${this.name} (${columns}) VALUES ?`;
-        return db.execute(sql, values);
+        return db.execute(sql);
         // return new Promise((resolve, reject) => {
         //     db.conecction.query(sql, [values],  function(err, result){
         //         if (err) {

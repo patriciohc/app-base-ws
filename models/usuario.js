@@ -37,7 +37,7 @@ const columns = [
         type: "VARCHAR(100)"
     }, {
         name: "type_login",
-        type: "VARCHAR(100)"
+        type: "VARCHAR(100)"  // facebook, google, 
     }, {
         name: "id_device",
         type: "VARCHAR(100)"

@@ -74,6 +74,7 @@ function concatKeys(keys, uniques) {
 function getSqlInsert(object, model, table) {
     var columns = [];
     var values = [];
+    var vars = "";
     for (let i = 0; i < model.length; i++) {
         var column = model[i];
         if (typeof(object[column.name]) != 'undefined') {
@@ -88,7 +89,9 @@ function getSqlInsert(object, model, table) {
                     break;
                 case 'object':
                     if (object[column.name].type && object[column.name].value) {
-                        if (object[column.name].type == 'sql' || object[column.name].type == 'number') {
+                        if ((object[column.name].type == 'sql' && engine == 'postgresql') || object[column.name].type == 'number') {
+                            values.push(object[column.name].value);
+                        } else if (object[column.name].type == 'sql' && engine == 'mysql') {
                             values.push(object[column.name].value);
                         } else {
                             values.push(`'${object[column.name]}'`);
@@ -100,8 +103,10 @@ function getSqlInsert(object, model, table) {
             }
         }
     }
-    if (columns.length > 0) {
-        return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')})`
+    if (columns.length > 0 && engine == 'mysql') {
+        return `${vars} INSERT INTO ${table} (${columns.join(', ')}) SELECT ${values.join(', ')};`
+    } else if (columns.length > 0 && engine == 'postgresql') {
+        return `INSERT INTO ${table} (${columns.join(', ')}) VALUES (${values.join(', ')});`
     } else {
         return null;
     }

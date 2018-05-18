@@ -60,13 +60,28 @@ function localizarUnidadesPoligonos(req,  res, promises) {
 }
 
 function getLista(req, res) {
-    unidad.findAll()
-    .then(function(result) {
-        return res.status(200).send(result);
-    })
-    .catch(function(err){
-        return res.status(500).send({err: err});
-    })
+    var key = req.query.key;
+    var lng = req.query.lng;
+    var lat = req.query.lat;
+    if (key) {
+        unidad.findAll({where: {prefix: key}})
+        .then(function(result) {
+            return res.status(200).send(result);
+        })
+        .catch(function(err) {
+            return res.status(500).send({err: err});
+        })
+    } else if (lng && lat) {
+        unidad.findAll()
+        .then(function(result) {
+            return res.status(200).send(result);
+        })
+        .catch(function(err){
+            return res.status(500).send({err: err});
+        })
+    } else {
+        return res.status(400).send({code:"ERROR", message: "Faltan parametros"});
+    }
 }
 
 function getListaCliente(req, res) {

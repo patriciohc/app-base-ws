@@ -6,6 +6,8 @@ var moment = require('moment');
 var Model = require('../drive-db/model');
 var types = require('../drive-db/data-types');
 
+const engine = require('../settings').DATA_BASE.engine;
+
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..
 * json pedido
@@ -56,9 +58,6 @@ const columns = [
         name: "fecha_entrega",
         type: types.DATETIME
     }, {
-        name: "calificacion",
-        type: "INT"
-    }, {
         name: "id_direccion_solicitud",
         type: "INT NOT NULL"
     }, {
@@ -87,20 +86,36 @@ function sync () {
 
 function create (obj) {
     var now = moment().utc();
-    obj.fecha_recibido = now.format('YYYY-MM-DD HH:mm:ss');
-    obj.consecutivo = {
-        type: 'sql',
-        value: `coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and fecha_recibido::date = '${now.format('YYYY-MM-DD')}' ), 0)`
+    obj.fecha_recibido = now.format('YYYY-MM-DD HH:mm:ss +000Z');
+    if (engine == 'postgresql') {
+        obj.consecutivo = {
+            type: 'sql',
+            value: `coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and fecha_recibido::date = '${now.format('YYYY-MM-DD')}' ), 0)`
+        }
+        obj.no_pedido = {
+            type: 'sql',
+            value: `CONCAT(
+                (SELECT trim(prefix) FROM unidad WHERE id = ${obj.id_unidad}) , '-',
+                (SELECT TO_CHAR(NOW(), 'YYMMDD')), '-',
+                coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and cast(fecha_recibido as date) = '${now.format('YYYY-MM-DD')}' ), 0)
+            )`
+        };
+    } else if (engine == 'mysql') {
+        obj.consecutivo = {
+            type: 'sql',
+            value: `coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and cast(fecha_recibido as date) = '${now.format('YYYY-MM-DD')}' ), 0)`
+        }
+        obj.no_pedido = {
+            type: 'sql',
+            value: `CONCAT(
+                (SELECT trim(prefix) FROM unidad WHERE id = ${obj.id_unidad}) , '-',
+                (SELECT DATE_FORMAT(NOW() ,'%y%m%d')), '-',
+                coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and cast(fecha_recibido as date) = '${now.format('YYYY-MM-DD')}' ), 0)
+            )`
+        };
     }
-    obj.no_pedido = {
-        type: 'sql',
-        value: `CONCAT(
-            (SELECT trim(prefix) FROM unidad WHERE id = ${obj.id_unidad}) , '-',
-            (SELECT TO_CHAR(NOW(), 'YYMMDD')), '-',
-            coalesce((SELECT MAX(consecutivo) + 1 from pedido where id_unidad = ${obj.id_unidad} and fecha_recibido::date = '${now.format('YYYY-MM-DD')}' ), 0)
-        )`
-    };
-    return model.create(obj , ['id', 'no_pedido']);
+
+    return model.create(obj, {returns: 'no_pedido'});
 }
 
 function findOne (query) {
@@ -141,7 +156,7 @@ async function findAllWithDependencies(query) {
   var lista = [];
   var where = model.getWhere(query.where);
   var orderBy = model.getOrderBy(query.orderBy) || '';
-  var query = `SELECT pedido.id as id, pedido.estatus as estatus, comentarios, fecha_recibido, calificacion,
+  var query = `SELECT pedido.id as id, pedido.no_pedido as no_pedido, pedido.estatus as estatus, comentarios, fecha_recibido, calificacion,
     usr.id as usuario_id, usr.correo_electronico as usuario_correo_electronico,  usr.nombre as usuario_nombre, usr.telefono as usuario_telefono,
     u.id as unidad_id, u.nombre as unidad_nombre, u.lat as unidad_lat, u.lng as unidad_lng,
     ds.id as ds_id, ds.nombre_direccion as ds_nombre_direccion, ds.direccion as ds_direccion, ds.lat as ds_lat, ds.lng as ds_lng, ds.referencia as ds_referencia,
@@ -186,6 +201,7 @@ async function findAllWithDependencies(query) {
 
             lista.push({
                 id: record.id,
+                no_pedido: record.no_pedido,
                 estatus: record.estatus,
                 comentarios: record.comentarios,
                 fecha_recibido: record.fecha_recibido,

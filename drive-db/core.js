@@ -7,12 +7,12 @@ const { Pool } = require('pg');
 var isConected, conecction;
 
 //private function
-function executeMySQL(query, values) {
+function executeMySQL(query, options) {
     if (!isConected) connect();
 
     return new Promise(function(resolve, reject) {
-        if (values) {
-            conecction.query(query, values, (err, result) => {
+        if (options && options.values) {
+            conecction.query(query, options.values, (err, result) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -32,13 +32,17 @@ function executeMySQL(query, values) {
     })
 }
 
-async function executePostgreSQL(query, values) {
+async function executePostgreSQL(query, options) {
     if (!isConected) connect();
     query = query.trim();
     var command = query.split(" ")[0];
     if (command.toUpperCase() === 'INSERT') {
-        query.replace(";", "");
-        query = query  + ' RETURNING id;'
+        query = query.replace(";", "");
+        if (options && options.returns) {
+            query = query  + ` RETURNING ${options.returns};`
+        } else {
+            query = query  + ' RETURNING id;'
+        }
     }
     try {
         var res = await conecction.query(query);
@@ -59,7 +63,8 @@ function connect() {
             host: config.host,
             user: config.user,
             password: config.password,
-            database: config.database
+            database: config.database,
+            dateStrings: true
         });
         isConected = true;
     } else if (config.engine == 'postgresql') {
@@ -73,12 +78,12 @@ function connect() {
 
 
 // public function
-function execute(query, values) {
+function execute(query, options) {
     console.log(query);
     if (config.engine == 'mysql') {
-        return executeMySQL(query, values);
+        return executeMySQL(query, options);
     } else if (config.engine == 'postgresql') {
-        return executePostgreSQL(query, values);
+        return executePostgreSQL(query, options);
     }
 }
 
