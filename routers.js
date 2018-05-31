@@ -14,7 +14,10 @@ const autentication =  require('./controllers/autentication');
 const imagen =  require('./controllers/imagen');
 const notification = require('./controllers/push-notification');
 const payments = require('./controllers/payments');
+const categoriaUnidad = require('./controllers/categoria-unidad');
+
 const permisos = require('./permisos');
+
 
 
 api.post('/create-payment/', payments.create);
@@ -60,7 +63,7 @@ api.get('/unidad-cliente/', unidad.getListaCliente);
 * @apiSuccess {Unidad} lista de objetos unidad
 */
 // -- no requiere permisos
-api.get('/unidad/', unidad.getLista);
+api.get('/unidad/', unidad.findUnidades);
 
 /**
 * @api {get} /unidad/:id Obtiene una unidad
@@ -422,6 +425,23 @@ api.delete('/categoria/', autentication.isAuth, categoria.deleteR);
 * @apiSuccess {array} array de categorias
 */
 api.get('/categoria/', categoria.getLista);
+
+
+/**
+* @api {post} /categoria-unidad/ Crea una categoria para unidad
+* @apiGroup Categoria unidad
+* @apiParam {Object} objeto categoria {nombre: string, descripcion: string}
+* @apiSuccess {number} id de objeto insertado
+*/
+permisos.add('/categoria-unidad/', 'POST', [permisos.ADMINISTRADOR])
+api.post('/categoria-unidad/', autentication.isAuth, categoriaUnidad.create);
+
+/**
+* @api {post} /categoria-unidad/ consulta lista de categorias
+* @apiGroup Categoria unidad
+* @apiSuccess {Array}
+*/
+api.get('/categoria-unidad/', categoriaUnidad.getList);
 
 /**
 * @api {post} /producto/ Crea un producto

@@ -2,7 +2,7 @@
 
 const operador = require('../models').operador;
 const clienteOperador = require('../models').clienteOperador;
-const permisos = require('../permisos');
+const catalogos = require('./catalogos');
 const SHA256 = require("crypto-js/sha256");
 const Auth = require('./autentication');
 
@@ -120,22 +120,7 @@ function update(req, res) {
 }
 
 function getRoles(req, res) {
-    return res.status(200).send([
-        {
-            id: permisos.REPARTIDOR,
-            nombre: 'Repartidor'
-        }, {
-            id: permisos.OPERADOR_UNIDAD,
-            nombre: 'Operador de unidad'
-        }, {
-            id: permisos.ADMIN_UNIDAD,
-            nombre: 'Administrador de unidad'
-        }, {
-            id: permisos.ADMIN_CLIENTE,
-            nombre: 'Administrador'           
-        }
-    ])
-
+    return res.status(200).send(catalogos.ROLES);
 }
 
 module.exports = {

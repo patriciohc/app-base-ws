@@ -18,7 +18,7 @@ function get(req, res) {
 }
 
 function getLista(req, res) {
-    var where = utils.minimizarObjeto(["id_cliente", "id"], req.query);
+    var where = utils.minimizarObjeto(["id_cliente"], req.query);
     categoria.findAll({where})
     .then(function(result) {
         return res.status(200).send(result);
@@ -27,19 +27,6 @@ function getLista(req, res) {
         return res.status(500).send({err: err});
     })
 }
-
-// function getLista(req, res) {
-//   if (!req.query.id_unidad) {
-//       return res.status(400).send({err: "se requiere id_unidad"});
-//   }
-//   categoria.findAllPorUnidad(req.query.id_unidad)
-//   .then(function(result) {
-//       return res.status(200).send(result);
-//   })
-//   .catch(function(err){
-//       return res.status(500).send({err: err});
-//   })
-// }
 
 function create(req, res) {
     var obj = req.body;

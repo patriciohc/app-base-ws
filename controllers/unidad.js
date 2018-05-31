@@ -23,31 +23,36 @@ function get(req, res) {
 }
 
 /**
-* localiza las unidades que se encutran dentro del rango de entrega
+* localiza las unidades que se encutran dentro de un perimetro 
+* 
 * de la latitud y longitud recibida
 * @param {float} lat - latitud
 * @param {float} lng - longitud
+* @param {string} search - parametro de busqueda
 * @return {array} array de uidaddes
 */
 function localizarUnidades (req, res) {
     var lat = parseFloat(req.query.lat);
     var lng = parseFloat(req.query.lng);
+    var search = req.query.search;
+    var categoria = req.query.categoria;
     var distancia = 0.25;
-    unidad.findPorDistancia(lat, lng, distancia)  // optimiza busqueda reduciendo el numero de unidades
+    unidad.find(lat, lng, distancia, {search, categoria})  // optimiza busqueda reduciendo el numero de unidades
     .then(function (result) {
-        var unidadesDisponibles = [];
-        var arrayPromises = [];
-        for (var i = 0; i < result.length; i++) {
-            arrayPromises.push(poligono.isInsade(lat, lng, result[i], unidadesDisponibles));
-        }
-        Promise.all(arrayPromises)
-        .then(function () {
-            return res.status(200).send(unidadesDisponibles);
-        })
-        .catch(function (err) {
-            console.log(err);
-            return res.status(500).send(err);
-        });
+        // var unidadesDisponibles = [];
+        // var arrayPromises = [];
+        // for (var i = 0; i < result.length; i++) {
+        //     arrayPromises.push(poligono.isInsade(lat, lng, result[i], unidadesDisponibles));
+        // }
+        // Promise.all(arrayPromises)
+        // .then(function () {
+        //     return res.status(200).send(unidadesDisponibles);
+        // })
+        // .catch(function (err) {
+        //     console.log(err);
+        //     return res.status(500).send(err);
+        // });
+        return res.status(200).send(result);
     })
     .catch(function (err) {
         console.log(err);
@@ -59,7 +64,8 @@ function localizarUnidadesPoligonos(req,  res, promises) {
 
 }
 
-function getLista(req, res) {
+
+function findUnidades(req, res) {
     var key = req.query.key;
     var lng = req.query.lng;
     var lat = req.query.lat;
@@ -76,7 +82,7 @@ function getLista(req, res) {
         .then(function(result) {
             return res.status(200).send(result);
         })
-        .catch(function(err){
+        .catch(function(err) {
             return res.status(500).send({err: err});
         })
     } else {
@@ -116,6 +122,9 @@ function updateInfoBasic(req, res) {
     var infoUnidad = req.body
     var idUnidad = req.query.id_unidad
     var idCliente = req.usuario;
+    if (infoUnidad.categoria && infoUnidad.categoria.length) {
+        infoUnidad.categoria = `{ ${infoUnidad.categoria.join(',')} }`
+    }
     unidad.update(idUnidad, idCliente, infoUnidad)
     .then(function(result) {
         return res.status(200).send({code: 'OK', message:"success", affected: result.affectedRows});
@@ -221,7 +230,7 @@ module.exports = {
     localizarUnidades,
     create,
     updateInfoBasic,
-    getLista,
+    findUnidades,
     addProducto,
     deleteR,
     getProductos,

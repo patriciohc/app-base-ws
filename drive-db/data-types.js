@@ -60,9 +60,30 @@ const DATETIME = {
     }
 }
 
+const ARRAY = {
+    toString: function (config) {
+        if (!config || !config.arrayType) {
+            throw 'type array is require'
+        }
+        switch (engine) {
+            case 'mysql': return ARRAY.toMySQL(config.arrayType);
+            case 'postgresql': return ARRAY.toPostgreSQL(config.arrayType);
+        }
+    },
+
+    toMySQL: function (type) {
+        return type.toString() + '[]'
+    },
+
+    toPostgreSQL: function (type) {
+        return type.toString() + '[]'
+    }
+}
+
 module.exports = {
     DECIMAL,
     REAL,
     SMALL_INT,
-    DATETIME
+    DATETIME,
+    ARRAY
 }

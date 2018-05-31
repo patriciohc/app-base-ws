@@ -26,16 +26,15 @@ function concat(model) {
         columns.push(item);
         //columns += `${model[i].name} ${model[i].type} ${model[i].auto_increment ? inc : ''}, `
     }
-    columns.join(', ')
     // columns = columns.substring(0, columns.length - 2);
-    return columns;
+    return columns.join(', ')
 }
 
 function createElementContactMysql(item) {
     if (item.auto_increment) {
-        return `${item.name} ${item.type.toString()} AUTO_INCREMENT `
+        return `${item.name} ${item.type.toString(item.config)} AUTO_INCREMENT `
     } else {
-        return `${item.name} ${item.type.toString()} `
+        return `${item.name} ${item.type.toString(item.config)} `
     }
 }
 
@@ -43,7 +42,7 @@ function createElementContactPostgreSQL(item) {
     if (item.auto_increment) {
         return `${item.name} SERIAL `
     } else {
-        return `${item.name} ${item.type.toString()} `
+        return `${item.name} ${item.type.toString(item.config)} `
     }
 }
 
@@ -112,6 +111,14 @@ function getSqlInsert(object, model, table) {
     }
 }
 
+/**
+* retorna query de busqueda
+* @param{Object} model - columnas de la tabla
+* @param{Object} query - es un objeto de tipo {select: {}, where: {}}
+* @param{string} table - nombre de la tabla
+* @param{string} limit - limite de registros, obligatorio para no enviar infomacion en exceso
+* @return{string} cadena sql
+*/
 function getSqlFind(model, query, table, limit) {
     var where = getWhere(query.where, model);
     var select = '*'

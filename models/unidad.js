@@ -53,6 +53,12 @@ const columns = [
     }, {
         name: "descripcion",
         type: "VARCHAR(250)"
+    }, {
+        name: "categoria",
+        type: types.ARRAY,
+        config: {
+            arrayType: types.SMALL_INT
+        }
     }
 ]
 
@@ -74,14 +80,16 @@ function update(idUnidad, idCliente, obj) {
         'hora_cierre',
         'imagen',
         'palabras_clave',
-        'descripcion'
+        'descripcion',
+        'categoria'
     ];
+    var updates = [];
     var query = `UPDATE ${name} SET `;
-    for (let i = 0; i < columnsUpdate.length - 1; i++) {
+    for (let i = 0; i < columnsUpdate.length ; i++) {
         if (obj[columnsUpdate[i]])
-            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+            updates.push(`${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}'`);
     }
-    query = query.substring(0, query.length -2); // se quita coma
+    query = query + updates.join(', ') // se quita coma
     query += ` WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
     
     return unidad.rawQuery(query);
@@ -111,11 +119,12 @@ function addPosition(idUnidad, idCliente, obj) {
 
 /**
 * Regresa todas las unidades que se encuentran a una determinada distancia de lat, lng
+* y cumplen con un prametro de busqueda
 * @param {float} lat - latitud
 * @param {float} lng - longitud
 * @return {array} array de tipo Unidad
 */
-function findPorDistancia (lat, lng, distancia) {
+function find (lat, lng, distancia, query) {
     var latmin = parseFloat(lat) - parseFloat(distancia);
     var latmax = parseFloat(lat) + parseFloat(distancia);
     var lngmin = parseFloat(lng) - parseFloat(distancia);
@@ -145,7 +154,7 @@ module.exports = {
     deleteR,
     findById,
     findAll,
-    findPorDistancia,
+    find,
     addRelation: unidad.addRelation,
     addPosition,
     update

@@ -13,6 +13,7 @@ var pedido = require('../models/pedido');
 var unidadProducto = require('../models/unidad-producto');
 var clienteOperador = require('../models/cliente-operador');
 var imagen = require('../models/imagen');
+var categoriaUnidad = require('../models/categoria-unidad');
 
 cliente.sync()
 .then(function (result) {
@@ -50,6 +51,9 @@ cliente.sync()
 })
 .then(function (result) {
     return imagen.sync();
+})
+.then(function () {
+    return categoriaUnidad.sync();
 })
 .then(function (result) {
   createForeingKey();
@@ -135,5 +139,6 @@ module.exports = {
     pedido,
     unidadProducto,
     clienteOperador,
-    imagen
+    imagen,
+    categoriaUnidad
 }

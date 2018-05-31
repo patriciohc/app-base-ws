@@ -1,17 +1,28 @@
 'use strict'
-//var fs = require('fs');
+const permisos = require('../permisos');
+
+const ROLES = [
+  {
+    id: permisos.REPARTIDOR,
+    nombre: 'Repartidor'
+  }, {
+    id: permisos.OPERADOR_UNIDAD,
+    nombre: 'Operador de unidad'
+  }, {
+    id: permisos.ADMIN_UNIDAD,
+    nombre: 'Administrador de unidad'
+  }, {
+    id: permisos.ADMIN_CLIENTE,
+    nombre: 'Administrador'           
+  }
+]
 
 const CATALOGOS = {
   "estatus": {
     1: "En espera de aceptación",
     2: "Aceptado por la tienda",
     3: "En ruta",
-    4: "Entregado",
-  },
-  "roles": {
-    1: "Operador de tienda",
-    2: "Repartidor",
-    3: "Administrador"
+    4: "Entregado"
   }
 }
 
@@ -30,4 +41,5 @@ function get (req, res) {
 
 module.exports = {
     get,
+    ROLES
 }
