@@ -120,11 +120,11 @@ function addPosition(idUnidad, idCliente, obj) {
 /**
 * Regresa todas las unidades que se encuentran a una determinada distancia de lat, lng
 * y cumplen con un prametro de busqueda
-* @param {float} lat - latitud
-* @param {float} lng - longitud
+* @param {float} lat - latitud obligatorio
+* @param {float} lng - longitud obligatorio
 * @return {array} array de tipo Unidad
 */
-function find (lat, lng, distancia, query) {
+function find (lat, lng, distancia, extraQuery) {
     var latmin = parseFloat(lat) - parseFloat(distancia);
     var latmax = parseFloat(lat) + parseFloat(distancia);
     var lngmin = parseFloat(lng) - parseFloat(distancia);
@@ -133,6 +133,14 @@ function find (lat, lng, distancia, query) {
         lat BETWEEN ${latmin} AND ${latmax} AND
         lng BETWEEN ${lngmin} AND ${lngmax}
     `;
+    if (extraQuery.categoria) {
+        query +=    `AND ${extraQuery.categoria} = ANY (categoria) `
+    }
+    if (extraQuery.texto) {
+        query += `AND (to_tsvector(descripcion) @@ to_tsquery(${extraQuery.texto})
+            OR (to_tsvector(nombre) @@ to_tsquery(${extraQuery.texto})
+        )`
+    } 
     return unidad.rawQuery(query)
 }
 

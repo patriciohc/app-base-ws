@@ -31,14 +31,14 @@ function get(req, res) {
 * @param {string} search - parametro de busqueda
 * @return {array} array de uidaddes
 */
-function localizarUnidades (req, res) {
-    var lat = parseFloat(req.query.lat);
-    var lng = parseFloat(req.query.lng);
-    var search = req.query.search;
-    var categoria = req.query.categoria;
-    var distancia = 0.25;
-    unidad.find(lat, lng, distancia, {search, categoria})  // optimiza busqueda reduciendo el numero de unidades
-    .then(function (result) {
+// function localizarUnidades (req, res) {
+//     var lat = parseFloat(req.query.lat);
+//     var lng = parseFloat(req.query.lng);
+//     var search = req.query.search;
+//     var categoria = req.query.categoria;
+//     var distancia = 0.25;
+//     unidad.find(lat, lng, distancia, {search, categoria})  // optimiza busqueda reduciendo el numero de unidades
+//     .then(function (result) {
         // var unidadesDisponibles = [];
         // var arrayPromises = [];
         // for (var i = 0; i < result.length; i++) {
@@ -52,23 +52,22 @@ function localizarUnidades (req, res) {
         //     console.log(err);
         //     return res.status(500).send(err);
         // });
-        return res.status(200).send(result);
-    })
-    .catch(function (err) {
-        console.log(err);
-        return res.status(500).send(err);
-    });
-}
-
-function localizarUnidadesPoligonos(req,  res, promises) {
-
-}
+//         return res.status(200).send(result);
+//     })
+//     .catch(function (err) {
+//         console.log(err);
+//         return res.status(500).send(err);
+//     });
+// }
 
 
 function findUnidades(req, res) {
     var key = req.query.key;
     var lng = req.query.lng;
     var lat = req.query.lat;
+    var categoria = req.query.categoria;
+    var search = req.query.texto;
+    var distancia = 2.25;
     if (key) {
         unidad.findAll({where: {prefix: key}})
         .then(function(result) {
@@ -78,7 +77,7 @@ function findUnidades(req, res) {
             return res.status(500).send({err: err});
         })
     } else if (lng && lat) {
-        unidad.findAll()
+        unidad.find(lat, lng, distancia, {search, categoria})
         .then(function(result) {
             return res.status(200).send(result);
         })
@@ -227,7 +226,7 @@ function getProductos(req, res) {
 
 module.exports = {
     get,
-    localizarUnidades,
+    // localizarUnidades,
     create,
     updateInfoBasic,
     findUnidades,
