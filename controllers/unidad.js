@@ -215,7 +215,10 @@ function getProductos(req, res) {
   if (!req.query.id_unidad) {
       return res.status(400).send({err: "se require id_unidad"});
   }
-  unidadProducto.findAllProductos(req.query.id_unidad)
+  var search = {}
+  if (req.query.texto) search.texto = req.query.texto
+  if (req.query.categoria) search.categoria = req.query.categoria
+  unidadProducto.findAllProductos(req.query.id_unidad, search)
   .then(result => {
       return res.status(200).send(result);
   })

@@ -138,7 +138,7 @@ function find (lat, lng, distancia, extraQuery) {
     }
     if (extraQuery.texto) {
         query += `AND (to_tsvector(descripcion) @@ to_tsquery(${extraQuery.texto})
-            OR (to_tsvector(nombre) @@ to_tsquery(${extraQuery.texto})
+            OR to_tsvector(nombre) @@ to_tsquery(${extraQuery.texto})
         )`
     } 
     return unidad.rawQuery(query)

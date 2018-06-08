@@ -18,12 +18,13 @@ function get(req, res) {
 }
 
 function getLista(req, res) {
-    var where = utils.minimizarObjeto(["id_cliente"], req.query);
-    categoria.findAll({where})
+    var id_unidad = req.query.id_unidad;
+    if (!id_unidad) return res.status(404).send({code: "ERROR", message: "falta el id de la unidad"})
+    categoria.findAll(id_unidad)
     .then(function(result) {
         return res.status(200).send(result);
     })
-    .catch(function(err){
+    .catch(function(err) {
         return res.status(500).send({err: err});
     })
 }

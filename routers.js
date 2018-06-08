@@ -107,7 +107,9 @@ api.post('/unidad-producto/', autentication.isAuth, unidad.addProducto);
 * @api {get} /unidad-producto obtiene todos los productos en una unidad
 *
 * @apiGroup Unidad
-* @apiParam {Number} id_unidad in query 
+* @apiParam {Number} id_unidad in query , obligatorio
+* @apiParam {Number} texto in query texto de busqueda, opcional
+* @apiParam {Number} categoria in query cateogira de los productos, opcional
 * @apiSuccess {Object[]} lista de productos
 */
 api.get('/unidad-producto/', unidad.getProductos);

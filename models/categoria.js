@@ -59,7 +59,12 @@ function findOne (query) {
     return categoria.findOne(query);
 }
 
-function findAll (query) {
+function findAll (id_unidad) {
+    var query = `
+        SELECT * FROM categoria c
+        INNER JOIN unidad u ON u.id_cliente = c.id_cliente
+        WHERE = u.id = ${id_unidad}
+    `
     return categoria.findAll(query);
 }
 

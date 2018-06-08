@@ -39,10 +39,19 @@ function findAll (query) {
     return unidadProducto.findAll(query);
 }
 
-function findAllProductos (id_unidad) {
-  var query = `SELECT * FROM producto p
-    INNER JOIN unidad_producto up ON up.id_producto = p.id
-    WHERE up.id_unidad = ${id_unidad}`
+function findAllProductos (id_unidad, search) {
+    var query = `SELECT * FROM producto p
+        INNER JOIN unidad_producto up ON up.id_producto = p.id
+        WHERE up.id_unidad = ${id_unidad} `
+
+    if (search.categoria) {
+        query += `AND p.id_categoria = ${search.categoria} `
+    }
+    if (search.texto) {
+        query += `AND (to_tsvector(p.descripcion) @@ to_tsquery('${search.texto}')
+            OR to_tsvector(p.nombre) @@ to_tsquery('${search.texto}')
+        )`
+    }
     return unidadProducto.rawQuery(query);
 }
 

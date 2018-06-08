@@ -6,7 +6,7 @@ var types = require('../drive-db/data-types');
 // const engine = require('../settings').DATA_BASE.engine;
 
 // nombre de la tabla en db
-const name = "comentarios_unidad";
+const name = "unidad_calificaion";
 // columnas en db
 const columns = [
     {
@@ -17,7 +17,7 @@ const columns = [
         name: "fecha",
         type: types.DATETIME
     }, {
-        name: "id_producto",
+        name: "id_unidad",
         type: "INT"
     }, {
         name: "id_usuario",
@@ -25,9 +25,6 @@ const columns = [
     }, {
         name: "calificacion",
         type: "INT"
-    }, {
-        name: "comentario",
-        type: "VARCHAR(200)"
     }
 ]
 
@@ -38,26 +35,19 @@ function sync () {
 }
 
 function create (obj) {
-    
+    return model.create(obj)
 }
 
-function findOne (query) {
-    return model.findOne(query);
+function count (id_unidad) {
+    var query = `SELECT COUNT(*) as total FROM unidad_calificaion
+        WHERE id_unidad = ${id_unidad}`;
+    return model.rawQuery(query);
 }
 
-function findAll (query) {
-    return model.findAll(query);
-}
-
-function findById (id) {
-    return model.findById(id);
-}
-
-function update (id, obj, keyUpdate = 'id') {
-}
-
-function deleteR (query) {
-    return model.deleteR(query.where);
+function get (id_unidad) {
+    var query = `SELECT SUM(calificacion)/COUNT(*) as calificaion FROM unidad_calificaion
+        WHERE id_unidad = ${id_unidad}`;
+    return model.rawQuery(id);
 }
 
 module.exports = {
