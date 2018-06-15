@@ -111,7 +111,7 @@ async function getProfile(req, res) {
     var id_usuario = req.usuario;
     if (!id_usuario) return res.status(404).send({code:"ERROR", message: "Faltan parametros"});
     try {
-        var profile = Usuario.getProfile(id_usuario);
+        var profile = await Usuario.getProfile(id_usuario);
         return res.status(200).send({code:"SUCCESS", message:"", data: profile});
     } catch (err) {
         return res.status(500).send({code:"ERROR", message:"", data: err});

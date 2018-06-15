@@ -43,25 +43,17 @@ function sync () {
 function create (obj) {
     var now = moment().utc();
     obj.fecha = now.format('YYYY-MM-DD');
-
     return model.create(obj)
 }
 
-function count (id_unidad) {
-    var query = `SELECT COUNT(*) as total FROM unidad_calificaion
-        WHERE id_unidad = ${id_unidad}`;
-    return model.rawQuery(query);
-}
-
-function get (id_unidad) {
-    var query = `SELECT SUM(calificacion) as calificaion FROM unidad_calificaion
-        WHERE id_unidad = ${id_unidad}`;
+function getCalificacion (id_unidad) {
+    var query = `SELECT SUM(calificacion)/COUNT(*) as avg_calificacion, comentario as calificaion FROM unidad_calificaion
+        WHERE id_unidad = ${id_unidad} ORDER BY fecha DESC`;
     return model.rawQuery(query);
 }
 
 module.exports = {
     sync,
     create,
-    count,
-    get
+    getCalificacion
 }

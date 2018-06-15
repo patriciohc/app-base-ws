@@ -3,11 +3,12 @@
 * 04/08/2017
 * Archivo javascript principal para la ejecución del servidor
 */
-var path = require('path');
+// var path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-
 var cors = require('cors');
+
+require('./models/index').createTables();
 
 var app = express();
 // websockets

@@ -97,9 +97,12 @@ function update(id, obj) {
 }
 
 async function login(correo_electronico, type_login, password) {
-    var query = `SELECT correo_electronico, nombre, telefono, recibir_promociones, p.calificacion, p.id as id_pedido
+    var query = `SELECT u.id as id_usuario, correo_electronico, u.nombre as nombre, u.telefono as telefono, recibir_promociones, 
+        p.calificacion as pedido_calificacion, p.id as id_pedido, p.estatus as pedido_estatus,
+        un.nombre as pedido_tienda, un.id as pedido_id_unidad
         FROM usuario u
         LEFT JOIN pedido p ON p.id_usuario = u.id
+        LEFT JOIN unidad un ON un.id = p.id_unidad
         WHERE u.correo_electronico = '${correo_electronico}' AND 
         type_login = ${type_login} `
 
@@ -124,10 +127,13 @@ async function login(correo_electronico, type_login, password) {
 }
 
 async function getProfile(id_usuario) {
-    var query = `SELECT correo_electronico, nombre, telefono, recibir_promociones, p.calificacion, p.id as id_pedido
+    var query = `SELECT u.id as id_usuario, correo_electronico, u.nombre as nombre,  u.telefono as telefono, recibir_promociones, 
+    p.calificacion as pedido_calificacion, p.id as id_pedido, p.estatus as pedido_estatus,
+    un.nombre as pedido_tienda, un.id as pedido_id_unidad
     FROM usuario u
     LEFT JOIN pedido p ON p.id_usuario = u.id
-    WHERE u.id = ${id_usuario}`;
+    LEFT JOIN unidad un ON un.id = p.id_unidad
+    WHERE u.id = ${id_usuario} ORDER BY p.fecha_recibido desc LIMIT 1`;
     try {
         var u = await model.rawQuery(query);
         if (u && u.length) {
@@ -141,15 +147,19 @@ async function getProfile(id_usuario) {
 }
 
 function construirProfile(usuario) {
+    var token = Auth.createToken(usuario.id_usuario, permisos.USUSARIO);
     return  {
         correo_electronico: usuario.correo_electronico,
         nombre: usuario.nombre,
         telefono: usuario.telefono,
         recibir_promociones: usuario.recibir_promociones,
-        token: Auth.createToken(usuario.id, permisos.USUSARIO),
+        token,
         ultimo_pedido: {
-            id: usuario.id_pedido,
-            esta_calificado: usuario.calificacion
+            id_pedido: usuario.id_pedido,
+            esta_calificado: usuario.pedido_calificacion,
+            estatus: usuario.pedido_estatus,
+            tienda: usuario.pedido_tienda,
+            id_unidad: usuario.pedido_id_unidad
         }
     }
 }

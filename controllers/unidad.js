@@ -5,7 +5,8 @@ const poligono = require('../models').poligono;
 const unidadProducto = require('../models').unidadProducto;
 const clienteOperador = require('../models').clienteOperador;
 const operador = require('../models').operador;
-const unidadCalificacion = require('../models/').unidadCalificacion;
+const UnidadCalificacion = require('../models/').unidadCalificacion;
+const Pedido = require('../models/').pedido;
 const utils = require('./utils');
 const permisos = require('../permisos');
 
@@ -228,14 +229,15 @@ function getProductos(req, res) {
   });
 }
 
-function calificar(req, res) {
+async function calificar(req, res) {
     var id_usuario = req.usuario
     var id_unidad = req.body.id_unidad;
     var id_pedido = req.body.id_pedido;
-    var calificacion = req.body.calificacion;
+    var calificacion = req.body.estrellas;
     var comentario = req.body.comentario;
 
-    if (!id_unidad || !calificacion || !id_pedido) return res.status(404).send({code: "ERROR", message: "falta parametros"})
+    if (!id_unidad || !calificacion || !id_pedido || !id_usuario) 
+        return res.status(404).send({code: "ERROR", message: "falta parametros"})
     var obj = {
         id_unidad,
         id_usuario,
@@ -244,14 +246,30 @@ function calificar(req, res) {
         comentario
     }
     try {
-        unidadCalificacion.create(obj)
-        .then( result => {
-            return res.status(200).send({success: result});
-        })
-        .catch( err => {
-            console.log(err);
-            
-        })      
+        var response = await UnidadCalificacion.create(obj);
+        response = await Pedido.update(id_pedido, {calificacion: 1});
+        return res.status(200).send({code: "SUCCEES", message:"", data: response});   
+    } catch(err) {
+        return res.status(500).send({err: err});
+    }
+
+}
+
+async function getCalificacion(req, res) {
+    var id_unidad = req.query.id_unidad;
+
+    if (!id_unidad)  return res.status(404).send({code: "ERROR", message: "falta parametros"})
+    var obj = {
+        id_unidad,
+        id_usuario,
+        id_pedido,
+        calificacion,
+        comentario
+    }
+    try {
+        var response = await UnidadCalificacion.create(obj);
+        response = await Pedido.update(id_pedido, {calificacion: 1});
+        return res.status(200).send({code: "SUCCEES", message:"", data: response});   
     } catch(e) {
         return res.status(500).send({err: err});
     }
@@ -272,5 +290,6 @@ module.exports = {
     addPosition,
     addPolygon,
     getPoligono,
-    calificar
+    calificar,
+    getCalificacion
 }

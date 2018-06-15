@@ -555,8 +555,8 @@ permisos.add('/pedido-repartidor/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_
 api.put('/pedido-repartidor/', autentication.isAuth, pedido.asignarRepartidor);
 
 /**
-* @api {put} /pedido/ Crea un pedido
-* @apiGroup producto
+* @api {put} /pedido/ califica un pedido
+* @apiGroup unidad
 * @apiParam {number} id_pedido
 * @apiSuccess {number} calificacion
 * @apiSuccessExample Success-Response:

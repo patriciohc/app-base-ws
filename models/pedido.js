@@ -134,11 +134,12 @@ function findById (id) {
     return model.findById(id);
 }
 
-function update (id, obj, keyUpdate = 'id') {
+function update (value, obj, keyUpdate = 'id') {
     var columnsUpdate = [
         "estatus",
         "payment_id",
-        "payer_id"
+        "payer_id",
+        "calificacion"
     ];
     var query = `UPDATE ${name} SET `;
     for (let i = 0; i < columnsUpdate.length; i++) {
@@ -146,7 +147,7 @@ function update (id, obj, keyUpdate = 'id') {
             query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
     }
     query = query.substring(0, query.length -2); // se quita coma
-    query += ` WHERE ${keyUpdate} = '${id}'`;
+    query += ` WHERE ${keyUpdate} = '${value}'`;
     
     return model.rawQuery(query);
 }
@@ -254,14 +255,6 @@ function asignarRepartidor(id, idRepartidor) {
     return model.rawQuery(query);
 }
 
-function calificar(id) {
-    var query = `UPDATE pedido
-        SET calificacion=1
-        WHERE id=${id}`;
-    return model.rawQuery(query);
-}
-
-
 function getNPedidosXWeek(stringDate) {
     var date = moment(stringDate)
     var day = date.day();
@@ -284,7 +277,6 @@ module.exports = {
     update,
     setEstatus,
     asignarRepartidor,
-    calificar,
     addRelation: model.addRelation,
     findAllWithDependencies,
     getNPedidosXWeek,
