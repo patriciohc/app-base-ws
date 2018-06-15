@@ -2,11 +2,6 @@
 const format = require('pg-format');
 const engine = require('../settings').DATA_BASE.engine;
 
-const NUMBER = [
-    'INT',
-    'TINYINT',
-]
-
 const COMPARATORS = {
     'eq': '=',
     'st': '<',
@@ -34,7 +29,7 @@ function createElementContactMysql(item) {
     if (item.auto_increment) {
         return `${item.name} ${item.type.toString(item.config)} AUTO_INCREMENT `
     } else {
-        return `${item.name} ${item.type.toString(item.config)} `
+        return `${item.name} ${item.type.toString(item.config)} ${item.default || ''}`
     }
 }
 
@@ -42,7 +37,7 @@ function createElementContactPostgreSQL(item) {
     if (item.auto_increment) {
         return `${item.name} SERIAL `
     } else {
-        return `${item.name} ${item.type.toString(item.config)} `
+        return `${item.name} ${item.type.toString(item.config)} ${item.default || ''}`
     }
 }
 

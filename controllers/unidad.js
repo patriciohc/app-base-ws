@@ -5,6 +5,7 @@ const poligono = require('../models').poligono;
 const unidadProducto = require('../models').unidadProducto;
 const clienteOperador = require('../models').clienteOperador;
 const operador = require('../models').operador;
+const unidadCalificacion = require('../models/').unidadCalificacion;
 const utils = require('./utils');
 const permisos = require('../permisos');
 
@@ -227,6 +228,36 @@ function getProductos(req, res) {
   });
 }
 
+function calificar(req, res) {
+    var id_usuario = req.usuario
+    var id_unidad = req.body.id_unidad;
+    var id_pedido = req.body.id_pedido;
+    var calificacion = req.body.calificacion;
+    var comentario = req.body.comentario;
+
+    if (!id_unidad || !calificacion || !id_pedido) return res.status(404).send({code: "ERROR", message: "falta parametros"})
+    var obj = {
+        id_unidad,
+        id_usuario,
+        id_pedido,
+        calificacion,
+        comentario
+    }
+    try {
+        unidadCalificacion.create(obj)
+        .then( result => {
+            return res.status(200).send({success: result});
+        })
+        .catch( err => {
+            console.log(err);
+            
+        })      
+    } catch(e) {
+        return res.status(500).send({err: err});
+    }
+
+}
+
 module.exports = {
     get,
     // localizarUnidades,
@@ -240,5 +271,6 @@ module.exports = {
     getListaCliente,
     addPosition,
     addPolygon,
-    getPoligono
+    getPoligono,
+    calificar
 }

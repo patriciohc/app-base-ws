@@ -75,6 +75,10 @@ const columns = [
     }, {
         name: "payer_id",
         type: "VARCHAR(100)"
+    }, {
+        name: "calificacion", 
+        type: types.SMALL_INT, // 0:  no esta calificado, 1: esta calificado
+        default: "0"
     }
 ]
 
@@ -133,7 +137,6 @@ function findById (id) {
 function update (id, obj, keyUpdate = 'id') {
     var columnsUpdate = [
         "estatus",
-        "calificacion",
         "payment_id",
         "payer_id"
     ];
@@ -156,7 +159,7 @@ async function findAllWithDependencies(query) {
   var lista = [];
   var where = model.getWhere(query.where);
   var orderBy = model.getOrderBy(query.orderBy) || '';
-  var query = `SELECT pedido.id as id, pedido.no_pedido as no_pedido, pedido.estatus as estatus, comentarios, fecha_recibido, calificacion,
+  var query = `SELECT pedido.id as id, pedido.no_pedido as no_pedido, pedido.estatus as estatus, comentarios, fecha_recibido,
     usr.id as usuario_id, usr.correo_electronico as usuario_correo_electronico,  usr.nombre as usuario_nombre, usr.telefono as usuario_telefono,
     u.id as unidad_id, u.nombre as unidad_nombre, u.lat as unidad_lat, u.lng as unidad_lng,
     ds.id as ds_id, ds.nombre_direccion as ds_nombre_direccion, ds.direccion as ds_direccion, ds.lat as ds_lat, ds.lng as ds_lng, ds.referencia as ds_referencia,
@@ -205,7 +208,6 @@ async function findAllWithDependencies(query) {
                 estatus: record.estatus,
                 comentarios: record.comentarios,
                 fecha_recibido: record.fecha_recibido,
-                calificacion: record.calificacion,
                 direccion_entrega,
                 usuario,
                 unidad,
@@ -252,9 +254,9 @@ function asignarRepartidor(id, idRepartidor) {
     return model.rawQuery(query);
 }
 
-function calificar(id, calificacion) {
+function calificar(id) {
     var query = `UPDATE pedido
-        SET calificacion=${calificacion}
+        SET calificacion=1
         WHERE id=${id}`;
     return model.rawQuery(query);
 }

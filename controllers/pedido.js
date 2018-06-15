@@ -166,17 +166,6 @@ function asignarRepartidor(req, res) {
     })
 }
 
-function calificar(req, res) {
-    Pedido.calificar(req.body.id_pedido, req.body.calificacion)
-    .then( result => {
-        return res.status(200).send({success: result});
-    })
-    .catch( err => {
-        console.log(err);
-        return res.status(500).send({err: err});
-    })
-}
-
 function getListaPorRepartidor(req, res) {
     var id_usiario = req.usuario;
     Pedido.findAllWithDependencies({
@@ -196,6 +185,16 @@ function getNPedidosXWeek(req, res) {
     var date = req.query.date || new Date()
     try {
         //var response = Pedido.getNPedidosXWeek(date);
+        return res.status(200).send({code: 'OK', message: 'metodo en construccion'});
+    } catch (err) {
+        return res.status(500).send({code: 'ERROR', message:''})
+    }
+}
+
+function calificar(req, res) {
+    var id_pedido = req.body.id_pedido
+    try {
+        var response = Pedido.calificar(id_pedido);
         return res.status(200).send({code: 'OK', message: 'metodo en construccion'});
     } catch (err) {
         return res.status(500).send({code: 'ERROR', message:''})

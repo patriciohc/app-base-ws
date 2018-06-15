@@ -23,8 +23,14 @@ const columns = [
         name: "id_usuario",
         type: "INT"
     }, {
+        name: "id_pedido",
+        type: "INT"
+    }, {
         name: "calificacion",
         type: "INT"
+    }, {
+        name: "comentario",
+        type: "VARCHAR(200)"
     }
 ]
 
@@ -35,6 +41,9 @@ function sync () {
 }
 
 function create (obj) {
+    var now = moment().utc();
+    obj.fecha = now.format('YYYY-MM-DD');
+
     return model.create(obj)
 }
 
@@ -45,17 +54,14 @@ function count (id_unidad) {
 }
 
 function get (id_unidad) {
-    var query = `SELECT SUM(calificacion)/COUNT(*) as calificaion FROM unidad_calificaion
+    var query = `SELECT SUM(calificacion) as calificaion FROM unidad_calificaion
         WHERE id_unidad = ${id_unidad}`;
-    return model.rawQuery(id);
+    return model.rawQuery(query);
 }
 
 module.exports = {
     sync,
     create,
-    findOne,
-    findById,
-    findAll,
-    update,
-    deleteR
+    count,
+    get
 }

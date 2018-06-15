@@ -1,9 +1,7 @@
 'use strict'
 
-const usuario = require('../models').usuario;
-const admin = require('../models/administrator')
-const SHA256 = require("crypto-js/sha256");
-const Auth = require('./autentication');
+const Usuario = require('../models').usuario;
+const admin = require('../models/administrator');
 const permisos = require('../permisos');
 const utils = require('./utils');
 const graph = require('fbgraph');
@@ -29,24 +27,22 @@ async function loginFacebook(req, res) {
     // var idFace = req.body.id;
     try {
         var profile = await getProfileFacebook(tokenFace);
-        if (!profile.email) return res.status(400).send({code: "error", message: "falta email", error:""})
-        var userdb = await usuario.findOne({where: {email: profile.email}});
-        if (!userdb) {
+        if (!profile.email) return res.status(400).send({code: "ERROR", message: "falta email", error:""})
+        var profileDB = await Usuario.login(profile.email, Usuario.LOGIN_FACEBOOK);
+        if (!profileDB) {
             var newUser = {
                 nombre: profile.name,
                 correo_electronico: profile.email,
                 // fechaNacimiento: resp.birthday,
                 // sexo: resp.gender,
-                // type_login: 'facebook',
+                type_login: Usuario.LOGIN_FACEBOOK,
             };
-            userdb = await usuario.create(newUser);
+            var profileDB = await Usuario.create(newUser);
         }
-        userdb.type_login = 'facebook';
-        userdb.token = Auth.createToken(userdb.id, permisos.USUSARIO)
-        return res.status(200).send(userdb);
+        return res.status(200).send({code:"SUCCESS", message:"", data: profileDB});
     } catch(e) {
         console.log(e);
-        return res.status(500).send({code: "error", message: "Error en el servidor" , error: e});
+        return res.status(500).send({code: "ERROR", message: "Error en el servidor" , error: e});
     }
 }
 
@@ -81,69 +77,51 @@ async function loginGoogle(req, res) {
     // var idFace = req.body.id;
     try {
         var profile = await getProfileGoogle(req.body.token);
-        if (!profile.email) return res.status(400).send({code: "error", message: "falta email", error:""})
-        var userdb = await usuario.findOne({where: {email: profile.email}});
-        if (!userdb) {
+        if (!profile.email) return res.status(400).send({code: "ERROR", message: "falta email", error:""})
+        var profileDB = await Usuario.login(profile.email, Usuario.LOGIN_GOOGLE);
+        if (!profileDB) {
             var newUser = {
                 nombre: profile.name,
                 correo_electronico: profile.email,
                 //type_login: 'google',
             };
-            userdb = await usuario.create(newUser);
+            var profileDB = await Usuario.create(newUser);
         }
-        userdb.type_login = 'google';
-        userdb.token = Auth.createToken(userdb.id, permisos.USUSARIO)
-        return res.status(200).send(userdb);
+        return res.status(200).send({code: "SUCCESS", message:"", data: profileDB});
     } catch(e) {
         console.log(e);
-        return res.status(500).send({code: "error", message: "Error en el servidor" , error: e});
+        return res.status(500).send({code: "ERROR", message: "Error en el servidor" , data: e});
     }
 }
 
 
-function login(req, res) {
-    usuario.findOne({
-      select: ['id', 'correo_electronico', 'nombre', 'telefono', 'recibir_promociones', 'password'],
-      where:{correo_electronico: req.body.correo_electronico}
-    })
-    .then(function(result) {
-        console.log(result);
-        if (!result) {
-            return res.status(404).send({message: "not found"});
-        } else {
-          let shaPass = SHA256(req.body.password)
-          if (shaPass == result.password) {
-            delete result.password;
-            result.token = Auth.createToken(result.id, permisos.USUSARIO)
-            return res.status(200).send(result);
-          } else {
-            return res.status(401).send({message: "usuario no autorizado"});
-          }
-        }
-    })
-    .catch(function(err) {
-        return res.status(500).send({err});
-    });
+async function login(req, res) {
+    var email = req.body.correo_electronico;
+    var password = req.body.password;
+    if (!email || !password) return res.status.send(404).send({code:"ERROR", message:"faltan parametros"})
+    try {
+        var profile = await Usuario.login(email, Usuario.LOGIN_DEFAULT, password);
+        return res.status(200).send({code: "SUCCESS", message:"", data: profile})
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: "", data: err});
+    }
 }
 
-function login_admin(req, res) {
-    let user = admin.findOne(req.body.correo_electronico)
-    if (!user) {
-      return res.status(404).send({message: "administrador no encontrado"});
-    }
-    let shaPass = SHA256(req.body.password)
-    if (shaPass == user.password) {
-      user.token = Auth.createToken(user.id, permisos.ADMINISTRADOR)
-      return res.status(200).send(user);
-    } else {
-      return res.status(401).send({message: "usuario no autorizado"});
+async function getProfile(req, res) {
+    var id_usuario = req.usuario;
+    if (!id_usuario) return res.status(404).send({code:"ERROR", message: "Faltan parametros"});
+    try {
+        var profile = Usuario.getProfile(id_usuario);
+        return res.status(200).send({code:"SUCCESS", message:"", data: profile});
+    } catch (err) {
+        return res.status(500).send({code:"ERROR", message:"", data: err});
     }
 }
 
 function create(req, res) {
     let isValid = utils.andValidate(['correo_electronico', 'nombre', 'password'], req.body)
     if (!isValid) return res.status(400).send({message: 'faltan parametros'})
-    usuario.create(req.body)
+    Usuario.create(req.body)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
     })
@@ -160,7 +138,7 @@ module.exports = {
     login,
     create,
     update,
-    login_admin,
     loginFacebook,
-    loginGoogle
+    loginGoogle,
+    getProfile
 }

@@ -14,6 +14,8 @@ const DATA_BASE = {
   connectionString: process.env.DATABASE_URL
 }
 
+
+
 module.exports = {
   SECRET_KEY,
   DATA_BASE

@@ -9,13 +9,13 @@ const categoria = require('./controllers/categoria');
 const producto = require('./controllers/producto');
 const pedido = require('./controllers/pedido');
 const operador = require('./controllers/operador');
-const catalogos = require('./controllers/catalogos');
+// const catalogos = require('./controllers/catalogos');
 const autentication =  require('./controllers/autentication');
 const imagen =  require('./controllers/imagen');
 const notification = require('./controllers/push-notification');
 const payments = require('./controllers/payments');
 const categoriaUnidad = require('./controllers/categoria-unidad');
-
+const Administrador = require('./controllers/administrador');
 const permisos = require('./permisos');
 
 
@@ -359,6 +359,16 @@ api.post('/login-facebook/', usuario.loginFacebook);
 api.post('/login-google/', usuario.loginGoogle);
 
 /**
+* @api {post} /profile/
+* @apiGroup usuario
+* @apiParam {string} token token de facebook
+* @apiParam {string} id id de facebook
+* @apiSuccess {Usuario} obejto de tipo usuario
+*/
+permisos.add('/profile/', 'GET', [permisos.USUSARIO]);
+api.get('/profile/', autentication.isAuth, usuario.getProfile);
+
+/**
 * Administrador
 */
 /**
@@ -368,7 +378,7 @@ api.post('/login-google/', usuario.loginGoogle);
 * @apiParam {string} password
 * @apiSuccess {Usuario} obejto de tipo Usuario
 */
-api.post('/login-admin/', usuario.login_admin);
+api.post('/login-admin/', Administrador.login);
 
 /**
 * @api {post} /cliente/ Crea usuario
@@ -542,7 +552,7 @@ api.put('/pedido-estatus/', autentication.isAuth, pedido.setEstatus);
 *     id
 */
 permisos.add('/pedido-repartidor/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.put('/pedido-repartidor', autentication.isAuth, pedido.asignarRepartidor);
+api.put('/pedido-repartidor/', autentication.isAuth, pedido.asignarRepartidor);
 
 /**
 * @api {put} /pedido/ Crea un pedido
@@ -553,8 +563,8 @@ api.put('/pedido-repartidor', autentication.isAuth, pedido.asignarRepartidor);
 *     HTTP/1.1 200 OK
 *     id
 */
-permisos.add('/pedido-calificacion/', 'PUT', [permisos.USUSARIO])
-api.put('/pedido-calificacion', autentication.isAuth, pedido.calificar);
+permisos.add('/unidad-calificacion/', 'PUT', [permisos.USUSARIO])
+api.put('/unidad-calificacion/', autentication.isAuth, unidad.calificar);
 
 /**
 * @api {get} /pedido/ obtiene lista de pedidos
