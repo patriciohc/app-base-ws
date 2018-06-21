@@ -566,6 +566,28 @@ api.put('/pedido-repartidor/', autentication.isAuth, pedido.asignarRepartidor);
 permisos.add('/unidad-calificacion/', 'PUT', [permisos.USUSARIO])
 api.put('/unidad-calificacion/', autentication.isAuth, unidad.calificar);
 
+
+/**
+* @api {put} /unidad/ califica un pedido
+* @apiGroup unidad
+* @apiParam {number} id_unidad
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.get('/unidad-calificacion/', unidad.getCalificacion);
+
+/**
+* @api {put} /unidad/ califica un pedido
+* @apiGroup unidad
+* @apiParam {number} id_unidad
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     id
+*/
+api.get('/unidad-comentarios/', unidad.getComentarios);
+
+
 /**
 * @api {get} /pedido/ obtiene lista de pedidos
 * @apiGroup pedido

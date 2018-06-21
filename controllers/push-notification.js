@@ -62,7 +62,8 @@ async function sendPush(title, message, idDevices) {
     };
     var headers = {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization": "Basic YjMyMjMzMGMtMGUxZC00NmQwLWFhOTMtYzAwMzhmODVhOTM0"
+        "Authorization": "Basic MjkyZDgxNDAtNTIwMS00MDY0LWE2MGEtOWY1ZTFiOGJjMTNh"
+        //"Authorization": "Basic YjMyMjMzMGMtMGUxZC00NmQwLWFhOTMtYzAwMzhmODVhOTM0"
       };
       
       var options = {

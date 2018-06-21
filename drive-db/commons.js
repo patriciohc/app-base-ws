@@ -29,7 +29,7 @@ function createElementContactMysql(item) {
     if (item.auto_increment) {
         return `${item.name} ${item.type.toString(item.config)} AUTO_INCREMENT `
     } else {
-        return `${item.name} ${item.type.toString(item.config)} ${item.default || ''}`
+        return `${item.name} ${item.type.toString(item.config)} ${item.default ? ('DEFAULT ' + item.default) : ''}`
     }
 }
 
@@ -37,7 +37,7 @@ function createElementContactPostgreSQL(item) {
     if (item.auto_increment) {
         return `${item.name} SERIAL `
     } else {
-        return `${item.name} ${item.type.toString(item.config)} ${item.default || ''}`
+        return `${item.name} ${item.type.toString(item.config)} ${item.default ? ('DEFAULT ' + item.default) : ''}`
     }
 }
 

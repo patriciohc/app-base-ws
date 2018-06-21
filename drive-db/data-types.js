@@ -63,7 +63,7 @@ const DATETIME = {
 const ARRAY = {
     toString: function (config) {
         if (!config || !config.arrayType) {
-            throw 'type array is require'
+            throw 'type array is required'
         }
         switch (engine) {
             case 'mysql': return ARRAY.toMySQL(config.arrayType);

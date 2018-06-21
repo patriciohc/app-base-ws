@@ -90,7 +90,8 @@ function sync () {
 
 function create (obj) {
     var now = moment().utc();
-    obj.fecha_recibido = now.format('YYYY-MM-DD HH:mm:ss +000Z');
+    obj.fecha_recibido = now.format('YYYY-MM-DD HH:mm:ss');
+    obj.fecha_recibido += '+0000'
     if (engine == 'postgresql') {
         obj.consecutivo = {
             type: 'sql',

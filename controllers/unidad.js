@@ -255,25 +255,29 @@ async function calificar(req, res) {
 
 }
 
-async function getCalificacion(req, res) {
+async function getComentarios(req, res) {
     var id_unidad = req.query.id_unidad;
 
     if (!id_unidad)  return res.status(404).send({code: "ERROR", message: "falta parametros"})
-    var obj = {
-        id_unidad,
-        id_usuario,
-        id_pedido,
-        calificacion,
-        comentario
-    }
     try {
-        var response = await UnidadCalificacion.create(obj);
-        response = await Pedido.update(id_pedido, {calificacion: 1});
+        var response = await UnidadCalificacion.getComentarios(id_unidad);
         return res.status(200).send({code: "SUCCEES", message:"", data: response});   
     } catch(e) {
         return res.status(500).send({err: err});
     }
+}
 
+async function getCalificacion(req, res) {
+    var id_unidad = req.query.id_unidad;
+
+    if (!id_unidad)  return res.status(404).send({code: "ERROR", message: "falta parametros"})
+    try {
+        var response = await UnidadCalificacion.getCalificacion(id_unidad);
+        if (response && response.length)
+        return res.status(200).send({code: "SUCCEES", message:"", data: response[0]});   
+    } catch(e) {
+        return res.status(500).send({err: err});
+    }
 }
 
 module.exports = {
@@ -291,5 +295,6 @@ module.exports = {
     addPolygon,
     getPoligono,
     calificar,
-    getCalificacion
+    getCalificacion,
+    getComentarios
 }

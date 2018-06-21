@@ -52,7 +52,7 @@ async function executePostgreSQL(query, options) {
         return res.rows;
     } catch (err) {
         console.log(err);
-        throw err;
+        // throw err;
     }
 }
 

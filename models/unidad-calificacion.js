@@ -47,13 +47,20 @@ function create (obj) {
 }
 
 function getCalificacion (id_unidad) {
-    var query = `SELECT SUM(calificacion)/COUNT(*) as avg_calificacion, comentario as calificaion FROM unidad_calificaion
-        WHERE id_unidad = ${id_unidad} ORDER BY fecha DESC`;
+    var query = `SELECT SUM(calificacion)/COUNT(*) as avg_calificacion, COUNT(*) as total FROM unidad_calificaion
+        WHERE id_unidad = ${id_unidad}`;
     return model.rawQuery(query);
+}
+
+function getComentarios (id_unidad) {
+    var query = `SELECT comentario FROM unidad_calificaion
+    WHERE id_unidad = ${id_unidad} AND comentario != '' ORDER BY fecha DESC LIMIT 10`;
+return model.rawQuery(query);  
 }
 
 module.exports = {
     sync,
     create,
-    getCalificacion
+    getCalificacion,
+    getComentarios
 }
