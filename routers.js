@@ -474,12 +474,21 @@ permisos.add('/producto/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.put('/producto/', autentication.isAuth, producto.update);
 
 /**
-* @api {get} /producto/ filtra categorias por id de categoria
+* @api {get} /producto/ filtra productos segun query
 * @apiGroup producto
-* @apiParam {number} id identificador de categoria
+* @apiParam {id_cliente} id de cliente 
+* @apiParam {id_categorita} id de cateogira 
 * @apiSuccess {array} array de productos
 */
-api.get('/producto', producto.getLista);
+api.get('/productos/', producto.getLista);
+
+/**
+* @api {get} /producto/ obtiene producto por id
+* @apiGroup producto
+* @apiParam {id_producto} id de cliente 
+* @apiSuccess {object}  producto
+*/
+api.get('/producto/', producto.get);
 
 /**
 * @api {get} /producto/ detalle de producto para consulta de clientes

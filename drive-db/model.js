@@ -99,32 +99,23 @@ class Model {
         // });
     }
 
-    async findById(id) {
-        var sql = `SELECT * FROM ${this.name} WHERE id = ${id};`;
+    async findById(id, select) {
+        var sqlSelect = ''
+        if (!select) {
+            sqlSelect = '*'
+        } else {
+            var selectFilter = this.model.filter(item => select.find(a => a == item.name));
+            select = selectFilter.map(item => item.name);
+            sqlSelect = select.length ? select.join(', ') : 'id';
+        }
+        var sql = `SELECT ${sqlSelect} FROM ${this.name} WHERE id = ${id} LIMIT 1;`;
         if (!sql) return {};
         try {
             var results = await db.execute(sql);
-            return results.length > 0 ? results[0] : {};
+            return results.length > 0 ? results[0] : null;
         } catch (err) {
             throw err;
         }
-        // return new Promise((resolve, reject) => {
-        //     if (sql) {
-        //         db.conecction.query(sql, function(err, result){
-        //             if (err) {
-        //                 return reject(err);
-        //             } else {
-        //                 if (result.length == 0) {
-        //                     return resolve();
-        //                 } else {
-        //                     return resolve(result[0]);
-        //                 }
-        //             }
-        //         })
-        //     } else {
-        //         return resolve([]);
-        //     }
-        // });
     }
 
 /**

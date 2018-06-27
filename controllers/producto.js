@@ -3,12 +3,18 @@ const utils = require('./utils');
 const producto = require('../models').producto;
 
 function get(req, res) {
-    producto.findById(req.params.id)
+    if (!req.query.id_producto) return res.status(404).send({code:"ERROR", message:"falta el id de producto"})
+    var id_usuario = req.usuario;
+    var select;
+    if (!id_usuario) {
+        select = ['id', 'nombre', 'codigo', 'descripcion', 'precio_publico', 'imagen', 'id_categoria'];
+    } /* else determinar que tipo de rol tiene para enviar mas info*/
+    producto.findById(req.query.id_producto, select)
     .then(function(result) {
         if (!result) {
-            return res.status(404).send({err: "not found"});
+            return res.status(404).send({code:"ERROR", message: "not found"});
         } else {
-            return res.status(200).send(result);
+            return res.status(200).send({code:"SUCCESS", message: "", data: result});
         }
     })
     .catch(function(err) {
@@ -18,7 +24,7 @@ function get(req, res) {
 
 function getLista(req, res) {
     if (!req.query.id_cliente && !req.query.id_categoria) {
-        return res.status(400).send({err: "se requiere: id_cliente || id_categoria"});
+        return res.status(400).send({err: "se requiere: id_cliente o id_categoria"});
     }
     var where = utils.minimizarObjeto(["id_cliente", "id_categoria"], req.query);
     producto.findAll({where})

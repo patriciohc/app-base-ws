@@ -59,8 +59,8 @@ function findAll (query) {
     return producto.findAll(query);
 }
 
-function findById (id) {
-    return producto.findById(id);
+function findById (id, select) {
+    return producto.findById(id, select);
 }
 
 function deleteR (query) {

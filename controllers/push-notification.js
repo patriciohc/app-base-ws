@@ -47,19 +47,19 @@ async function sendPushUnidad(id_unidad) {
     if (idsDevices.length > 0) sendPush('Nuevo pedido!!!', 'Ha recibido un nuevo pedido', idsDevices)
 }
 
-async function sendPush(title, message, idDevices) {
-    var response = '';
-    var data = {
-        app_id: "f1809dc0-2ff4-4560-8f82-38ee0c57a5e5",
-        // included_segments: [segment],
-        include_player_ids: idDevices,
-        data: {},
+function getTemplateData(title, message, extraContent) {
+    return {
+        //app_id: "f1809dc0-2ff4-4560-8f82-38ee0c57a5e5",
+        app_id: "57c22654-7696-44a9-8d2c-503590e2554f",
+        data: extraContent,
         headings: {en: title},
-        // ios_badgeType: 'SetTo',
-        // ios_badgeCount: 0,
-        // subtitle: {en: subtitle},
+
         contents: {en: message}
     };
+}
+
+async function sendPush(data) {
+    var response = '';
     var headers = {
         "Content-Type": "application/json; charset=utf-8",
         "Authorization": "Basic MjkyZDgxNDAtNTIwMS00MDY0LWE2MGEtOWY1ZTFiOGJjMTNh"
@@ -94,14 +94,23 @@ async function sendPush(title, message, idDevices) {
       req.end();     
 }
 
-async function sendPushOneUser(title, message, idUser) {
-    var user = await Usuario.findById(idUser)
-    sendPush(title, message, [user.id_device])
+async function sendPushOneUser(title, message, idUser, extraContent = {}) {
+    var user = await Usuario.findById(idUser);
+    var data = getTemplateData(title, message, extraContent);
+    data.include_player_ids = [user.id_device];
+    sendPush(data);
+}
+
+async function sendPushAllUser(title, message, extraContent = {}) {
+    var data = getTemplateData(title, message, extraContent);
+    data.included_segments = ['All'];
+    sendPush(data);
 }
 
 module.exports = {
     suscribe,
     sendPushOneUser,
-    sendPushUnidad
+    sendPushUnidad,
+    sendPushAllUser
 }
 
