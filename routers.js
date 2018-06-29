@@ -24,15 +24,6 @@ api.post('/create-payment/', payments.create);
 api.post('/execute-payment/', payments.onAuthorize);
 
 /**
-* @api {post} /subscribe suscribe al un usuario a las notificaciones 
-* @apiGroup Notification
-* @apiParam {string} id_device
-* @apiSuccess {number} 
-*/
-permisos.add('/subscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.USUSARIO])
-api.post('/subscribe/', autentication.isAuth, notification.suscribe);
-
-/**
 * @api {get} /unidad-cliente/ obitiene unidad por cliente
 * @apiGroup Unidad
 * @apiParam {number} id_cliente identificador unico de cliente
@@ -651,13 +642,23 @@ api.get('/signed-request-image/', autentication.isAuth, imagen.getUrlUploadImage
 permisos.add('/image/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
 api.get('/image/', autentication.isAuth, imagen.getImageListCliente);
 
+
+/**
+* @api {post} /subscribe suscribe al un usuario a las notificaciones 
+* @apiGroup Notification
+* @apiParam {string} id_device
+* @apiSuccess {number} 
+*/
+permisos.add('/subscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.USUSARIO])
+api.post('/subscribe/', autentication.isAuth, notification.subscribe);
+
 /**
 * @api {get} /suscribe-notification/ notificaciones para usaurio especificos
 * @apiGroup suscribe-notification
 * @apiSuccess {Image[]}
 */
-permisos.add('/suscribe-notification/', 'POST', [permisos.USUSARIO])
-api.post('/suscribe-notification/', autentication.isAuth, notification.suscribe);
+permisos.add('/send-notification/', 'POST', [permisos.CLIENTE])
+api.post('/send-notification/', autentication.isAuth, notification.sendPushAllUserApp);
 
 
 api.post('/test', function (req, res) {

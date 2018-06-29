@@ -93,7 +93,7 @@ function update(id, obj) {
     query = query.substring(0, query.length -2); // se quita coma
     query += ` WHERE id = ${id}`;
     
-    return usuario.rawQuery(query);
+    return model.rawQuery(query);
 }
 
 async function login(correo_electronico, type_login, password) {

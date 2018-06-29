@@ -15,10 +15,28 @@ const DATA_BASE = {
 }
 
 
+const ONE_SIGNAL = {
+  portal_client: {
+    app_id: "d4f6ac11-64cc-451d-8471-e8552ef57f86",
+    token: "ZWFmNTNmYjEtZDA0ZS00YTg3LWI4YmEtNWUwMzQ1NjUzOTRi"
+  },
+  app: {
+    app_id: "57c22654-7696-44a9-8d2c-503590e2554f",
+    token: "MjkyZDgxNDAtNTIwMS00MDY0LWE2MGEtOWY1ZTFiOGJjMTNh"
+  },
+
+  default: {
+    app_id: "57c22654-7696-44a9-8d2c-503590e2554f",
+    token: "MjkyZDgxNDAtNTIwMS00MDY0LWE2MGEtOWY1ZTFiOGJjMTNh"   
+  }
+}
+
+
 
 module.exports = {
   SECRET_KEY,
-  DATA_BASE
+  DATA_BASE,
+  ONE_SIGNAL
 }
 
 

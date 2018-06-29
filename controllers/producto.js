@@ -36,7 +36,7 @@ function getLista(req, res) {
     })
 }
 
-function getDetalle(req, res) { 
+function getDetalle(req, res) {
     var id_cliente = req.usuario;
     var id = req.query.id_producto;
     if (!id_cliente || !id) {

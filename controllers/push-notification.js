@@ -5,8 +5,11 @@ const Cliente = require('../models').cliente;
 const Operador = require('../models').operador;
 const Usuario = require('../models').usuario;
 const clienteOperador = require('../models').clienteOperador;
+const ONE_SIGNAL = require('../settings').ONE_SIGNAL
 
-async function suscribe (req, res) {
+
+// public functions
+async function subscribe (req, res) {
     var id_usuario = req.usuario;
     var rol = req.rol;
     var id_device = req.body.id_device;
@@ -30,6 +33,28 @@ async function suscribe (req, res) {
     }
 }
 
+/* envia notificacion a aplicacion de usuario*/
+async function sendPushAllUserApp (req, res) {
+    var id_usuario = req.usuario;
+    var rol = req.rol; 
+    var titulo = req.body.titulo;
+    var mensaje = req.body.mensaje;
+    var url = req.body.url;
+    if (!titulo || !mensaje || !url ) return res.status(404).send({code:"ERROR", message:"faltan datos"})
+    var data = {
+        type: 'promocion',
+        url: url
+    }
+    sendPushSegments(titulo, mensaje, ['All'], data, ONE_SIGNAL.app);
+    return res.status(200).send({code: "SUCCESS", message: ""});
+}
+
+/* envia notificacion a aplicacion de usuario*/
+async function sendPushOneUserApp (titulo, mensaje, ids, data) {
+    sendPushIds(titulo, mensaje, ids, data, ONE_SIGNAL.app);
+}
+
+/* envia notificacion a aplicacion de unidad*/
 async function sendPushUnidad(id_unidad) {
     var idsDevices = [], operadores, cliente;
     try {
@@ -44,26 +69,29 @@ async function sendPushUnidad(id_unidad) {
     }
     if (cliente.length && cliente[0].id_device) idsDevices.push(cliente[0].id_device)
 
-    if (idsDevices.length > 0) sendPush('Nuevo pedido!!!', 'Ha recibido un nuevo pedido', idsDevices)
+    if (idsDevices.length > 0) {
+        sendPushIds('Nuevo pedido!!!', 'Ha recibido un nuevo pedido', idsDevices, extraContent = {}, settings = ONE_SIGNAL.portal_client)
+    }
 }
+
+
+// PRIVATE FUNCTION
 
 function getTemplateData(title, message, extraContent) {
     return {
-        //app_id: "f1809dc0-2ff4-4560-8f82-38ee0c57a5e5",
-        app_id: "57c22654-7696-44a9-8d2c-503590e2554f",
         data: extraContent,
         headings: {en: title},
-
         contents: {en: message}
     };
 }
 
-async function sendPush(data) {
+function sendPush(data, settings) {
     var response = '';
+    data.app_id = settings.app_id;
+
     var headers = {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization": "Basic MjkyZDgxNDAtNTIwMS00MDY0LWE2MGEtOWY1ZTFiOGJjMTNh"
-        //"Authorization": "Basic YjMyMjMzMGMtMGUxZC00NmQwLWFhOTMtYzAwMzhmODVhOTM0"
+        "Authorization": "Basic " + settings.token
       };
       
       var options = {
@@ -74,43 +102,48 @@ async function sendPush(data) {
         headers: headers
       };
       
-      var req = https.request(options, function(res) {
-        res.on('data', function(data) {
-            response += data;
-        });
-
-        res.on('end', () => {
-            console.log(JSON.parse(response));
-        });
-
-      });
-      
-      req.on('error', function(e) {
-        console.log("ERROR:");
-        console.log(e);
-      });
-      
-      req.write(JSON.stringify(data));
-      req.end();     
+      return new Promise(function (resolve, reject) {
+        var req = https.request(options, function(res) {
+            res.on('data', function(data) {
+                response += data;
+            });
+    
+            res.on('end', () => {
+                console.log(JSON.parse(response));
+                resolve(response);
+            });
+    
+          });
+          
+          req.on('error', function(e) {
+            console.log("ERROR:");
+            console.log(e);
+            reject(e);
+          });
+          
+          req.write(JSON.stringify(data));
+          req.end();  
+      });   
 }
 
-async function sendPushOneUser(title, message, idUser, extraContent = {}) {
-    var user = await Usuario.findById(idUser);
+async function sendPushIds(title, message, ids, extraContent = {}, settings = ONE_SIGNAL.default) {
     var data = getTemplateData(title, message, extraContent);
-    data.include_player_ids = [user.id_device];
-    sendPush(data);
+    data.include_player_ids = ids;
+    sendPush(data, settings);
 }
 
-async function sendPushAllUser(title, message, extraContent = {}) {
+async function sendPushSegments(title, message, segments = ['All'], extraContent = {}, settings = ONE_SIGNAL.default) {
     var data = getTemplateData(title, message, extraContent);
-    data.included_segments = ['All'];
-    sendPush(data);
+    data.included_segments = segments;
+    sendPush(data, settings);
 }
 
 module.exports = {
-    suscribe,
-    sendPushOneUser,
-    sendPushUnidad,
-    sendPushAllUser
+    // servicios
+    sendPushAllUserApp,
+    subscribe,
+    // function
+    sendPushOneUserApp,
+    sendPushUnidad
 }
 

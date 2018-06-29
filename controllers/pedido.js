@@ -2,6 +2,7 @@
 const DireccionSolicitud = require('../models').direccionSolicitud;
 const ListaPedido = require('../models').listaPedido;
 const Pedido = require('../models').pedido;
+const Usuario = require('../models').usuario;
 const utils = require('./utils');
 const notification = require('./push-notification');
 
@@ -126,24 +127,28 @@ async function setEstatus(req, res) {
     if (!status || !idPedido) return res.status.statu(400).send({code:"ERROR", message: "Faltan parametros"})
     // var idUser = req.body.id_usuario;
     var pedido = await Pedido.findById(idPedido);
+    var user = await Usuario.findById(pedido.id_usuario);
     switch (status) {
         case 2:
-            notification.sendPushOneUser(
+            notification.sendPushOneUserApp(
                 'Su pedido ha sido recibido', 
                 'Gracias por su compra, su pedido se esta preparando', 
-                pedido.id_usuario)
+                [user.id_device],
+                {type: 'seguimiento', id_pidido: idPedido})
             break;
         case 3:
-            notification.sendPushOneUser(
+            notification.sendPushOneUserApp(
                 'Su pedido esta en camino', 
                 'Gracias por esperar, su pedido ha sido enviado', 
-                pedido.id_usuario)
+                [user.id_device],
+                {type: 'seguimiento', id_pidido: idPedido})
         break;
         case 4:
-            notification.sendPushOneUser(
+            notification.sendPushOneUserApp(
                 'Su pedido ha sido entregado', 
                 'Gracias por su compra, ayudanos a mejorar calificando el servicio', 
-                pedido.id_usuario)
+                [user.id_device],
+                {type: 'seguimiento', id_pidido: idPedido})
         break;
     }
     Pedido.setEstatus(idPedido, status)
