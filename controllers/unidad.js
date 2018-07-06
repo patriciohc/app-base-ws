@@ -68,7 +68,7 @@ function findUnidades(req, res) {
     var lng = req.query.lng;
     var lat = req.query.lat;
     var categoria = req.query.categoria;
-    var search = req.query.texto;
+    var texto = req.query.texto;
     var distancia = 2.25;
     if (key) {
         unidad.findAll({where: {prefix: key}})
@@ -79,15 +79,19 @@ function findUnidades(req, res) {
             return res.status(500).send({err: err});
         })
     } else if (lng && lat) {
-        unidad.find(lat, lng, distancia, {search, categoria})
+        unidad.find(lat, lng, distancia, {texto, categoria})
         .then(function(result) {
-            return res.status(200).send(result);
+            if (!result) {
+                return res.status(404).send({code: "ERROR", message: "no se encontraron datos"});
+            } else {
+                return res.status(200).send({code: "SUCCESS", message: "", data: result});
+            }
         })
         .catch(function(err) {
-            return res.status(500).send({err: err});
+            return res.status(500).send({code:"ERROR", message: "ocurrio algun error", data: err});
         })
     } else {
-        return res.status(400).send({code:"ERROR", message: "Faltan parametros"});
+        return res.status(400).send({code: "ERROR", message: "Faltan parametros"});
     }
 }
 
