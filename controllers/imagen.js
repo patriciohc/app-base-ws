@@ -6,8 +6,8 @@ async function getUrlUploadImage(req, res) {
     try {
         var img = await signedS3(req.usuario, req.query.type_image);
         var response = await imagen.create(req.usuario, img.url, req.query.type_image);
-        response.id = result.insertId;
-        return res.status(200).send(response);
+        // response.id = result.insertId;
+        return res.status(200).send(img);
     } catch (err) {
         console.error(err);
         return res.status(200).send({code: "ERROR", message: "Ocurrio un error al guardar imagen", data: err});
