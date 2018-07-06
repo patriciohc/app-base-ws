@@ -1,18 +1,17 @@
 const aws = require('aws-sdk');
 const imagen = require('../models').imagen;
 
-function getUrlUploadImage(req, res) {
-    var response;
-    if (!req.query.type_image) return res.status(400).send({message: "falta type_image"});
-    signedS3(req.usuario, req.query.type_image)
-    .then(result => {
-        response = result;
-        return imagen.create(req.usuario, response.url, req.query.type_image)
-    })
-    .then(result => {
+async function getUrlUploadImage(req, res) {
+    if (!req.query.type_image) return res.status(400).send({code: "ERROR", message: "falta type_image"});
+    try {
+        var img = await signedS3(req.usuario, req.query.type_image);
+        var response = await imagen.create(req.usuario, img.url, req.query.type_image);
         response.id = result.insertId;
-        res.status(200).send(response);
-    })
+        return res.status(200).send(response);
+    } catch (err) {
+        console.error(err);
+        return res.status(200).send({code: "ERROR", message: "Ocurrio un error al guardar imagen", data: err});
+    }
 }
 
 function getImageListCliente(req, res) {
