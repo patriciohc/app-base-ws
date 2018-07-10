@@ -3,28 +3,23 @@
 * 04/08/2017
 * Archivo javascript principal para la ejecución del servidor
 */
-// var path = require('path');
-const express = require('express');
-const bodyParser = require('body-parser');
-var cors = require('cors');
+
+const express       = require('express');
+const bodyParser    = require('body-parser');
+const cors          = require('cors');
+const app           = express();
 
 require('./models/index').createTables();
 
-var app = express();
-// websockets
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
+
 require('./controllers-sk/seguimiento')(io);
-//const config = require('./api/config');
-//var jwt = require('jwt-simple');
-//process.env.PWD = process.cwd()
-//app.use('/public', express.static(process.env.PWD + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+require('./routers')(app);
 
-const api = require('./routers');
-app.use('/api', api);
 /************ https ************/
 // var fs = require('fs');
 // var https = require('https');

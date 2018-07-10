@@ -1,7 +1,7 @@
 'use strict'
 var moment = require('moment');
-var Model = require('../drive-db/model');
-var types = require('../drive-db/data-types');
+var Model = require('../libs/drive-db/model');
+var types = require('../libs/drive-db/data-types');
 
 // const engine = require('../settings').DATA_BASE.engine;
 

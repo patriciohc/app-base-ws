@@ -3,14 +3,10 @@
 * Poligono que conrresponde a un establecimiento
 *
 */
-// const fs = require('fs');
-// const tj = require('togeojson');
-const inside = require('point-in-polygon');
-var types = require('../drive-db/data-types');
+const inside    = require('point-in-polygon');
+const types     = require('../libs/drive-db/data-types');
+const Model     = require('../libs/drive-db/model');
 
-// const DIR_KML = "./kml/"
-
-var Model = require('../drive-db/model');
 // nombre de la tabla en db
 const name = "poligono";
 // columnas en db
@@ -44,17 +40,6 @@ function sync () {
  * @returns {Promise}
  */
 function create (idUnidad, cordenadas) {
-    // var stringxml = fs.readFileSync(DIR_KML + kml, 'utf8');
-    // var kml = new DOMParser().parseFromString(stringxml);
-    // var converted = tj.kml(kml);
-    // if (!converted.features || !converted.features.length || converted.features.length == 0) {
-    //     return;
-    // }
-    // var tmp = converted.features[0];
-    // if (!tmp.geometry || !tmp.geometry.coordinates) {
-    //     return;
-    // }
-    // var cordenadas = tmp.geometry.coordinates[0];
     var values = [];
     for (let i = 0; i < cordenadas.length; i++) {
         var cordenada = cordenadas[i];

@@ -4,7 +4,7 @@
 * y editar sus categorias.
 *
 */
-var Model = require('../drive-db/model');
+var Model = require('../libs/drive-db/model');
 // nombre de la tabla en db
 const name = "categoria";
 // columnas en db

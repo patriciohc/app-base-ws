@@ -3,11 +3,11 @@
 * Usuario que usa la app de compra
 *
 */
-const SHA256 = require("crypto-js/sha256");
-const Model = require('../drive-db/model');
-const types = require('../drive-db/data-types');
-const Auth = require('../controllers/autentication');
-const permisos = require('../permisos');
+const SHA256    = require("crypto-js/sha256");
+const Model     = require('../libs/drive-db/model');
+const types     = require('../libs/drive-db/data-types');
+const Auth      = require('../middleware/autentication');
+const permisos  = require('../permisos');
 
 const LOGIN_DEFAULT = 0;
 const LOGIN_FACEBOOK = 1;
@@ -15,8 +15,6 @@ const LOGIN_GOOGLE = 2;
 
 // nombre de la tabla en db
 const name = "usuario";
-// columnas de valor unico
-const uniques = ['correo_electronico'];
 // columnas en db
 const columns = [
     {

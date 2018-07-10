@@ -3,8 +3,8 @@
 * Unidad representa un establecimiento, consultorio, local ect.
 *
 */
-var Model = require('../drive-db/model');
-var types = require('../drive-db/data-types');
+var Model = require('../libs/drive-db/model');
+var types = require('../libs/drive-db/data-types');
 
 // nombre de la tabla en db
 const name = "unidad";

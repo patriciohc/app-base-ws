@@ -2,22 +2,20 @@
 
 const express = require('express');
 const api = express.Router();
-const cliente = require('./controllers/cliente');
-const unidad = require('./controllers/unidad');
-const usuario = require('./controllers/usuario');
-const categoria = require('./controllers/categoria');
-const producto = require('./controllers/producto');
-const pedido = require('./controllers/pedido');
-const operador = require('./controllers/operador');
-// const catalogos = require('./controllers/catalogos');
-const autentication =  require('./controllers/autentication');
-const imagen =  require('./controllers/imagen');
-const notification = require('./controllers/push-notification');
-const payments = require('./controllers/payments');
-const categoriaUnidad = require('./controllers/categoria-unidad');
-const Administrador = require('./controllers/administrador');
-const permisos = require('./permisos');
-
+const cliente = require('../controllers/cliente');
+const unidad = require('../controllers/unidad');
+const usuario = require('../controllers/usuario');
+const categoria = require('../controllers/categoria');
+const producto = require('../controllers/producto');
+const pedido = require('../controllers/pedido');
+const operador = require('../controllers/operador');
+const autentication =  require('../middleware/autentication');
+const imagen =  require('../controllers/imagen');
+const notification = require('../controllers/push-notification');
+const payments = require('../controllers/payments');
+const categoriaUnidad = require('../controllers/categoria-unidad');
+const Administrador = require('../controllers/administrador');
+const rol = require('../config/roles');
 
 
 api.post('/create-payment/', payments.create);
@@ -29,7 +27,7 @@ api.post('/execute-payment/', payments.onAuthorize);
 * @apiParam {number} id_cliente identificador unico de cliente
 * @apiSuccess {Object} obejto de tipo unidad
 */
-api.get('/unidad-cliente/', unidad.getListaCliente);
+// api.get('/unidad-cliente/', unidad.getListaCliente);
 
 /**
 * @api {get} /unidad/ Obtitene lista de unidades de un cliente (informacion general)
@@ -39,8 +37,8 @@ api.get('/unidad-cliente/', unidad.getListaCliente);
 *
 * @apiSuccess {Unidad[]} lista de objetos unidad
 */
-permisos.add('/unidad-cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/unidad-cliente/', unidad.getListaCliente);
+// rol.add('/unidad-cliente/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+// api.get('/unidad-cliente/', unidad.getListaCliente);
 
 /**
 * @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
@@ -53,7 +51,7 @@ api.get('/unidad-cliente/', unidad.getListaCliente);
 *
 * @apiSuccess {Unidad} lista de objetos unidad
 */
-// -- no requiere permisos
+// -- no requiere rol
 api.get('/unidad/', unidad.findUnidades);
 
 /**
@@ -71,8 +69,11 @@ api.get('/unidad/:id', unidad.get);
 * @apiParam {Object} objeto de tipo Unidad en body
 * @apiSuccess {number} id de la unidad creada
 */
-permisos.add('/unidad/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/unidad/', autentication.isAuth, unidad.create);
+api.post(
+    '/unidad/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+    unidad.create
+);
 
 /**
 * @api {post} /unidad actuliza la informacion basica de una unidad
@@ -81,8 +82,11 @@ api.post('/unidad/', autentication.isAuth, unidad.create);
 * @apiParam {Object} objeto de tipo Unidad en body
 * @apiSuccess {number} id de la unidad creada
 */
-permisos.add('/unidad/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.put('/unidad/', autentication.isAuth, unidad.updateInfoBasic);
+api.put(
+    '/unidad/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    unidad.updateInfoBasic
+);
 
 /**
 * @api {post} /unidad-producto agrega productos a la unidad
@@ -91,8 +95,11 @@ api.put('/unidad/', autentication.isAuth, unidad.updateInfoBasic);
 * @apiParam {Number[][]} id_unidad, id_producto
 * @apiSuccess {Object} success
 */
-permisos.add('/unidad-producto/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/unidad-producto/', autentication.isAuth, unidad.addProducto);
+api.post(
+    '/unidad-producto/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+    unidad.addProducto
+);
 
 /**
 * @api {get} /unidad-producto obtiene todos los productos en una unidad
@@ -113,8 +120,12 @@ api.get('/unidad-producto/', unidad.getProductos);
 * @apiParam {Object} {lat, lng} en body
 * @apiSuccess {Object} success
 */
-permisos.add('/unidad-posicion/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/unidad-posicion/', autentication.isAuth, unidad.addPosition);
+// rol.add('/unidad-posicion/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.post(
+    '/unidad-posicion/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+    unidad.addPosition
+);
 
 /**
 * @api {post} /unidad-poligono agrega o actuliza el poligono de reparto
@@ -124,8 +135,12 @@ api.post('/unidad-posicion/', autentication.isAuth, unidad.addPosition);
 * @apiParam {Object[]} [{lat, lng}...] posiciones en body
 * @apiSuccess {Object} success
 */
-permisos.add('/unidad-poligono/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/unidad-poligono/', autentication.isAuth, unidad.addPolygon);
+// rol.add('/unidad-poligono/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.post(
+    '/unidad-poligono/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    unidad.addPolygon
+);
 
 /**
 * @api {get} /unidad-poligono obtiene el poligono de la unidad
@@ -143,7 +158,7 @@ api.get('/unidad-poligono/', unidad.getPoligono);
 * @apiParam {Number} id_unidad
 * @apiSuccess {Object[]} lista de operadores
 */
-// permisos.add('/unidad-operador/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
+// rol.add('/unidad-operador/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 // api.get('/unidad-operador/', autentication.isAuth, unidad.getListOperadoresUnidad);
 
 /**
@@ -153,8 +168,11 @@ api.get('/unidad-poligono/', unidad.getPoligono);
 * @apiParam {number} id_unidad de uniad por query
 * @apiSuccess {Object} success
 */
-permisos.add('/unidad/', 'DELETE', [permisos.CLIENTE])
-api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
+// rol.add('/unidad/', 'DELETE', [rol.CLIENTE])
+api.delete(
+    '/unidad/', 
+    autentication.isAuth([rol.CLIENTE]), 
+    unidad.deleteR);
 
 /**
 * @api {post} /clienten-operador/ agrega operadores a un cliente
@@ -166,8 +184,8 @@ api.delete('/unidad/', autentication.isAuth, unidad.deleteR);
 * @apiParam {number} rol - rol del operador 
 * @apiSuccess {Object} success
 */
-permisos.add('/clienten-operador/', 'POST', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
-api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
+// rol.add('/clienten-operador/', 'POST', [rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE ])
+// api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
 
 /**
 * @api {put} /clienten-operador/ actuliza 
@@ -178,8 +196,8 @@ api.post('/clienten-operador/', autentication.isAuth, cliente.addOperador);
 * @apiParam {number} id_unidad - id_unidad 
 * @apiSuccess {Object} success
 */
-permisos.add('/clienten-operador/', 'PUT', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
-api.put('/clienten-operador/', autentication.isAuth, cliente.updateOperador);
+// rol.add('/clienten-operador/', 'PUT', [rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE ])
+// api.put('/clienten-operador/', autentication.isAuth, cliente.updateOperador);
 
 /**
 * @api {get} /operador obitiene operadores por cliente
@@ -188,8 +206,8 @@ api.put('/clienten-operador/', autentication.isAuth, cliente.updateOperador);
 * @apiParam {Number} id_cliente
 * @apiSuccess {} success
 */
-permisos.add('/clienten-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE ])
-api.get('/clienten-operador/', autentication.isAuth, cliente.getListOperadores);
+// rol.add('/clienten-operador/', 'GET', [rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE ])
+// api.get('/clienten-operador/', autentication.isAuth, cliente.getListOperadores);
 
 
 /**
@@ -202,8 +220,11 @@ api.get('/clienten-operador/', autentication.isAuth, cliente.getListOperadores);
 * @apiParam {number} rol - rol del operador 
 * @apiSuccess {Object} success
 */
-permisos.add('/clienten-operador/', 'DELETE', [permisos.CLIENTE])
-api.delete('/clienten-operador/', autentication.isAuth, cliente.deleteOperador);
+// rol.add('/clienten-operador/', 'DELETE', [rol.CLIENTE])
+api.delete(
+    '/clienten-operador/', 
+    autentication.isAuth([rol.CLIENTE]), 
+    cliente.deleteOperador);
 
 /**
 * @api {post} /operador/ crea un operador
@@ -220,8 +241,12 @@ api.post('/operador/', operador.create);
 * @apiGroup Operador
 * @apiSuccess {Boolean} success
 */
-permisos.add('/list-unidad-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR])
-api.get('/list-unidad-operador/', autentication.isAuth, operador.getListUnidades);
+// rol.add('/list-unidad-operador/', 'GET', [rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR])
+api.get(
+    '/list-unidad-operador/', 
+    autentication.isAuth([rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR]),
+    operador.getListUnidades
+);
 
 
 
@@ -260,8 +285,12 @@ api.post('/login-operador/', operador.login);
 * @apiParam {string} id_sucursal
 * @apiSuccess {Operador} success
 */
-permisos.add('/login-unidad-operador/', 'GET', [permisos.CLIENTE, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR, permisos.SIN_ROL])
-api.get('/login-unidad-operador/', autentication.isAuth, operador.siginUnidad);
+// rol.add('/login-unidad-operador/', 'GET', [rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR, rol.SIN_ROL])
+api.get(
+    '/login-unidad-operador/',
+    autentication.isAuth([rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR, rol.SIN_ROL]),
+    operador.siginUnidad
+);
 
 /**
 * @api {post} /login-repartidor genera un nuevo token para llamar ws 
@@ -282,8 +311,11 @@ api.post('/login-repartidor/', operador.loginRepartidor);
 * @apiParam {number} id identificado unico de cliente
 * @apiSuccess {Object} obejto de tipo Cliente
 */
-permisos.add('/cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/cliente/:id', autentication.isAuth, cliente.get);
+// rol.add('/cliente/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+// api.get(
+//     '/cliente/:id', 
+//     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+//     cliente.get);
 
 /**
 * @api {get} /cliente obtiene liste de clientes
@@ -291,8 +323,12 @@ api.get('/cliente/:id', autentication.isAuth, cliente.get);
 * @apiSuccess {Object[]} arrya de tipo Cliente
 * @apiSuccessExample Success-Response:
 */
-permisos.add('/cliente/', 'GET', [permisos.ADMINISTRADOR])
-api.get('/cliente/', autentication.isAuth, cliente.getLista);
+// rol.add('/cliente/', 'GET', [rol.ADMINISTRADOR])
+// api.get(
+//     '/cliente/',
+//     autentication.isAuth([rol.ADMINISTRADOR]),
+//     cliente.getLista
+// );
 
 /**
 * @api {post} /cliente/ Crea un nuevo cliente
@@ -303,8 +339,12 @@ api.get('/cliente/', autentication.isAuth, cliente.getLista);
 *     HTTP/1.1 200 OK
 *   {id: id }
 */
-permisos.add('/cliente/', 'POST', [permisos.ADMINISTRADOR])
-api.post('/cliente', autentication.isAuth, cliente.create);
+// rol.add('/cliente/', 'POST', [rol.ADMINISTRADOR])
+api.post(
+    '/cliente',
+    autentication.isAuth([rol.ADMINISTRADOR]),
+    cliente.create
+);
 
 /**
 * @api {post} /cliente-login/ loguea cliente
@@ -356,8 +396,12 @@ api.post('/login-google/', usuario.loginGoogle);
 * @apiParam {string} id id de facebook
 * @apiSuccess {Usuario} obejto de tipo usuario
 */
-permisos.add('/profile/', 'GET', [permisos.USUSARIO]);
-api.get('/profile/', autentication.isAuth, usuario.getProfile);
+// rol.add('/profile/', 'GET', [rol.USUSARIO]);
+api.get(
+    '/profile/',
+    autentication.isAuth([rol.USUSARIO]),
+    usuario.getProfile
+);
 
 /**
 * Administrador
@@ -389,8 +433,12 @@ api.post('/usuario/', usuario.create);
 * @apiParam {Cliente} objeto de tipo cliente
 * @apiSuccess {number} id de objeto insertado
 */
-permisos.add('/categoria/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/categoria/', autentication.isAuth, categoria.create);
+// rol.add('/categoria/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.post(
+    '/categoria/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    categoria.create
+);
 
 /**
 * @api {post} /categoria/ actualiza una categoria
@@ -399,8 +447,12 @@ api.post('/categoria/', autentication.isAuth, categoria.create);
 * @apiParam {id} identificador de categoria
 * @apiSuccess {number}
 */
-permisos.add('/categoria/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.put('/categoria/', autentication.isAuth, categoria.update);
+// rol.add('/categoria/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.put(
+    '/categoria/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    categoria.update
+);
 
 /**
 * @api {delete} /categoria/ elimina categoria por id
@@ -408,8 +460,12 @@ api.put('/categoria/', autentication.isAuth, categoria.update);
 * @apiParam {Number} id de la categoria
 * @apiSuccess {Boolean}
 */
-permisos.add('/categoria/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.delete('/categoria/', autentication.isAuth, categoria.deleteR);
+// rol.add('/categoria/', 'DELETE', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.delete(
+    '/categoria/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    categoria.deleteR
+);
 
 /**
 * @api {get} /categoria/ filtra categorias por id de unidad
@@ -436,8 +492,12 @@ api.get('/categoria/', categoria.getLista);
 * @apiParam {Object} objeto categoria {nombre: string, descripcion: string}
 * @apiSuccess {number} id de objeto insertado
 */
-permisos.add('/categoria-unidad/', 'POST', [permisos.ADMINISTRADOR])
-api.post('/categoria-unidad/', autentication.isAuth, categoriaUnidad.create);
+// rol.add('/categoria-unidad/', 'POST', [rol.ADMINISTRADOR])
+api.post(
+    '/categoria-unidad/', 
+    autentication.isAuth([rol.ADMINISTRADOR]), 
+    categoriaUnidad.create
+);
 
 /**
 * @api {post} /categoria-unidad/ consulta lista de categorias
@@ -452,8 +512,12 @@ api.get('/categoria-unidad/', categoriaUnidad.getList);
 * @apiParam {Producto} objeto de tipo Producto
 * @apiSuccess {number} id de objeto insertado
 */
-permisos.add('/producto/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.post('/producto/', autentication.isAuth, producto.create);
+// rol.add('/producto/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.post(
+    '/producto/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    producto.create
+);
 
 /**
 * @api {put} /producto/ actualiza producto
@@ -461,8 +525,12 @@ api.post('/producto/', autentication.isAuth, producto.create);
 * @apiParam {Producto} objeto de tipo Producto
 * @apiParam {number} id de objeto
 */
-permisos.add('/producto/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.put('/producto/', autentication.isAuth, producto.update);
+// rol.add('/producto/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.put(
+    '/producto/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+    producto.update
+);
 
 /**
 * @api {get} /producto/ filtra productos segun query
@@ -487,8 +555,12 @@ api.get('/producto/', producto.get);
 * @apiParam {number} id identificador
 * @apiSuccess {Producto} array de productos
 */
-permisos.add('/producto-detalle/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/producto-detalle/', autentication.isAuth, producto.getDetalle);
+// rol.add('/producto-detalle/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.get(
+    '/producto-detalle/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+    producto.getDetalle
+);
 
 /**
 * @api {delete} /producto/ elimina producto por id
@@ -496,8 +568,12 @@ api.get('/producto-detalle/', autentication.isAuth, producto.getDetalle);
 * @apiParam {number} id identificador de producto
 * @apiSuccess {Boolean} respuesta
 */
-permisos.add('/producto-cliente/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/producto-cliente', autentication.isAuth, producto.getListaCliente);
+// rol.add('/producto-cliente/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.get(
+    '/producto-cliente', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    producto.getListaCliente
+);
 
 /**
 * @api {delete} /producto/ elimina producto por id
@@ -505,8 +581,12 @@ api.get('/producto-cliente', autentication.isAuth, producto.getListaCliente);
 * @apiParam {number} id identificador de producto
 * @apiSuccess {Boolean} respuesta
 */
-permisos.add('/producto/', 'DELETE', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.delete('/producto', autentication.isAuth, producto.deleteR);
+// rol.add('/producto/', 'DELETE', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.delete(
+    '/producto', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
+    producto.deleteR
+);
 
 
 /**
@@ -518,8 +598,12 @@ api.delete('/producto', autentication.isAuth, producto.deleteR);
 *     HTTP/1.1 200 OK
 *     id
 */
-permisos.add('/pedido/', 'POST', [permisos.USUSARIO])
-api.post('/pedido/', autentication.isAuth, pedido.create);
+// rol.add('/pedido/', 'POST', [rol.USUSARIO])
+api.post(
+    '/pedido/',
+    autentication.isAuth([rol.USUSARIO]),
+    pedido.create
+);
 
 /**
 * @api {post} /pedido/ elimina pedido
@@ -529,8 +613,12 @@ api.post('/pedido/', autentication.isAuth, pedido.create);
 *     HTTP/1.1 200 OK
 *     id
 */
-permisos.add('/pedido/', 'DELETE', [permisos.USUSARIO])
-api.delete('/pedido/', autentication.isAuth, pedido.deleteR);
+// rol.add('/pedido/', 'DELETE', [rol.USUSARIO])
+api.delete(
+    '/pedido/',
+    autentication.isAuth([rol.USUSARIO]),
+    pedido.deleteR
+);
 
 /**
 * @api {put} /pedido/ actuliza estatus pedido
@@ -539,8 +627,12 @@ api.delete('/pedido/', autentication.isAuth, pedido.deleteR);
 * @apiParam {number} estatus
 * @apiSuccess {Boolean} success
 */
-permisos.add('/pedido-estatus/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.REPARTIDOR])
-api.put('/pedido-estatus/', autentication.isAuth, pedido.setEstatus);
+// rol.add('/pedido-estatus/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR])
+api.put(
+    '/pedido-estatus/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR]),
+    pedido.setEstatus
+);
 
 /**
 * @api {put} /pedido-repartidor/ asigna un pedio a un repartidor
@@ -551,8 +643,12 @@ api.put('/pedido-estatus/', autentication.isAuth, pedido.setEstatus);
 *     HTTP/1.1 200 OK
 *     id
 */
-permisos.add('/pedido-repartidor/', 'PUT', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.put('/pedido-repartidor/', autentication.isAuth, pedido.asignarRepartidor);
+// rol.add('/pedido-repartidor/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.put(
+    '/pedido-repartidor/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    pedido.asignarRepartidor
+);
 
 /**
 * @api {put} /pedido/ califica un pedido
@@ -563,8 +659,12 @@ api.put('/pedido-repartidor/', autentication.isAuth, pedido.asignarRepartidor);
 *     HTTP/1.1 200 OK
 *     id
 */
-permisos.add('/unidad-calificacion/', 'PUT', [permisos.USUSARIO])
-api.put('/unidad-calificacion/', autentication.isAuth, unidad.calificar);
+// rol.add('/unidad-calificacion/', 'PUT', [rol.USUSARIO])
+api.put(
+    '/unidad-calificacion/',
+    autentication.isAuth([rol.USUSARIO]),
+    unidad.calificar
+);
 
 
 /**
@@ -595,8 +695,12 @@ api.get('/unidad-comentarios/', unidad.getComentarios);
 * @apiParam {number} id_unidad
 * @apiSuccess {Object[]} lista de pedidos
 */
-permisos.add('/pedido/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/pedido/',  autentication.isAuth, pedido.getListaPorUnidad);
+// rol.add('/pedido/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.get(
+    '/pedido/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    pedido.getListaPorUnidad
+);
 
 /**
 * @api {get} /pedido-grafica-semana/ obtiene informacion para grafica por semana
@@ -604,8 +708,12 @@ api.get('/pedido/',  autentication.isAuth, pedido.getListaPorUnidad);
 * @apiParam {number} id_unidad
 * @apiSuccess {Object} lista de pedidos
 */
-permisos.add('/pedido-grafica-semana/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_CLIENTE, permisos.ADMIN_UNIDAD])
-api.get('/pedido-grafica-semana/',  autentication.isAuth, pedido.getNPedidosXWeek);
+// rol.add('/pedido-grafica-semana/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_CLIENTE, rol.ADMIN_UNIDAD])
+api.get(
+    '/pedido-grafica-semana/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_CLIENTE, rol.ADMIN_UNIDAD]),
+    pedido.getNPedidosXWeek
+);
 
 /**
 * @api {get} /operador-repartidor obitene los pedidos asignados a un repartidor
@@ -614,8 +722,12 @@ api.get('/pedido-grafica-semana/',  autentication.isAuth, pedido.getNPedidosXWee
 * @apiParam {Number} id_repartidor
 * @apiSuccess {Pedido[]}
 */
-permisos.add('/pedido-repartidor/', 'GET', [permisos.REPARTIDOR])
-api.get('/pedido-repartidor/', autentication.isAuth, pedido.getListaPorRepartidor);
+// rol.add('/pedido-repartidor/', 'GET', [rol.REPARTIDOR])
+api.get(
+    '/pedido-repartidor/',
+    autentication.isAuth([rol.REPARTIDOR]),
+    pedido.getListaPorRepartidor
+);
 
 /**
 * @api {get} /pedido/ obtiene lista de pedidos por usuario
@@ -623,24 +735,35 @@ api.get('/pedido-repartidor/', autentication.isAuth, pedido.getListaPorRepartido
 * @apiParam {number} id_usuario
 * @apiSuccess {Object[]} lista de pedidos
 */
-permisos.add('/pedido-usuario/', 'GET', [permisos.USUSARIO])
-api.get('/pedido-usuario/',autentication.isAuth, pedido.getListaPorUsuario);
+// rol.add('/pedido-usuario/', 'GET', [rol.USUSARIO])
+api.get(
+    '/pedido-usuario/',
+    autentication.isAuth([rol.USUSARIO]),
+    pedido.getListaPorUsuario
+);
 
 /**
 * @api {get} /signed-request-image/ 
 * @apiGroup image
 * @apiSuccess {}
 */
-permisos.add('/signed-request-image/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/signed-request-image/', autentication.isAuth, imagen.getUrlUploadImage);
+// rol.add('/signed-request-image/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.get(
+    '/signed-request-image/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    imagen.getUrlUploadImage);
 
 /**
 * @api {get} /image/ obtiene lista de imagenes en base a cliente
 * @apiGroup image
 * @apiSuccess {Image[]}
 */
-permisos.add('/image/', 'GET', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD])
-api.get('/image/', autentication.isAuth, imagen.getImageListCliente);
+// rol.add('/image/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
+api.get(
+    '/image/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    imagen.getImageListCliente
+);
 
 
 /**
@@ -649,22 +772,24 @@ api.get('/image/', autentication.isAuth, imagen.getImageListCliente);
 * @apiParam {string} id_device
 * @apiSuccess {number} 
 */
-permisos.add('/subscribe/', 'POST', [permisos.CLIENTE, permisos.OPERADOR_UNIDAD, permisos.ADMIN_UNIDAD, permisos.ADMIN_CLIENTE, permisos.USUSARIO])
-api.post('/subscribe/', autentication.isAuth, notification.subscribe);
+// rol.add('/subscribe/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.USUSARIO])
+api.post(
+    '/subscribe/', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.USUSARIO]), 
+    notification.subscribe
+);
 
 /**
 * @api {get} /suscribe-notification/ notificaciones para usaurio especificos
 * @apiGroup suscribe-notification
 * @apiSuccess {Image[]}
 */
-permisos.add('/send-notification/', 'POST', [permisos.CLIENTE])
-api.post('/send-notification/', autentication.isAuth, notification.sendPushAllUserApp);
-
-
-api.post('/test', function (req, res) {
-  console.log(req.body)
-  return res.status(200).send({message: "success"})
-})
+// rol.add('/send-notification/', 'POST', [rol.CLIENTE])
+api.post(
+    '/send-notification/',
+    autentication.isAuth([rol.CLIENTE]),
+    notification.sendPushAllUserApp
+);
 
 
 module.exports = api;

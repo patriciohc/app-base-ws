@@ -3,7 +3,7 @@
 const cliente = require('../models').cliente;
 const utils = require('./utils');
 const SHA256 = require("crypto-js/sha256");
-const Auth = require('./autentication');
+const Auth = require('../middleware/autentication');
 const permisos = require('../permisos');
 const clienteOperador = require('../models/cliente-operador');
 const operador = require('../models/operador');
@@ -46,11 +46,13 @@ function create(req, res) {
 }
 
 async function login(req, res) {
+    var correo_electronico = req.body.correo_electronico;
+    var password = req.body.password;
     try {
         var usr = await cliente.findOne({
             where: {correo_electronico: req.body.correo_electronico}
         })
-        if (!usr) return res.status(404).send({message: "not found"});
+        if (!usr) return res.status(404).send({code: "ERROR", message: "not found"});
         let shaPass = SHA256(req.body.password);
         if (shaPass == usr.password) {
             var sesion = {
@@ -60,9 +62,9 @@ async function login(req, res) {
                 id_cliente: usr.id,
                 rol: permisos.CLIENTE
             }
-            return res.status(200).send(sesion);
+            return res.status(200).send({code:"SUCCESS", message:"", data: sesion});
         } else {
-            return res.status(401).send({code:'SUCCESS', message: 'usuario no autorizado'});
+            return res.status(401).send({code:'ERROR', message: 'usuario no autorizado'});
         }
     } catch (err) {
         return res.status(500).send({code: "ERROR", message: '', err: err});
@@ -130,6 +132,14 @@ function getListOperadores(req, res) {
 }
 
 function update(req, res) {
+
+}
+
+
+/*
+* PRIVATE FUNCTION 
+*/
+function getProfileClient () {
 
 }
 

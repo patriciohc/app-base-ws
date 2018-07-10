@@ -5,8 +5,8 @@ async function getUrlUploadImage(req, res) {
     if (!req.query.type_image) return res.status(400).send({code: "ERROR", message: "falta type_image"});
     try {
         var img = await signedS3(req.usuario, req.query.type_image);
-        var response = await imagen.create(req.usuario, img.url, req.query.type_image);
-        // response.id = result.insertId;
+        await imagen.create(req.usuario, img.url, req.query.type_image);
+        // var response.id = result.insertId;
         return res.status(200).send(img);
     } catch (err) {
         console.error(err);
@@ -14,14 +14,13 @@ async function getUrlUploadImage(req, res) {
     }
 }
 
-function getImageListCliente(req, res) {
-    imagen.findAll({id_cliente: req.usuario})
-    .then(result => {
-        return res.status(200).send(result);
-    })
-    .catch(err => {
+async function getImageListCliente(req, res) {
+    try {
+        var response = imagen.findAll({id_cliente: req.usuario})
+        return res.status(200).send(response);
+    } catch (err) {
         return res.status(500).send({err})
-    })
+    }
 }
 
 function signedS3(usuario, typeImage) {

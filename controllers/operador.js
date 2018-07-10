@@ -4,7 +4,7 @@ const operador = require('../models').operador;
 const clienteOperador = require('../models').clienteOperador;
 const catalogos = require('./catalogos');
 const SHA256 = require("crypto-js/sha256");
-const Auth = require('./autentication');
+const Auth = require('../libs/jwt-utils');
 
 function get(req, res) {
     operador.findById(req.params.id)

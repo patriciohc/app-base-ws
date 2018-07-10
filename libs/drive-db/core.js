@@ -1,6 +1,6 @@
 "use strict";
 
-const config = require('../settings').DATA_BASE;
+const config = require('../../settings').DATA_BASE;
 const mysql = require('mysql');
 const { Pool } = require('pg');
 

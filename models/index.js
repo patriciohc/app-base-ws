@@ -1,20 +1,20 @@
 'use strict'
 
-var cliente = require('../models/cliente');
-var unidad = require('../models/unidad');
-var usuario = require('../models/usuario');
-var poligono = require('../models/poligono');
-var categoria = require('../models/categoria');
-var producto = require('../models/producto');
-var direccionSolicitud = require('../models/direccion-solicitud');
-var listaPedido = require('../models/lista-pedido');
-var operador = require('../models/operador');
-var pedido = require('../models/pedido');
-var unidadProducto = require('../models/unidad-producto');
-var clienteOperador = require('../models/cliente-operador');
-var imagen = require('../models/imagen');
-var categoriaUnidad = require('../models/categoria-unidad');
-var unidadCalificacion = require('../models/unidad-calificacion');
+var cliente             = require('../models/cliente');
+var unidad              = require('../models/unidad');
+var usuario             = require('../models/usuario');
+var poligono            = require('../models/poligono');
+var categoria           = require('../models/categoria');
+var producto            = require('../models/producto');
+var direccionSolicitud  = require('../models/direccion-solicitud');
+var listaPedido         = require('../models/lista-pedido');
+var operador            = require('../models/operador');
+var pedido              = require('../models/pedido');
+var unidadProducto      = require('../models/unidad-producto');
+var clienteOperador     = require('../models/cliente-operador');
+var imagen              = require('../models/imagen');
+var categoriaUnidad     = require('../models/categoria-unidad');
+var unidadCalificacion  = require('../models/unidad-calificacion');
 
 async function createTables () {
     try {

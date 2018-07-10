@@ -3,7 +3,7 @@
 * imagen
 *
 */
-var Model = require('../drive-db/model');
+var Model = require('../libs/drive-db/model');
 // nombre de la tabla en db
 const name = "image";
 // columnas en db

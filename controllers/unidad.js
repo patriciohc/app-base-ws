@@ -95,20 +95,16 @@ function findUnidades(req, res) {
     }
 }
 
-function getListaCliente(req, res) {
-    if (!req.query.id_cliente) {
-        return res.status(200).send("se requiere id de usuario")
+async function getList(req, res) {
+    if (!req.query.id_cliente) return res.status(200).send("se requiere id de usuario");
+    var select = ['id', 'nombre', 'direccion', 'telefono', 'hora_apetura', 'hora_cierre', 'descripcion'];
+    var where = {id_cliente: req.query.id_cliente}
+    try {
+        var response = await unidad.findAll({select, where});
+        return res.status(200).send(response);
+    } catch(err) {
+        return res.status(500).send({code: "ERROR", message: "", data: err});
     }
-    unidad.findAll({
-        select: ['id', 'nombre', 'direccion', 'telefono', 'hora_apetura', 'hora_cierre', 'descripcion'],
-        where: {id_cliente: req.query.id_cliente}
-    })
-    .then(function(result) {
-        return res.status(200).send(result);
-    })
-    .catch(function(err){
-        return res.status(500).send({err: err});
-    })
 }
 
 function create(req, res) {
@@ -294,7 +290,7 @@ module.exports = {
     deleteR,
     getProductos,
     // getLOperadoresUnidad,
-    getListaCliente,
+    getList,
     addPosition,
     addPolygon,
     getPoligono,

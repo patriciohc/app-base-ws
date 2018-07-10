@@ -1,12 +1,10 @@
 'use strict'
 var listaPedido = require('./lista-pedido');
-var direccionSolicitud = require('./direccion-solicitud');
-var usuario = require('./usuario');
-var moment = require('moment');
-var Model = require('../drive-db/model');
-var types = require('../drive-db/data-types');
+var moment      = require('moment');
+var Model       = require('../libs/drive-db/model');
+var types       = require('../libs/drive-db/data-types');
 
-const engine = require('../settings').DATA_BASE.engine;
+const engine    = require('../settings').DATA_BASE.engine;
 
 /*
 * Pedido representa un usuario dueño de uno o varios establecimientos..

@@ -4,7 +4,7 @@
 *
 */
 var SHA256 = require("crypto-js/sha256");
-var Model = require('../drive-db/model');
+var Model = require('../libs/drive-db/model');
 // nombre de la tabla en db
 const name = "cliente";
 // columnas de valor unico

@@ -3,7 +3,7 @@
 * categoria_unidad, categoria a la que pertenece una unidad
 *
 */
-var Model = require('../drive-db/model');
+var Model = require('../libs/drive-db/model');
 // nombre de la tabla en db
 const name = "categoria_unidad";
 // columnas en db

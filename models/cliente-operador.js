@@ -3,7 +3,7 @@
 * operadores que tiene un cliente (administrador principal)
 *
 */
-var Model = require('../drive-db/model');
+var Model = require('../libs/drive-db/model');
 // nombre de la tabla en db
 const name = "cliente_operador";
 // columnas en db

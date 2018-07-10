@@ -1,6 +1,6 @@
 'use strict'
 const format = require('pg-format');
-const engine = require('../settings').DATA_BASE.engine;
+const engine = require('../../settings').DATA_BASE.engine;
 
 const COMPARATORS = {
     'eq': '=',

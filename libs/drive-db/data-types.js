@@ -1,4 +1,4 @@
-const engine = require('../settings').DATA_BASE.engine;
+const engine = require('../../settings').DATA_BASE.engine;
 
 const DECIMAL = {
     toString: function () {

@@ -3,9 +3,10 @@
 * OperadorEntrea representa un usuario repartidor
 *
 */
-var Model = require('../drive-db/model');
-var SHA256 = require("crypto-js/sha256");
-var types = require('../drive-db/data-types');
+var Model   = require('../libs/drive-db/model');
+var types   = require('../libs/drive-db/data-types');
+var SHA256  = require("crypto-js/sha256");
+
 
 // nombre de la tabla en db
 const name = "operador";
