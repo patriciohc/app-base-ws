@@ -3,8 +3,10 @@
 * Cliente representa un usuario dueño de uno o varios establecimientos..
 *
 */
-var SHA256 = require("crypto-js/sha256");
-var Model = require('../libs/drive-db/model');
+var SHA256  = require("crypto-js/sha256");
+var Model   = require('../libs/drive-db/model');
+var types   = require('../libs/drive-db/data-types');
+
 // nombre de la tabla en db
 const name = "cliente";
 // columnas de valor unico
@@ -36,6 +38,12 @@ const columns = [
     }, {
         name: "id_device",
         type: "VARCHAR(100)"
+    }, {
+        name: "has_notification",
+        type: types.SMALL_INT       
+    }, {
+        name: "has_chat",
+        type: types.SMALL_INT
     }
 ]
 

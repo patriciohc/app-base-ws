@@ -36,11 +36,11 @@ function getListaPorUnidad(req, res) { // forbidden for users
     Pedido.findAllWithDependencies({where, order_by: {value: 'fecha_recibido', order: 'DESC'}})
     .then(function(result) {
       console.log(result);
-      return res.status(200).send(result);
+      return res.status(200).send({code: "SUCCESS", message:"", data: result});
     })
     .catch(function(err){
       console.log(err);
-      return res.status(500).send({err});
+      return res.status(500).send({code: "ERROR", message:"", data: err});
     })
 }
 

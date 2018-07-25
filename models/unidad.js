@@ -21,7 +21,7 @@ const columns = [
         name: "nombre",
         type: "VARCHAR(250)"
     }, {
-        name: "direccion", // colonia, calle, numerovarchar(100)
+        name: "direccion", // colonia, calle, numero
         type: "VARCHAR(200)"
     }, {
         name: "lat", // latitud
@@ -59,6 +59,9 @@ const columns = [
         config: {
             arrayType: types.SMALL_INT
         }
+    }, {
+        name: "servicio_domicilio",
+        type: types.SMALL_INT
     }
 ]
 
@@ -81,7 +84,8 @@ function update(idUnidad, idCliente, obj) {
         'imagen',
         'palabras_clave',
         'descripcion',
-        'categoria'
+        'categoria',
+        'servicio_domicilio'
     ];
     var updates = [];
     var query = `UPDATE ${name} SET `;

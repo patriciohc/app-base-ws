@@ -1,6 +1,5 @@
 'use strict'
 const moment    = require('moment');
-// const permisos  = require('../permisos');
 const jwtUtils  = require('../libs/jwt-utils');
 
 /*
@@ -13,21 +12,21 @@ function isAuth (roles) {
             return res.status(400).send({code:"ERROR", message: 'usuario no autorizado'})
         }
         try {
-            var decoded = jwtUtils(token);
+            var decoded = jwtUtils.decodeToken(token);
             if(decoded.exp <= moment().unix()) {
-                return res.status(401).send({code: "ERRRO", message: "El token ha expirado"});
+                return res.status(401).send({code: "ERROR", message: "El token ha expirado"});
             }
-            isAllowed = roles.find(rol => rol === decode.rol);
+            var isAllowed = roles.find(rol => rol === decoded.rol);
             if (isAllowed) {
                 req.usuario = decoded.id;
                 req.rol = decoded.rol;
-                next();
+                return next();
             } else {
                 return res.status(400).send({code:"ERROR", message: 'usuario no autorizado'})
             }
         } catch(err) {
             console.log(err);
-            return res.status(400).send({message: 'usuario no autorizado'})
+            return res.status(400).send({code:"ERROR", message: 'usuario no autorizado'})
         }
     }
 }

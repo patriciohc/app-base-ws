@@ -3,7 +3,7 @@
 module.exports = Object.freeze({
 
 // TABLA OPERADOR
-    SIN_ROL: 0,         // tiene permiso solo a ws muy especificos
+    SIN_ROL: 0,         // se asigna a un operador antes de poder determinar su rol
     REPARTIDOR: 1,      // tiene acceso a la app de repartidor - operador
     OPERADOR_UNIDAD: 2, // tiene permisos para ver y cambiar de estatus los pedidos - operedor
     ADMIN_UNIDAD: 3,    // tiene permisos de edicion en una unidad especifica - operador

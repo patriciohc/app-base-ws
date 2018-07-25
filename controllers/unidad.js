@@ -101,7 +101,7 @@ async function getList(req, res) {
     var where = {id_cliente: req.query.id_cliente}
     try {
         var response = await unidad.findAll({select, where});
-        return res.status(200).send(response);
+        return res.status(200).send({code:"SUCCESS", message:"", data: response});
     } catch(err) {
         return res.status(500).send({code: "ERROR", message: "", data: err});
     }
@@ -125,13 +125,15 @@ function updateInfoBasic(req, res) {
     var idCliente = req.usuario;
     if (infoUnidad.categoria && infoUnidad.categoria.length) {
         infoUnidad.categoria = `{ ${infoUnidad.categoria.join(',')} }`
+    } else {
+        infoUnidad.categoria = '{}';
     }
     unidad.update(idUnidad, idCliente, infoUnidad)
     .then(function(result) {
-        return res.status(200).send({code: 'OK', message:"success", affected: result.affectedRows});
+        return res.status(200).send({code: 'SUCCESS', message:"success", affected: result.affectedRows});
     })
     .catch(function(err) {
-        return res.status(500).send({err: err})
+        return res.status(500).send({code: 'ERROR', message: '', data: err})
     })
 }
 

@@ -1,12 +1,12 @@
 'use strict'
 
-const cliente = require('../models').cliente;
-const utils = require('./utils');
-const SHA256 = require("crypto-js/sha256");
-const Auth = require('../middleware/autentication');
-const permisos = require('../permisos');
+const cliente   = require('../models').cliente;
+const utils     = require('./utils');
+const SHA256    = require("crypto-js/sha256");
+const jwtUtils  = require('../libs/jwt-utils');
+const rol       = require('../config/roles');
 const clienteOperador = require('../models/cliente-operador');
-const operador = require('../models/operador');
+const operador  = require('../models/operador');
 
 function get(req, res) {
     cliente.findById(req.params.id)
@@ -18,7 +18,7 @@ function get(req, res) {
         }
     })
     .catch(function(err) {
-        return res.status(500).send({err});
+        return res.status(500).send({code: "ERROR", message: "", data: err});
     });
 }
 
@@ -46,8 +46,6 @@ function create(req, res) {
 }
 
 async function login(req, res) {
-    var correo_electronico = req.body.correo_electronico;
-    var password = req.body.password;
     try {
         var usr = await cliente.findOne({
             where: {correo_electronico: req.body.correo_electronico}
@@ -55,19 +53,35 @@ async function login(req, res) {
         if (!usr) return res.status(404).send({code: "ERROR", message: "not found"});
         let shaPass = SHA256(req.body.password);
         if (shaPass == usr.password) {
-            var sesion = {
-                id_usuario: usr.id,
-                token: Auth.createToken(usr.id, permisos.CLIENTE),
-                nombre_usuario: usr.representante_legal,
-                id_cliente: usr.id,
-                rol: permisos.CLIENTE
-            }
-            return res.status(200).send({code:"SUCCESS", message:"", data: sesion});
+            var profile = makeProfile(usr);
+            return res.status(200).send({code:"SUCCESS", message: "", data: profile});
         } else {
             return res.status(401).send({code:'ERROR', message: 'usuario no autorizado'});
         }
     } catch (err) {
         return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
+}
+
+async function getProfile(req, res) {
+    var id = req.usuario;
+    try {
+        var usr = await cliente.findOne({where: {id}});
+        if (!usr) return res.status(404).send({code: "ERROR", message: "not found"});
+        var profile = makeProfile(usr);
+        return res.status(200).send({code:"SUCCESS", message: "", data: profile});
+    } catch (err) {
+        return res.status(500).send({code: "ERROR", message: '', err: err});
+    }
+}
+
+function makeProfile(usr) {
+    return {
+        id_usuario: usr.id,
+        token: jwtUtils.createToken(usr.id, rol.CLIENTE),
+        nombre_usuario: usr.representante_legal,
+        id_cliente: usr.id,
+        rol: rol.CLIENTE
     }
 }
 
@@ -79,7 +93,7 @@ async function addOperador(req, res) {
     try {
         var op = await operador.findOne({where: {correo_electronico}});
         if (!op || !op.id) return res.status(404).send({code:"ERROR", message:"Usurio no encontrado"})
-        if (req.rol == permisos.CLIENTE) {
+        if (req.rol == rol.CLIENTE) {
             var response = await clienteOperador.create({id_cliente: id_usuario, id_unidad, id_operador: op.id, rol})
             return res.status(200).send({code: "SUCCESS", message:""});
         }
@@ -92,7 +106,7 @@ async function updateOperador(req, res) {
     var id_cliente;
     var rol = req.rol;
     var id_operador = req.query.id_operador
-    if (rol == permisos.CLIENTE) {
+    if (rol == rol.CLIENTE) {
         id_cliente = req.usuario;
         try {
             var response = await clienteOperador.update(id_cliente, id_operador, req.body);
@@ -120,7 +134,7 @@ async function deleteOperador(req, res) {
 function getListOperadores(req, res) {
     var id_usuario = req.usuario;
     var rol = req.rol;
-    if (rol == permisos.CLIENTE) {
+    if (rol == rol.CLIENTE) {
         clienteOperador.findAllOperadores(id_usuario)
         .then(result => {
             return res.status(200).send(result);
@@ -135,14 +149,6 @@ function update(req, res) {
 
 }
 
-
-/*
-* PRIVATE FUNCTION 
-*/
-function getProfileClient () {
-
-}
-
 module.exports = {
     get,
     getLista,
@@ -152,5 +158,6 @@ module.exports = {
     addOperador,
     getListOperadores,
     deleteOperador,
-    updateOperador
+    updateOperador,
+    getProfile
 }

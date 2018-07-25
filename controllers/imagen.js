@@ -16,10 +16,10 @@ async function getUrlUploadImage(req, res) {
 
 async function getImageListCliente(req, res) {
     try {
-        var response = imagen.findAll({id_cliente: req.usuario})
+        var response = await imagen.findAll({id_cliente: req.usuario})
         return res.status(200).send(response);
     } catch (err) {
-        return res.status(500).send({err})
+        return res.status(500).send({code:"ERROR", message: "", data: err})
     }
 }
 

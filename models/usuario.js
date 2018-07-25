@@ -105,9 +105,8 @@ async function login(correo_electronico, type_login, password) {
         type_login = ${type_login} `
 
     if (type_login == LOGIN_DEFAULT) {
-        var shaPass = SHA256(password)
         query += `AND
-            password = '${shaPass}'
+            password = '${SHA256(password)}'
             ORDER BY p.fecha_recibido desc LIMIT 1`;
     } else {
         query += `ORDER BY p.fecha_recibido desc LIMIT 1`;

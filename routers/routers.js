@@ -9,12 +9,12 @@ const categoria = require('../controllers/categoria');
 const producto = require('../controllers/producto');
 const pedido = require('../controllers/pedido');
 const operador = require('../controllers/operador');
-const autentication =  require('../middleware/autentication');
 const imagen =  require('../controllers/imagen');
 const notification = require('../controllers/push-notification');
 const payments = require('../controllers/payments');
 const categoriaUnidad = require('../controllers/categoria-unidad');
 const Administrador = require('../controllers/administrador');
+const autentication =  require('../middleware/autentication');
 const rol = require('../config/roles');
 
 
@@ -220,11 +220,10 @@ api.delete(
 * @apiParam {number} rol - rol del operador 
 * @apiSuccess {Object} success
 */
-// rol.add('/clienten-operador/', 'DELETE', [rol.CLIENTE])
-api.delete(
-    '/clienten-operador/', 
-    autentication.isAuth([rol.CLIENTE]), 
-    cliente.deleteOperador);
+// api.delete(
+//     '/clienten-operador/', 
+//     autentication.isAuth([rol.CLIENTE]), 
+//     cliente.deleteOperador);
 
 /**
 * @api {post} /operador/ crea un operador
@@ -354,7 +353,7 @@ api.post(
 * @apiSuccess {Number} id de objeto Cliente
 *
 */
-api.post('/login-cliente/', cliente.login);
+// api.post('/login-cliente/', cliente.login);
 
 //api.put('/cliente', controllers.updateCliente);
 
@@ -426,65 +425,6 @@ api.post('/login-admin/', Administrador.login);
 *
 */
 api.post('/usuario/', usuario.create);
-
-/**
-* @api {post} /categoria/ Crea una categoria
-* @apiGroup Categoria
-* @apiParam {Cliente} objeto de tipo cliente
-* @apiSuccess {number} id de objeto insertado
-*/
-// rol.add('/categoria/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.post(
-    '/categoria/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    categoria.create
-);
-
-/**
-* @api {post} /categoria/ actualiza una categoria
-* @apiGroup Categoria
-* @apiParam {Categoria} objeto de tipo categoria
-* @apiParam {id} identificador de categoria
-* @apiSuccess {number}
-*/
-// rol.add('/categoria/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.put(
-    '/categoria/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    categoria.update
-);
-
-/**
-* @api {delete} /categoria/ elimina categoria por id
-* @apiGroup Categoria
-* @apiParam {Number} id de la categoria
-* @apiSuccess {Boolean}
-*/
-// rol.add('/categoria/', 'DELETE', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.delete(
-    '/categoria/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    categoria.deleteR
-);
-
-/**
-* @api {get} /categoria/ filtra categorias por id de unidad
-* @apiGroup Categoria
-* @apiParam {number} id identificador de unidad
-* @apiParam {number} id identificador de cliente
-* @apiSuccess {array} array de categorias
-*/
-// api.get('/categoria', categoria.getListaPorUnidad);
-
-/**
-* @api {get} /categoria/ filtra categorias, parametros por query
-* @apiGroup Categoria
-* @apiParam {number} id_unidad identificador de unidad por query 
-* @apiParam {number} id_cliente identificador de cliente
-* @apiSuccess {array} array de categorias
-*/
-api.get('/categoria/', categoria.getLista);
-
 
 /**
 * @api {post} /categoria-unidad/ Crea una categoria para unidad
@@ -606,7 +546,7 @@ api.post(
 );
 
 /**
-* @api {post} /pedido/ elimina pedido
+* @api {delete} /pedido/ elimina pedido
 * @apiGroup pedido
 * @apiParam {number} id identificador de pedido
 * @apiSuccessExample Success-Response:
@@ -687,21 +627,6 @@ api.get('/unidad-calificacion/', unidad.getCalificacion);
 */
 api.get('/unidad-comentarios/', unidad.getComentarios);
 
-
-/**
-* @api {get} /pedido/ obtiene lista de pedidos
-* @apiGroup pedido
-* @apiParam {number} id_cliente
-* @apiParam {number} id_unidad
-* @apiSuccess {Object[]} lista de pedidos
-*/
-// rol.add('/pedido/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.get(
-    '/pedido/', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    pedido.getListaPorUnidad
-);
-
 /**
 * @api {get} /pedido-grafica-semana/ obtiene informacion para grafica por semana
 * @apiGroup pedido
@@ -752,18 +677,6 @@ api.get(
     '/signed-request-image/',
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
     imagen.getUrlUploadImage);
-
-/**
-* @api {get} /image/ obtiene lista de imagenes en base a cliente
-* @apiGroup image
-* @apiSuccess {Image[]}
-*/
-// rol.add('/image/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.get(
-    '/image/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    imagen.getImageListCliente
-);
 
 
 /**

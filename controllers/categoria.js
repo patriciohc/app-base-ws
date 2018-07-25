@@ -17,16 +17,23 @@ function get(req, res) {
     });
 }
 
-function getLista(req, res) {
+async function getLista(req, res) {
     var id_unidad = req.query.id_unidad;
-    if (!id_unidad) return res.status(404).send({code: "ERROR", message: "falta el id de la unidad"})
-    categoria.findAll(id_unidad)
-    .then(function(result) {
-        return res.status(200).send(result);
-    })
-    .catch(function(err) {
-        return res.status(500).send({err: err});
-    })
+    var id_cliente = req.query.id_cliente;
+    try {
+        if (id_unidad) {
+            var response = await categoria.findAllByUnidad(id_unidad);
+            return res.status(200).send({code: "SUCCESS", message: "", data: response});
+        } else if (id_cliente) {
+            var query = {where: {id_cliente}}
+            var response = await categoria.findAll(query);
+            return res.status(200).send({code: "SUCCESS", message: "", data: response});
+        } else {
+            return res.status(404).send({code: "ERROR", message: "se requiere id_unidad o id_cliente"});
+        }
+    } catch (err) {
+        return res.status(500).send({code:"ERROR", message: "", data: err});
+    }
 }
 
 function create(req, res) {

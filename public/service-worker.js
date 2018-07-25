@@ -1,4 +1,4 @@
-var CACHE = 'version-0';
+var CACHE = 'version-1';
 var filesToCache = [
   'assets/sound/airhorn.wap',
   // 'app.js',
