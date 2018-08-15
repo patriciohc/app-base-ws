@@ -60,4 +60,12 @@ api.delete(
 */
 api.get('/', categoria.getLista);
 
+/**
+* @api {get} /categoria/ obtiene una categoria 
+* @apiGroup Categoria
+* @apiParam {number} id
+* @apiSuccess {array}  categoria
+*/
+api.get('/:id', categoria.get);
+
 module.exports = api;

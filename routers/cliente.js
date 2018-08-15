@@ -120,7 +120,7 @@ api.post(
 * @apiSuccess {Image[]}
 */
 api.get(
-  '/imagen/',
+  '/image/',
   autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
   imagen.getImageListCliente
 );

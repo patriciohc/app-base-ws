@@ -21,6 +21,9 @@ const columns = [
     }, {
         name: "type_image",
         type: "VARCHAR(100)"
+    }, {
+        name: "label",
+        type: "VARCHAR(100)"
     }
 ]
 
@@ -31,13 +34,13 @@ function sync () {
 }
 
 /**
- * guarda nuevo poligono
+ * guarda la informacion una imagen
  * @param {string} idUnidad id de la unidad al que pertenece el poligono
  * @param {string} kml nombre de kml del poligono
  * @returns {Promise}
  */
-function create (id_cliente, url, type_image) {
-    return model.create({id_cliente, url, type_image});
+function create (obj) {
+    return model.create(obj);
 }
 
 // obtiene un poligono con todas sus cordenadas

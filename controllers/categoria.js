@@ -7,13 +7,13 @@ function get(req, res) {
     categoria.findById(req.params.id)
     .then(function(result) {
         if (!result) {
-            return res.status(404).send({err: "not found"});
+            return res.status(404).send({code:"ERROR", message: "not found"});
         } else {
-            return res.status(200).send(result);
+            return res.status(200).send({code:"SUCCESS", message:"", data: result});
         }
     })
     .catch(function(err) {
-        return res.status(500).send({err});
+        return res.status(500).send({code:"ERROR",  message:"", data: err});
     });
 }
 

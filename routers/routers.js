@@ -5,11 +5,9 @@ const api = express.Router();
 const cliente = require('../controllers/cliente');
 const unidad = require('../controllers/unidad');
 const usuario = require('../controllers/usuario');
-const categoria = require('../controllers/categoria');
 const producto = require('../controllers/producto');
 const pedido = require('../controllers/pedido');
 const operador = require('../controllers/operador');
-const imagen =  require('../controllers/imagen');
 const notification = require('../controllers/push-notification');
 const payments = require('../controllers/payments');
 const categoriaUnidad = require('../controllers/categoria-unidad');
@@ -666,18 +664,6 @@ api.get(
     autentication.isAuth([rol.USUSARIO]),
     pedido.getListaPorUsuario
 );
-
-/**
-* @api {get} /signed-request-image/ 
-* @apiGroup image
-* @apiSuccess {}
-*/
-// rol.add('/signed-request-image/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.get(
-    '/signed-request-image/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    imagen.getUrlUploadImage);
-
 
 /**
 * @api {post} /subscribe suscribe al un usuario a las notificaciones 
