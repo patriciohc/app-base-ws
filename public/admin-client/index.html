@@ -1,28 +1,26 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><title>PortalAdminClient</title><base href="/admin-client/"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="manifest" href="manifest.json"><link rel="icon" type="image/x-icon" href="favicon.ico"><!-- Compiled and minified CSS --><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"><script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script><link href="styles.b87ec6c37fe6be156b73.bundle.css" rel="stylesheet"/></head><body><app-root></app-root><audio id="push-audio" src="assets/sound/airhorn.wav"></audio><script type="text/javascript" src="inline.11e155a6ec1519dd0109.bundle.js"></script><script type="text/javascript" src="polyfills.abdf53ca655716e505e0.bundle.js"></script><script type="text/javascript" src="main.4841f03a6e6b27746ff2.bundle.js"></script></body><script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2WOtnid7SM473FFkkcRDAQP8G15GKxuM&libraries=places"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script><script type="text/javascript">window.M_initSelects = function (elems) {
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>PortalAdminClient</title><base href="/admin-client"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="manifest" href="manifest.json"><link rel="icon" type="image/x-icon" href="favicon.ico"><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css"><link href="styles.b9fdb25d1d5f8edc8e5c.bundle.css" rel="stylesheet"/></head><body><app-root></app-root><audio id="push-audio" src="assets/sound/airhorn.wav"></audio><script type="text/javascript" src="inline.0318692197a8085f594c.bundle.js"></script><script type="text/javascript" src="polyfills.abdf53ca655716e505e0.bundle.js"></script><script type="text/javascript" src="main.617a95dfdde860071754.bundle.js"></script></body><script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script><script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2WOtnid7SM473FFkkcRDAQP8G15GKxuM&libraries=places"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script><script type="text/javascript">window.M_initSelects = function (elems) {
       elems = elems || document.querySelectorAll('select');
-      var instances = M.FormSelect.init(elems);
-      return instances;
+      return M.FormSelect.init(elems);
     }
 
-    window.M_initDropdown = function () {
-      var elems = document.querySelectorAll('.dropdown-trigger');
-      var instances = M.Dropdown.init(elems);
+    window.M_initDropdown = function (elems) {
+      var elems = elems || document.querySelectorAll('.dropdown-trigger');
+      return M.Dropdown.init(elems);
     }
 
     window.M_initSideNav = function(elems) {
       var elems = elems ||  document.querySelectorAll('.sidenav');
-      var instances = M.Sidenav.init(elems);
-      return instances;
+      return M.Sidenav.init(elems);
     }
 
     window.M_initTimepicker = function () {
       var elems = document.querySelectorAll('.timepicker');
-      var instances = M.Timepicker.init(elems);
+      return M.Timepicker.init(elems);
     }
 
     window.M_initModal = function (elems) {
       var elems = elems || document.querySelectorAll('.modal');
-      var instances = M.Modal.init(elems);
+      return M.Modal.init(elems);
     }
 
     window.M_updateInputs = function (elems) {
