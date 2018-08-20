@@ -42,6 +42,10 @@ const columns = [
     }, {
         name: "id_device",
         type: "VARCHAR(100)"
+    }, {
+        name: "correo_electronico_valido",
+        type: types.SMALL_INT,
+        default: 0
     }
 ]
 
@@ -75,12 +79,16 @@ function update(id, obj) {
         'apellido_materno',
         'estatus',
         'foto',
-        'id_device'
+        'id_device',
+        'password'
     ];
     var query = `UPDATE ${name} SET `;
     for (let i = 0; i < columnsUpdate.length; i++) {
-        if (obj[columnsUpdate[i]])
-            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
+        var column = columnsUpdate[i];
+        if (obj[column]) {
+            let value = column != 'password' ? obj[column] : SHA256(obj[column])
+            query += `${column} = '${value}', `;
+        }
     }
     query = query.substring(0, query.length -2); // se quita coma
     query += ` WHERE id = ${id}`;

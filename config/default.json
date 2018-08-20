@@ -1,0 +1,13 @@
+{
+    "host": "localhost:8088",
+    "jwt": {
+        "secret": "ERdsf4543ergf5fR5gf6DF6gfsdfkl509dfl4lc506sd335glksfFs5R45fFTsflkvDR"
+    },
+    "nodemailer": {
+        "host": "",
+        "port": "",
+        "account_user": "patriciohc.0@gmail.com",
+        "client_id": "77758527577-71j6smtfh19d38edmd15u29ldat55m9i.apps.googleusercontent.com",
+        "client_secret": "A98QoLbHiMBh2RpCC6nplwNZ"
+    }
+}

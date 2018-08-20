@@ -1,18 +1,18 @@
 'use strict'
-const permisos = require('../permisos');
+const roles = require('../config/roles');
 
 const ROLES = [
   {
-    id: permisos.REPARTIDOR,
+    id: roles.REPARTIDOR,
     nombre: 'Repartidor'
   }, {
-    id: permisos.OPERADOR_UNIDAD,
+    id: roles.OPERADOR_UNIDAD,
     nombre: 'Operador de unidad'
   }, {
-    id: permisos.ADMIN_UNIDAD,
+    id: roles.ADMIN_UNIDAD,
     nombre: 'Administrador de unidad'
   }, {
-    id: permisos.ADMIN_CLIENTE,
+    id: roles.ADMIN_CLIENTE,
     nombre: 'Administrador'           
   }
 ]

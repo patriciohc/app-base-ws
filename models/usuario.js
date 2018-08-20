@@ -7,7 +7,7 @@ const SHA256    = require("crypto-js/sha256");
 const Model     = require('../libs/drive-db/model');
 const types     = require('../libs/drive-db/data-types');
 const Auth      = require('../middleware/autentication');
-const permisos  = require('../permisos');
+const ROLES     = require('../config/roles');
 
 const LOGIN_DEFAULT = 0;
 const LOGIN_FACEBOOK = 1;
@@ -45,6 +45,14 @@ const columns = [
     }, {
         name: "id_device",
         type: "VARCHAR(100)"
+    }, {
+        name: "correo_electronico_valido",
+        type: types.SMALL_INT, // 1 true, 0 false
+        default: 0
+    }, {
+        name: "telefono_valido",
+        type: types.SMALL_INT, // 1 true, 0 false
+        default: 0
     }
 ]
 
@@ -144,7 +152,7 @@ async function getProfile(id_usuario) {
 }
 
 function construirProfile(usuario) {
-    var token = Auth.createToken(usuario.id_usuario, permisos.USUSARIO);
+    var token = Auth.createToken(usuario.id_usuario, ROLES.USUSARIO);
     return  {
         correo_electronico: usuario.correo_electronico,
         nombre: usuario.nombre,

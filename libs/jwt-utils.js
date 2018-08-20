@@ -1,7 +1,7 @@
 'use strict'
 const jwt       = require('jsonwebtoken');
 const moment    = require('moment');
-const settings  = require('../settings');
+const config    = require('config');
 
 module.exports = {
     // creea token jwt
@@ -12,12 +12,11 @@ module.exports = {
           iat: moment().unix(),
           exp: moment().add(50, 'days').unix()
         }
-        return jwt.sign(payload, settings.SECRET_KEY)
+        return jwt.sign(payload, config.jwt.secret);
     },
     // decode jwt
     decodeToken (token) {
-        return jwt.verify(token, settings.SECRET_KEY);
+        return jwt.verify(token, config.jwt.secret);
     }
-
 }
 

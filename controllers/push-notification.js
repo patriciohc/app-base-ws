@@ -1,6 +1,6 @@
 
 const https = require('https');
-const permisos = require('../permisos');
+const ROLES = require('../config/roles');
 const Cliente = require('../models').cliente;
 const Operador = require('../models').operador;
 const Usuario = require('../models').usuario;
@@ -15,9 +15,9 @@ async function subscribe (req, res) {
     var id_device = req.body.id_device;
     var response;
     try {
-        if (rol == permisos.CLIENTE) {
+        if (rol == ROLES.CLIENTE) {
             response = await Cliente.update(id_usuario, {id_device})
-        } else if (rol == permisos.USUSARIO) {
+        } else if (rol == ROLES.USUSARIO) {
             response = await Usuario.update(id_usuario, {id_device})
         } else {
             response = await Operador.update(id_usuario, {id_device})

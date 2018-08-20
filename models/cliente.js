@@ -44,6 +44,10 @@ const columns = [
     }, {
         name: "has_chat",
         type: types.SMALL_INT
+    }, {
+        name: "correo_electronico_valido",
+        type: types.SMALL_INT,
+        default: 0
     }
 ]
 

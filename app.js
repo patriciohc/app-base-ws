@@ -29,7 +29,6 @@ require('./routers')(app);
 // var httpsServer = https.createServer(credentials, app);
 app.use(express.static("./public"));
 app.use('/admin-client/*', function(req, res, next) {
-    // Just send the index.html for other files to support HTML5Mode
     res.sendFile('./public/admin-client/index.html', { root: __dirname });
 });
 const port = process.env.PORT || 8088;

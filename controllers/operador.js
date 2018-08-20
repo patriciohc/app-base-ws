@@ -1,13 +1,16 @@
 'use strict'
 
-const operador = require('../models').operador;
+const Operador  = require('../models').operador;
 const clienteOperador = require('../models').clienteOperador;
 const catalogos = require('./catalogos');
-const SHA256 = require("crypto-js/sha256");
-const Auth = require('../libs/jwt-utils');
+const SHA256    = require("crypto-js/sha256");
+const Auth      = require('../libs/jwt-utils');
+const Email     = require('../libs/nodemailer');
+const config    = require('config');
+const ROLES     = require('../config/roles');
 
 function get(req, res) {
-    operador.findById(req.params.id)
+    Operador.findById(req.params.id)
     .then(function(result) {
         if (!result) {
             return res.status(404).send({err: "not found"});
@@ -20,23 +23,69 @@ function get(req, res) {
     });
 }
 
-function create(req, res) {
-    if (!req.body.correo_electronico) 
+async function create(req, res) {
+    const { correo_electronico } = req.body;
+    if (!correo_electronico) {
         return res.status(400).send({code: 'ERROR', message: 'falta correo electronico'});
-    operador.create(req.body)
-    .then(function(result) {
-        return res.status(200).send({id: result.insertId});
-    })
-    .catch(function(err) {
-        return res.status(500).send({err: err})
-    })
+    }
+    try {
+        let response = await Operador.create(req.body);
+        // let response = {insertId: 1};
+        let token = Auth.createToken(response.insertId, 'verify_email');
+        let data = {
+            url: config.host + '?token= ' + token 
+        }
+        // Email.sendMail(Email.VERIFY_EAMIL, correo_electronico, data)
+        return res.status(200).send({code: 'SUCCESS', message: '', data: {id: response.insertId}});
+    } catch (err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
+    }
+}
+
+/**
+ * Genera link y envia a correo electronico para recuperar reestableces password
+ */
+async function passwordRecovery(req, res) {
+    const { correo_electronico } = req.body;
+    if (!correo_electronico) {
+        return res.status(400).send({code: 'ERROR', message: 'correo_electronico es requerido'});
+    }
+    try {
+        let operador = await Operador.findOne({where:{correo_electronico}});
+        let token = Auth.createToken(operador.id, 'password_recovery');
+        let data = {
+            url: config.host + '/admin-client/recuperar-contrasena;token=' + token
+        }
+        console.log(data.url);
+        // Email.sendMail(Email.VERIFY_EAMIL, correo_electronico, data)
+        return res.status(200).send({code: 'SUCCESS', message: 'enviamos un mensaje a tu cuenta de correo para reestablecer la contraseña'});
+    } catch (err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
+    }
+}
+
+/**
+ * cambia password
+ */
+async function passwordReset(req, res) {
+    const { usuario, rol } = req;
+    const { password } = req.body;
+    if (rol != 'password_recovery') {
+        return res.status(400).send({code: 'ERROR', message: 'token invalido'});
+    }
+    try {
+        let response = await Operador.update(usuario, {password});
+        return res.status(200).send({code: 'SUCCESS', message: 'your password was updated'});
+    } catch (err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
+    }
 }
 
 async function siginUnidad(req, res) {
     var id_usuario = req.usuario;
     var id_unidad = req.query.id_unidad;
     try {
-        var usr = await operador.findById(id_usuario)
+        var usr = await Operador.findById(id_usuario)
         if (!usr) return res.status(404).send({message: "not found"});
         var unidad = await clienteOperador.findOne({where: {id_operador: usr.id, id_unidad: id_unidad}})
             var sesion = {
@@ -65,7 +114,7 @@ async function getListUnidades(req, res) {
 
 async function login(req, res) {
     try {
-        var usr = await operador.findOne({
+        var usr = await Operador.findOne({
             where: {correo_electronico: req.body.correo_electronico}
         })
         if (!usr) return res.status(404).send({code:"ERROR", message: "not found"});
@@ -84,7 +133,7 @@ async function login(req, res) {
 async function getProfile(req, res) {
     var id = req.usuario;
     try {
-        var usr = await operador.findOne({ where: {id}});
+        var usr = await Operador.findOne({ where: {id}});
         if (!usr) return res.status(404).send({code:"ERROR", message: "not found"});
         var profile = await makeProfile(usr);
         return res.status(200).send({code: "SUCCESS", message: "", data: profile});
@@ -99,29 +148,29 @@ async function makeProfile (usr) {
     var unidades = await clienteOperador.findAll({where: {id_operador: usr.id}})
     return {
         id_usuario: usr.id,
-        token: Auth.createToken(usr.id, permisos.SIN_ROL),
+        token: Auth.createToken(usr.id, ROLES.SIN_ROL),
         nombre_usuario: usr.nombre,
         unidades: unidades,
-        rol: permisos.SIN_ROL
+        rol: ROLES.SIN_ROL
     }
 }
 
 async function loginRepartidor(req, res) {
     try {
-        var usr = await operador.findOne({
+        var usr = await Operador.findOne({
             where: {correo_electronico: req.body.correo_electronico}
         })
         if (!usr) return res.status(404).send({message: "not found"});
         var sha = SHA256(req.body.password).toString();
         console.log(sha)
         if (sha == usr.password) {
-            var repartidor = await clienteOperador.findOne({where: {id_operador: usr.id, rol: permisos.REPARTIDOR}})
+            var repartidor = await clienteOperador.findOne({where: {id_operador: usr.id, rol: ROLES.REPARTIDOR}})
             if (!repartidor) return res.status(403).send({code:"ERROR", message:"usuario no autorizado"})
             var sesion = {
                 id_usuario: usr.id,
-                token: Auth.createToken(usr.id, permisos.REPARTIDOR),
+                token: Auth.createToken(usr.id, ROLES.REPARTIDOR),
                 nombre_usuario: usr.nombre,
-                rol: permisos.REPARTIDOR
+                rol: ROLES.REPARTIDOR
             }
             return res.status(200).send(sesion);
         } else {
@@ -150,5 +199,7 @@ module.exports = {
     siginUnidad,
     getListUnidades,
     loginRepartidor,
-    getProfile
+    getProfile,
+    passwordRecovery,
+    passwordReset
 }

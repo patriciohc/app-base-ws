@@ -3,12 +3,11 @@
 const unidad = require('../models').unidad;
 const poligono = require('../models').poligono;
 const unidadProducto = require('../models').unidadProducto;
-const clienteOperador = require('../models').clienteOperador;
-const operador = require('../models').operador;
+// const clienteOperador = require('../models').clienteOperador;
+// const operador = require('../models').operador;
 const UnidadCalificacion = require('../models/').unidadCalificacion;
 const Pedido = require('../models/').pedido;
-const utils = require('./utils');
-const permisos = require('../permisos');
+// const utils = require('./utils');
 
 function get(req, res) {
     unidad.findById(req.params.id)
@@ -216,18 +215,19 @@ function addProducto(req, res) {
 // }
 
 function getProductos(req, res) {
-  if (!req.query.id_unidad) {
+    const { id_unidad, texto, categoria } = req.query
+  if (!id_unidad) {
       return res.status(400).send({err: "se require id_unidad"});
   }
   var search = {}
-  if (req.query.texto) search.texto = req.query.texto
-  if (req.query.categoria) search.categoria = req.query.categoria
-  unidadProducto.findAllProductos(req.query.id_unidad, search)
+  if (texto) search.texto = texto;
+  if (categoria) search.categoria = categoria;
+  unidadProducto.findAllProductos(id_unidad, search)
   .then(result => {
-      return res.status(200).send(result);
+      return res.status(200).send({code: 'SUCCESS', message:'', data: result});
   })
   .catch(err => {
-      return res.status(500).send({err});
+      return res.status(500).send({code: 'ERROR', message:'', data: err});
   });
 }
 

@@ -8,6 +8,7 @@ const cliente       = require('../controllers/cliente');
 const operador      = require('../controllers/operador');
 const unidad        = require('../controllers/unidad');
 const imagen        = require('../controllers/imagen');
+const producto        = require('../controllers/producto');
 
 /*
 * path /cliente
@@ -112,6 +113,17 @@ api.post(
           return res.status(404).send({code: "ERROR", message: "rol no valido"})
         }
     }
+);
+
+/**
+* @api {delete} /cliente/producto/ obtiene los productos que pertenecen a un cliente
+* @apiGroup cliente
+* @apiSuccess {Object}
+*/
+api.get(
+    '/producto', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    producto.getListaCliente
 );
 
 /**

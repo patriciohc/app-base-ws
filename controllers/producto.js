@@ -3,13 +3,13 @@ const utils = require('./utils');
 const producto = require('../models').producto;
 
 function get(req, res) {
-    if (!req.query.id_producto) return res.status(404).send({code:"ERROR", message:"falta el id de producto"})
+    if (!req.params.id_producto) return res.status(404).send({code:"ERROR", message:"falta el id de producto"})
     var id_usuario = req.usuario;
     var select;
     if (!id_usuario) {
         select = ['id', 'nombre', 'codigo', 'descripcion', 'precio_publico', 'imagen', 'id_categoria'];
     } /* else determinar que tipo de rol tiene para enviar mas info*/
-    producto.findById(req.query.id_producto, select)
+    producto.findById(req.params.id_producto, select)
     .then(function(result) {
         if (!result) {
             return res.status(404).send({code:"ERROR", message: "not found"});
@@ -56,10 +56,10 @@ function getListaCliente(req, res) {
     var usuario = req.usuario;
     producto.findAll({where: {id_cliente: usuario}})
     .then(function(result) {
-        return res.status(200).send(result);
+        return res.status(200).send({code:'SUCCESS', message: '', data: result});
     })
     .catch(function(err){
-        return res.status(500).send({err: err});
+        return res.status(500).send({code: 'ERROR', message: '', data: err});
     })
 }
 

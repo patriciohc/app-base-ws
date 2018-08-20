@@ -1,11 +1,10 @@
 'use strict'
 
 const Usuario = require('../models').usuario;
-const admin = require('../models/administrator');
-const permisos = require('../permisos');
+// const admin = require('../models/administrator');
 const utils = require('./utils');
 const graph = require('fbgraph');
-var {OAuth2Client} = require('google-auth-library');
+const {OAuth2Client} = require('google-auth-library');
 
 function getProfileFacebook(tokenFace) {
     var options = { timeout: 3000, pool: { maxSockets: Infinity }, headers: { connection: 'keep-alive' } }
@@ -107,6 +106,48 @@ async function login(req, res) {
     }
 }
 
+/**
+ * Genera link y envia a correo electronico para recuperar reestableces password
+ */
+async function passwordRecovery(req, res) {
+    const { correo_electronico } = req.body;
+    if (correo_electronico) {
+        return res.status(400).send({code: 'ERROR', message: 'correo_electronico es requerido'});
+    }
+    try {
+        let usuario = await Usuario.findOne({correo_electronico});
+        if (usuario.type_login != Usuario.LOGIN_DEFAULT) {
+            return res.status(400).send({code: 'ERROR', message: 'su metodo de acceso es por facebook o google'});
+        }
+        let token = Auth.createToken(usuario.id, 'password_recovery');
+        let data = {
+            url: config.host + '/password_recovery/?token= ' + token
+        }
+        console.log(data.url);
+        // Email.sendMail(Email.VERIFY_EAMIL, correo_electronico, data)
+        return res.status(200).send({code: 'SUCCESS', message: 'enviamos un correo electronico para recuperar su contraseña'});
+    } catch (err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
+    }
+}
+
+/**
+ * cambia password
+ */
+async function passwordReset(req, res) {
+    const { usuario, rol } = req;
+    const { password } = req.body;
+    if (rol != 'password_recovery') {
+        return res.status(400).send({code: 'ERROR', message: 'token invalido'});
+    }
+    try {
+        let response = await Usuario.update(usuario, {password});
+        return res.status(200).send({code: 'SUCCESS', message: 'your password was updated'});
+    } catch (err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
+    }
+}
+
 async function getProfile(req, res) {
     var id_usuario = req.usuario;
     if (!id_usuario) return res.status(404).send({code:"ERROR", message: "Faltan parametros"});
@@ -140,5 +181,7 @@ module.exports = {
     update,
     loginFacebook,
     loginGoogle,
-    getProfile
+    getProfile,
+    passwordRecovery,
+    passwordReset
 }

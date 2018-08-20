@@ -71,6 +71,7 @@ function update (id, idCliente, obj) {
     var columnsUpdate = [
         'nombre',
         'descripcion',
+        'codigo',
         'imagen',
         'precio',
         'precio_publico',

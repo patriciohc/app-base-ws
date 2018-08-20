@@ -4,7 +4,7 @@ const express       = require('express');
 const api           = express.Router();
 const categoria     = require('../controllers/categoria');
 const autentication =  require('../middleware/autentication');
-const rol           = require('../config/roles');
+const ROLES         = require('../config/roles');
 
 /*
 * path /categoria/
@@ -20,7 +20,7 @@ const rol           = require('../config/roles');
 // rol.add('/categoria/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 api.post(
     '/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    autentication.isAuth([ROLES.CLIENTE, ROLES.OPERADOR_UNIDAD]),
     categoria.create
 );
 
@@ -34,7 +34,7 @@ api.post(
 // rol.add('/categoria/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 api.put(
     '/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    autentication.isAuth([ROLES.CLIENTE, ROLES.OPERADOR_UNIDAD]),
     categoria.update
 );
 
@@ -47,7 +47,7 @@ api.put(
 // rol.add('/categoria/', 'DELETE', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 api.delete(
     '/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    autentication.isAuth([ROLES.CLIENTE, ROLES.OPERADOR_UNIDAD]),
     categoria.deleteR
 );
 

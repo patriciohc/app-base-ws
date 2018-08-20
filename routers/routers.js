@@ -87,30 +87,6 @@ api.put(
 );
 
 /**
-* @api {post} /unidad-producto agrega productos a la unidad
-*
-* @apiGroup Unidad
-* @apiParam {Number[][]} id_unidad, id_producto
-* @apiSuccess {Object} success
-*/
-api.post(
-    '/unidad-producto/', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
-    unidad.addProducto
-);
-
-/**
-* @api {get} /unidad-producto obtiene todos los productos en una unidad
-*
-* @apiGroup Unidad
-* @apiParam {Number} id_unidad in query , obligatorio
-* @apiParam {Number} texto in query texto de busqueda, opcional
-* @apiParam {Number} categoria in query cateogira de los productos, opcional
-* @apiSuccess {Object[]} lista de productos
-*/
-api.get('/unidad-producto/', unidad.getProductos);
-
-/**
 * @api {post} /unidad-posicion agrega o actuliza la posicion de la unidad
 *
 * @apiGroup Unidad
@@ -222,15 +198,6 @@ api.delete(
 //     '/clienten-operador/', 
 //     autentication.isAuth([rol.CLIENTE]), 
 //     cliente.deleteOperador);
-
-/**
-* @api {post} /operador/ crea un operador
-*
-* @apiGroup Operador
-* @apiParam {Object} Operador
-* @apiSuccess {Boolean} success
-*/
-api.post('/operador/', operador.create);
 
 /**
 * @api {post} /list-unidad-operador/ obtiene la lista de unidades a la que esta asignado el operador
@@ -443,89 +410,6 @@ api.post(
 * @apiSuccess {Array}
 */
 api.get('/categoria-unidad/', categoriaUnidad.getList);
-
-/**
-* @api {post} /producto/ Crea un producto
-* @apiGroup producto
-* @apiParam {Producto} objeto de tipo Producto
-* @apiSuccess {number} id de objeto insertado
-*/
-// rol.add('/producto/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.post(
-    '/producto/', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    producto.create
-);
-
-/**
-* @api {put} /producto/ actualiza producto
-* @apiGroup producto
-* @apiParam {Producto} objeto de tipo Producto
-* @apiParam {number} id de objeto
-*/
-// rol.add('/producto/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.put(
-    '/producto/', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
-    producto.update
-);
-
-/**
-* @api {get} /producto/ filtra productos segun query
-* @apiGroup producto
-* @apiParam {id_cliente} id de cliente 
-* @apiParam {id_categorita} id de cateogira 
-* @apiSuccess {array} array de productos
-*/
-api.get('/productos/', producto.getLista);
-
-/**
-* @api {get} /producto/ obtiene producto por id
-* @apiGroup producto
-* @apiParam {id_producto} id de cliente 
-* @apiSuccess {object}  producto
-*/
-api.get('/producto/', producto.get);
-
-/**
-* @api {get} /producto/ detalle de producto para consulta de clientes
-* @apiGroup producto
-* @apiParam {number} id identificador
-* @apiSuccess {Producto} array de productos
-*/
-// rol.add('/producto-detalle/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.get(
-    '/producto-detalle/', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
-    producto.getDetalle
-);
-
-/**
-* @api {delete} /producto/ elimina producto por id
-* @apiGroup producto
-* @apiParam {number} id identificador de producto
-* @apiSuccess {Boolean} respuesta
-*/
-// rol.add('/producto-cliente/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.get(
-    '/producto-cliente', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    producto.getListaCliente
-);
-
-/**
-* @api {delete} /producto/ elimina producto por id
-* @apiGroup producto
-* @apiParam {number} id identificador de producto
-* @apiSuccess {Boolean} respuesta
-*/
-// rol.add('/producto/', 'DELETE', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
-api.delete(
-    '/producto', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
-    producto.deleteR
-);
-
 
 /**
 * @api {post} /pedido/ Crea un pedido
