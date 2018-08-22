@@ -8,7 +8,9 @@ const cliente       = require('../controllers/cliente');
 const operador      = require('../controllers/operador');
 const unidad        = require('../controllers/unidad');
 const imagen        = require('../controllers/imagen');
-const producto        = require('../controllers/producto');
+const producto      = require('../controllers/producto');
+const categoria     = require('../controllers/categoria');
+
 
 /*
 * path /cliente
@@ -116,7 +118,7 @@ api.post(
 );
 
 /**
-* @api {delete} /cliente/producto/ obtiene los productos que pertenecen a un cliente
+* @api {get} /cliente/producto/ obtiene los productos que pertenecen a un cliente
 * @apiGroup cliente
 * @apiSuccess {Object}
 */
@@ -124,6 +126,21 @@ api.get(
     '/producto', 
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
     producto.getListaCliente
+);
+
+/**
+* @api {get} /cliente/categoria/ obtiene las categorias que pertenecen a un cliente
+* @apiGroup cliente
+* @apiSuccess {Object}
+*/
+api.get(
+    '/categoria', 
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    function (req, res, next) {
+        req.query.id_cliente = req.usuario;
+        next();
+    },
+    categoria.getLista
 );
 
 /**

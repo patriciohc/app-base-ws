@@ -90,7 +90,7 @@ function update(idUnidad, idCliente, obj) {
     var updates = [];
     var query = `UPDATE ${name} SET `;
     for (let i = 0; i < columnsUpdate.length ; i++) {
-        if (obj[columnsUpdate[i]])
+        if (obj[columnsUpdate[i]] != undefined && obj[columnsUpdate[i]] != null)
             updates.push(`${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}'`);
     }
     query = query + updates.join(', ') // se quita coma
