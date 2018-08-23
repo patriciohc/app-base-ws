@@ -40,7 +40,7 @@ async function executePostgreSQL(query, options) {
         query = query.replace(";", "");
         if (options && options.returns) {
             query = query  + ` RETURNING ${options.returns};`
-        } else {
+        } else if (!options || options.returns) {
             query = query  + ' RETURNING id;'
         }
     }

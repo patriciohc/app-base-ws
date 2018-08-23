@@ -16,7 +16,6 @@ const categoria     = require('../controllers/categoria');
 * path /cliente
 */
 
-
 /**
 * @api {get} /unidad/ obitiene las unidades de un cliente cliente
 * @apiGroup cliente

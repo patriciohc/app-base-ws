@@ -5,7 +5,7 @@ const api = express.Router();
 const cliente = require('../controllers/cliente');
 const unidad = require('../controllers/unidad');
 const usuario = require('../controllers/usuario');
-const producto = require('../controllers/producto');
+// const producto = require('../controllers/producto');
 const pedido = require('../controllers/pedido');
 const operador = require('../controllers/operador');
 const notification = require('../controllers/push-notification');
@@ -37,54 +37,6 @@ api.post('/execute-payment/', payments.onAuthorize);
 */
 // rol.add('/unidad-cliente/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 // api.get('/unidad-cliente/', unidad.getListaCliente);
-
-/**
-* @api {get} /unidad/ Obtitene lista de unidades, en base a los parametros
-* pasados por query.
-*
-* @apiName GetUnidad
-* @apiGroup Unidad
-* @apiParam {Float} lat latitud de la ubicacion
-* @apiParam {Float} lng longitud de la ubicacion
-*
-* @apiSuccess {Unidad} lista de objetos unidad
-*/
-// -- no requiere rol
-api.get('/unidad/', unidad.findUnidades);
-
-/**
-* @api {get} /unidad/:id Obtiene una unidad
-* @apiGroup Unidad
-* @apiParam {number} id de unidad
-* @apiSuccess {Object} obejto Unidad
-*/
-api.get('/unidad/:id', unidad.get);
-
-/**
-* @api {post} /unidad crea una unidad nueva
-*
-* @apiGroup Unidad
-* @apiParam {Object} objeto de tipo Unidad en body
-* @apiSuccess {number} id de la unidad creada
-*/
-api.post(
-    '/unidad/', 
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]), 
-    unidad.create
-);
-
-/**
-* @api {post} /unidad actuliza la informacion basica de una unidad
-*  nombre, telefono, hora_apetura, hora_cierre, imagen, palabras_clave, descripcion
-* @apiGroup Unidad
-* @apiParam {Object} objeto de tipo Unidad en body
-* @apiSuccess {number} id de la unidad creada
-*/
-api.put(
-    '/unidad/',
-    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
-    unidad.updateInfoBasic
-);
 
 /**
 * @api {post} /unidad-posicion agrega o actuliza la posicion de la unidad
@@ -250,11 +202,11 @@ api.post('/login-operador/', operador.login);
 * @apiSuccess {Operador} success
 */
 // rol.add('/login-unidad-operador/', 'GET', [rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR, rol.SIN_ROL])
-api.get(
-    '/login-unidad-operador/',
-    autentication.isAuth([rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR, rol.SIN_ROL]),
-    operador.siginUnidad
-);
+// api.get(
+//     '/login-unidad-operador/',
+//     autentication.isAuth([rol.CLIENTE, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR, rol.SIN_ROL]),
+//     operador.siginUnidad
+// );
 
 /**
 * @api {post} /login-repartidor genera un nuevo token para llamar ws 

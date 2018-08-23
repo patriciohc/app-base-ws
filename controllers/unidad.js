@@ -190,14 +190,22 @@ function deleteR(req, res) {
     })
 }
 
-function addProducto(req, res) {
-    unidadProducto.insertBulk("id_unidad, id_producto",req.body)
-    .then(result => {
-        return res.status(200).send({success: true});
-    })
-    .catch(err => {
-        return res.status(500).send({err: err});
-    });
+async function addProducto(req, res) {
+    const { all, id_unidad } = req.query;
+    const { list } = req.body;
+    const id_cliente = req.usuario;
+    var result;
+    try {
+        if (all) {
+            result = await unidadProducto.addAll(id_unidad, id_cliente);
+            return res.status(200).send({code:'SUCCESS', message: '', data: true});            
+        } else {
+            result = await unidadProducto.insertBulk("id_unidad, id_producto", list);
+            return res.status(200).send({code:'SUCCESS', message: '', data: true});
+        }
+    } catch(err) {
+        return res.status(500).send({code: 'ERROR', message: '', data: err});
+    }
 }
 
 // function getLOperadoresUnidad(req, res) {
@@ -250,7 +258,7 @@ async function calificar(req, res) {
     try {
         var response = await UnidadCalificacion.create(obj);
         response = await Pedido.update(id_pedido, {calificacion: 1});
-        return res.status(200).send({code: "SUCCEES", message:"", data: response});   
+        return res.status(200).send({code: "SUCCESS", message:"", data: response});   
     } catch(err) {
         return res.status(500).send({err: err});
     }
@@ -263,7 +271,7 @@ async function getComentarios(req, res) {
     if (!id_unidad)  return res.status(404).send({code: "ERROR", message: "falta parametros"})
     try {
         var response = await UnidadCalificacion.getComentarios(id_unidad);
-        return res.status(200).send({code: "SUCCEES", message:"", data: response});   
+        return res.status(200).send({code: "SUCCESS", message:"", data: response});   
     } catch(e) {
         return res.status(500).send({err: err});
     }
@@ -276,9 +284,30 @@ async function getCalificacion(req, res) {
     try {
         var response = await UnidadCalificacion.getCalificacion(id_unidad);
         if (response && response.length)
-        return res.status(200).send({code: "SUCCEES", message:"", data: response[0]});   
+        return res.status(200).send({code: "SUCCESS", message:"", data: response[0]});   
     } catch(e) {
         return res.status(500).send({err: err});
+    }
+}
+
+async function delProductoUnidad(req, res) {
+    const { id_unidad, id_producto } = req.query;
+    try {
+        var result = await unidadProducto.deleteR(id_unidad, id_producto);
+        return res.status(200).send({code: 'SUCCESS', message:'', data: result});
+    } catch(err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
+    }
+}
+
+async function updataUnidadProducto(req, res) {
+    const { estatus } = req.body;
+    const { id_unidad, id_producto } = req.query;
+    try {
+        var result = await unidadProducto.update(id_unidad, id_producto, {estatus});
+        return res.status(200).send({code: 'SUCCESS', message:'', data: result});
+    } catch(err) {
+        return res.status(500).send({code:'ERROR', message: '', data: err})
     }
 }
 
@@ -298,5 +327,7 @@ module.exports = {
     getPoligono,
     calificar,
     getCalificacion,
-    getComentarios
+    getComentarios,
+    delProductoUnidad,
+    updataUnidadProducto
 }

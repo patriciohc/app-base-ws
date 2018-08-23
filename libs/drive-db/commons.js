@@ -6,7 +6,7 @@ const COMPARATORS = {
     'eq': '=',
     'st': '<',
     'gt': '>',
-    'neq':'<>'
+    'neq':'!='
 }
 /**
 * Concatena los elemetos de un objeto model, para la creacion de la tabla
@@ -132,15 +132,25 @@ function getSqlFind(model, query, table, limit) {
 * @return{string} cadena sql
 */
 function getWhere(where, model, table) {
-    var and = [], sqlWhere;
+    var and = [];
     for (var i = 0; i < model.length; i++) {
         var column = model[i].name;
-        if (where.hasOwnProperty(column)) {
-            let com = typeof(where[column]) === 'undefined' ? '' : where[column];
+        if (!where.hasOwnProperty(column)) continue;
+        var condition = where[column] == undefined ? '' : where[column];
+        if (typeof(condition) == 'string' || typeof(condition) == 'number') {
             if (table) {
-                and.push(`${table}.${column} = '${com}'`);
+                and.push(`${table}.${column} = '${condition}'`);
             } else {
-                and.push(`${column} = '${com}'`);
+                and.push(`${column} = '${condition}'`);
+            }
+        } else {
+            let op = COMPARATORS[condition.op];
+            if (!op) continue;
+            let com = condition.value;
+            if (table) {
+                and.push(`${table}.${column} ${op} '${com}'`);
+            } else {
+                and.push(`${column} ${op} '${com}'`);
             }
         }
     }

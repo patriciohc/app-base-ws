@@ -1,6 +1,7 @@
 'use strict'
 const utils = require('./utils');
 const producto = require('../models').producto;
+const UnidadProducto = require('../models').unidadProducto;
 
 function get(req, res) {
     if (!req.params.id_producto) return res.status(404).send({code:"ERROR", message:"falta el id de producto"})
@@ -52,15 +53,22 @@ function getDetalle(req, res) {
     })
 }
 
-function getListaCliente(req, res) {
-    var usuario = req.usuario;
-    producto.findAll({where: {id_cliente: usuario}})
-    .then(function(result) {
-        return res.status(200).send({code:'SUCCESS', message: '', data: result});
-    })
-    .catch(function(err){
-        return res.status(500).send({code: 'ERROR', message: '', data: err});
-    })
+async function getListaCliente(req, res) {
+    const { not_id_unidad } = req.query;
+    var where = {id_cliente: req.usuario}
+    var result;
+    try {
+        if (not_id_unidad) {
+            where.id_unidad = {value: not_id_unidad, op: 'neq'};
+            result = await UnidadProducto.findAllNoInUnidad(where.id_cliente, not_id_unidad);
+            return res.status(200).send({code:'SUCCESS', message: '', data: result});
+        } else {
+            result = await producto.findAll({where});
+            return res.status(200).send({code:'SUCCESS', message: '', data: result});
+        }
+    } catch (err) {
+        return res.status(500).send({code:'ERROR', message: '', data: result});
+    }
 }
 
 function create(req, res) {
