@@ -74,7 +74,7 @@ const columns = [
         name: "payer_id",
         type: "VARCHAR(100)"
     }, {
-        name: "calificacion", 
+        name: "calificacion",
         type: types.SMALL_INT, // 0:  no esta calificado, 1: esta calificado
         default: "0"
     }

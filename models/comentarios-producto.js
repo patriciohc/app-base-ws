@@ -33,39 +33,4 @@ const columns = [
 
 var model = new Model(name, columns);
 
-function sync () {
-    return model.createTable();
-}
-
-function create (obj) {
-    
-}
-
-function findOne (query) {
-    return model.findOne(query);
-}
-
-function findAll (query) {
-    return model.findAll(query);
-}
-
-function findById (id) {
-    return model.findById(id);
-}
-
-function update (id, obj, keyUpdate = 'id') {
-}
-
-function deleteR (query) {
-    return model.deleteR(query.where);
-}
-
-module.exports = {
-    sync,
-    create,
-    findOne,
-    findById,
-    findAll,
-    update,
-    deleteR
-}
+module.exports = model

@@ -35,33 +35,7 @@ const columns = [
     }
 ]
 
-var direccion = new Model(name, columns);
+var model = new Model(name, columns);
 
-function sync () {
-    return direccion.createTable();
-}
 
-function create (obj) {
-    return direccion.create(obj);
-}
-
-function findOne (query) {
-    return direccion.findOne(query);
-}
-
-function findAll (query) {
-    return direccion.findAll(query);
-}
-
-function findById (id) {
-    return direccion.findById(id);
-}
-
-module.exports = {
-    sync,
-    create,
-    findOne,
-    findById,
-    findAll,
-    addRelation: direccion.addRelation,
-}
+module.exports = model

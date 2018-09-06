@@ -41,33 +41,9 @@ const columns = [
     }
 ]
 
-var producto = new Model(name, columns);
+var model = new Model(name, columns);
 
-function sync () {
-    return producto.createTable();
-}
-
-function create (obj) {
-    return producto.create(obj);
-}
-
-function findOne (query) {
-    return producto.findOne(query);
-}
-
-function findAll (query) {
-    return producto.findAll(query);
-}
-
-function findById (id, select) {
-    return producto.findById(id, select);
-}
-
-function deleteR (query) {
-    return producto.deleteR(query.where);
-}
-
-function update (id, idCliente, obj) {
+model.update = function (id, idCliente, obj) {
     var columnsUpdate = [
         'nombre',
         'descripcion',
@@ -88,20 +64,10 @@ function update (id, idCliente, obj) {
     return producto.rawQuery(query);
 }
 
-function findListByIds (ids) {
+model.findListByIds = function (ids) {
     var query = `SELECT * FROM producto
       WHERE id in [${ids}]`
       return producto.rawQuery(query);
 }
 
-module.exports = {
-    sync,
-    create,
-    findOne,
-    findById,
-    findAll,
-    addRelation: producto.addRelation,
-    deleteR,
-    update,
-    findListByIds
-}
+module.exports =  model

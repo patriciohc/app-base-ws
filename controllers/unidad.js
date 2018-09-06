@@ -1,13 +1,10 @@
 'use strict'
 
-const unidad = require('../models').unidad;
-const poligono = require('../models').poligono;
-const unidadProducto = require('../models').unidadProducto;
-// const clienteOperador = require('../models').clienteOperador;
-// const operador = require('../models').operador;
-const UnidadCalificacion = require('../models/').unidadCalificacion;
-const Pedido = require('../models/').pedido;
-// const utils = require('./utils');
+const unidad        = require('../models').unidad;
+const poligono      = require('../models').poligono;
+const Pedido        = require('../models/').pedido;
+const unidadProducto        = require('../models').unidadProducto;
+const UnidadCalificacion    = require('../models/').unidadCalificacion;
 
 function get(req, res) {
     unidad.findById(req.params.id)
@@ -72,10 +69,10 @@ function findUnidades(req, res) {
     if (key) {
         unidad.findAll({where: {prefix: key}})
         .then(function(result) {
-            return res.status(200).send(result);
+            return res.status(200).send({code:'SUCCESS', message: '', data: result});
         })
         .catch(function(err) {
-            return res.status(500).send({err: err});
+            return res.status(500).send({code: 'ERROR', message:'', data: err});
         })
     } else if (lng && lat) {
         unidad.find(lat, lng, distancia, {texto, categoria})

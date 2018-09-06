@@ -30,15 +30,7 @@ const columns = [
 
 var model = new Model(name, columns);
 
-function sync () {
-    return model.createTable();
-}
-
-function create (obj) {
-    return model.create(obj);
-}
-
-function update (id, idCliente, obj) {
+model.update = function (id, idCliente, obj) {
     var columnsUpdate = [
         'nombre',
         'descripcion',
@@ -55,23 +47,7 @@ function update (id, idCliente, obj) {
     return model.rawQuery(query);
 }
 
-function findOne (query) {
-    return model.findOne(query);
-}
-
-function findAll (query) {
-    return model.findAll(query);
-}
-
-function findById (id) {
-    return model.findById(id);
-}
-
-function deleteR (query) {
-  return model.deleteR(query.where)
-}
-
-function findAllByUnidad (id_unidad) {
+model.findAllByUnidad = function (id_unidad) {
     var query = `
     SELECT * FROM categoria c
     INNER JOIN unidad u ON u.id_cliente = c.id_cliente
@@ -86,14 +62,4 @@ function findAllByUnidad (id_unidad) {
 //   WHERE up.id_unidad = ${id_unidad}`;
 }
 
-module.exports = {
-    sync,
-    create,
-    findOne,
-    findById,
-    findAll,
-    addRelation: model.addRelation,
-    findAllByUnidad,
-    deleteR,
-    update
-}
+module.exports = model

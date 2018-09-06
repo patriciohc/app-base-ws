@@ -22,16 +22,16 @@ async function createTables () {
         await unidad.sync();
         await usuario.sync();
         await poligono.sync();
-        await categoria.sync();
-        await producto.sync();
-        await direccionSolicitud.sync();
-        await listaPedido.sync();
+        await categoria.createTable();
+        await producto.createTable();
+        await direccionSolicitud.createTable();
+        await listaPedido.createTable();
         await operador.sync();
         await pedido.sync();
         await unidadProducto.sync();
-        await clienteOperador.sync();
+        await clienteOperador.createTable();
         await imagen.sync();
-        await categoriaUnidad.sync();
+        await categoriaUnidad.createTable();
         await unidadCalificacion.sync();
         createForeingKey();
     } catch(err) {

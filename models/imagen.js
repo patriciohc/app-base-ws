@@ -33,12 +33,6 @@ function sync () {
     return model.createTable();
 }
 
-/**
- * guarda la informacion una imagen
- * @param {string} idUnidad id de la unidad al que pertenece el poligono
- * @param {string} kml nombre de kml del poligono
- * @returns {Promise}
- */
 function create (obj) {
     return model.create(obj);
 }

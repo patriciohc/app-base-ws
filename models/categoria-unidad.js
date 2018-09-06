@@ -23,15 +23,7 @@ const columns = [
 
 var model = new Model(name, columns);
 
-function sync () {
-    return model.createTable();
-}
-
-function create (obj) {
-    return model.create(obj);
-}
-
-function update (id, idCliente, obj) {
+model.update = function (id, idCliente, obj) {
     var columnsUpdate = [
         'nombre',
         'descripcion'
@@ -47,29 +39,4 @@ function update (id, idCliente, obj) {
     return model.rawQuery(query);
 }
 
-function findOne (query) {
-    return model.findOne(query);
-}
-
-function findAll (query) {
-    return model.findAll(query);
-}
-
-function findById (id) {
-    return model.findById(id);
-}
-
-function deleteR (query) {
-  return model.deleteR(query.where)
-}
-
-
-module.exports = {
-    sync,
-    create,
-    findOne,
-    findById,
-    findAll,
-    deleteR,
-    update
-}
+module.exports = model

@@ -50,22 +50,6 @@ class Model {
         } catch (err) {
             throw err;
         }
-        // return new Promise((resolve, reject) => {
-        //     if (sql) {
-        //         db.conecction.query(sql, function(err, results){
-        //             if (err) {
-        //                 return reject(err);
-        //             } else {
-        //                 if (results.length > 0)
-        //                     return resolve(results[0]);
-        //                 else
-        //                     return resolve({});
-        //             }
-        //         })
-        //     } else {
-        //         return resolve([]);
-        //     }
-        // });
     }
 
     findAll(query) {
@@ -74,20 +58,6 @@ class Model {
         if (!sql) return Promise.resolve([]);
 
         return db.execute(sql);
-
-        // return new Promise((resolve, reject) => {
-        //     if (sql) {
-        //         db.conecction.query(sql, function(err, results) {
-        //             if (err) {
-        //                 return reject(err);
-        //             } else {
-        //                 return resolve(results);
-        //             }
-        //         })
-        //     } else {
-        //         return resolve([]);
-        //     }
-        // });
     }
 
     async findById(id, select) {
@@ -122,34 +92,16 @@ class Model {
         } catch (err) {
             throw err;
         }
-
-        // return new Promise((resolve, reject) => {
-        //     if (sqlWhere) {
-        //         db.conecction.query(sql, function(err, result){
-        //             if (err) {
-        //                 return reject(err);
-        //             } else {
-        //                 if (result.length == 0) {
-        //                     return resolve();
-        //                 } else {
-        //                     return resolve(result);
-        //                 }
-        //             }
-        //         })
-        //     } else {
-        //         return resolve({});
-        //     }
-        // });
     }
 
 /**
-* agrega una relacion entre tablas
+* 
 * @param {String} obj - datos
 * @param {String} columnsUpdate - columnas que se actulizaran
 * @param {String} where - condicion
 * @return {Promise}
 */
-    update (obj, columnsUpdate, where) {
+    coreUpdate (obj, columnsUpdate, where) {
         var where;
         var query = `UPDATE ${this.name} SET `;
         var sets = [];
@@ -177,29 +129,10 @@ class Model {
         ADD CONSTRAINT fk_${tableSrc}_${fieldSrc}_${tableRef}
         FOREIGN KEY (${fieldSrc}) REFERENCES ${tableRef}(id) ON DELETE CASCADE;`
         return db.execute(sql);
-
-        // return new Promise((resolve, reject) => {
-        //     db.conecction.query(sql, function(err, results) {
-        //         if (err) {
-        //             return reject(err);
-        //         } else {
-        //             return resolve(results);
-        //         }
-        //     })
-        // });
     }
 
     rawQuery(query) {
         return db.execute(query);
-        // return new Promise((resolve, reject) => {
-        //     db.conecction.query(query, function(err, results) {
-        //         if (err) {
-        //             return reject(err);
-        //         } else {
-        //             return resolve(results);
-        //         }
-        //     })
-        // });
     }
 
     getWhere(where) {

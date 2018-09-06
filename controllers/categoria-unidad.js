@@ -54,7 +54,7 @@ function create(req, res) {
 function deleteR(req, res) {
   if (!req.query.id)
     return res.status(400).send({err: "se requiere id del registro"})
-  categoria.deleteR({where: {id: req.query.id}})
+  categoria.deleteR({id: req.query.id})
   .then(result => {
     return res.status(200).send({success: true})
   })

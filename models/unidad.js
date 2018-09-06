@@ -85,7 +85,8 @@ function update(idUnidad, idCliente, obj) {
         'palabras_clave',
         'descripcion',
         'categoria',
-        'servicio_domicilio'
+        'servicio_domicilio',
+        'direccion'
     ];
     var updates = [];
     var query = `UPDATE ${name} SET `;

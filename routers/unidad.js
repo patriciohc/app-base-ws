@@ -103,6 +103,19 @@ api.put(
 );
 
 /**
+* @api {delete} /unidad elimina unidad
+*
+* @apiGroup Unidad
+* @apiParam {number} id_unidad de uniad por query
+* @apiSuccess {Object} success
+*/
+// rol.add('/unidad/', 'DELETE', [rol.CLIENTE])
+api.delete(
+    '/', 
+    autentication.isAuth([ROLES.CLIENTE]), 
+    Unidad.deleteR);
+
+/**
 * @api {get} /unidad/:id Obtiene una unidad
 * @apiGroup Unidad
 * @apiParam {number} id de unidad

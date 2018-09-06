@@ -2,10 +2,8 @@
 
 const express = require('express');
 const api = express.Router();
-const cliente = require('../controllers/cliente');
 const unidad = require('../controllers/unidad');
 const usuario = require('../controllers/usuario');
-// const producto = require('../controllers/producto');
 const pedido = require('../controllers/pedido');
 const operador = require('../controllers/operador');
 const notification = require('../controllers/push-notification');
@@ -86,19 +84,6 @@ api.get('/unidad-poligono/', unidad.getPoligono);
 */
 // rol.add('/unidad-operador/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 // api.get('/unidad-operador/', autentication.isAuth, unidad.getListOperadoresUnidad);
-
-/**
-* @api {delete} /unidad elimina unidad
-*
-* @apiGroup Unidad
-* @apiParam {number} id_unidad de uniad por query
-* @apiSuccess {Object} success
-*/
-// rol.add('/unidad/', 'DELETE', [rol.CLIENTE])
-api.delete(
-    '/unidad/', 
-    autentication.isAuth([rol.CLIENTE]), 
-    unidad.deleteR);
 
 /**
 * @api {post} /clienten-operador/ agrega operadores a un cliente
@@ -247,22 +232,6 @@ api.post('/login-repartidor/', operador.loginRepartidor);
 // );
 
 /**
-* @api {post} /cliente/ Crea un nuevo cliente
-* @apiGroup Cliente
-* @apiParam {Object} objeto de tipo cliente
-* @apiSuccess {number} id de objeto insertado
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*   {id: id }
-*/
-// rol.add('/cliente/', 'POST', [rol.ADMINISTRADOR])
-api.post(
-    '/cliente',
-    autentication.isAuth([rol.ADMINISTRADOR]),
-    cliente.create
-);
-
-/**
 * @api {post} /cliente-login/ loguea cliente
 * @apiGroup Cliente
 * @apiParam {String} - correo_electronico
@@ -349,7 +318,6 @@ api.post('/usuario/', usuario.create);
 * @apiParam {Object} objeto categoria {nombre: string, descripcion: string}
 * @apiSuccess {number} id de objeto insertado
 */
-// rol.add('/categoria-unidad/', 'POST', [rol.ADMINISTRADOR])
 api.post(
     '/categoria-unidad/', 
     autentication.isAuth([rol.ADMINISTRADOR]), 
@@ -364,44 +332,12 @@ api.post(
 api.get('/categoria-unidad/', categoriaUnidad.getList);
 
 /**
-* @api {post} /pedido/ Crea un pedido
-* @apiGroup pedido
-* @apiParam {Pedido} objeto de tipo Pedido
-* @apiSuccess {number} numero de pedido
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
-*/
-// rol.add('/pedido/', 'POST', [rol.USUSARIO])
-api.post(
-    '/pedido/',
-    autentication.isAuth([rol.USUSARIO]),
-    pedido.create
-);
-
-/**
-* @api {delete} /pedido/ elimina pedido
-* @apiGroup pedido
-* @apiParam {number} id identificador de pedido
-* @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     id
-*/
-// rol.add('/pedido/', 'DELETE', [rol.USUSARIO])
-api.delete(
-    '/pedido/',
-    autentication.isAuth([rol.USUSARIO]),
-    pedido.deleteR
-);
-
-/**
 * @api {put} /pedido/ actuliza estatus pedido
 * @apiGroup pedido
 * @apiParam {number} id_pedido
 * @apiParam {number} estatus
 * @apiSuccess {Boolean} success
 */
-// rol.add('/pedido-estatus/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR])
 api.put(
     '/pedido-estatus/',
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.REPARTIDOR]),
@@ -417,7 +353,6 @@ api.put(
 *     HTTP/1.1 200 OK
 *     id
 */
-// rol.add('/pedido-repartidor/', 'PUT', [rol.CLIENTE, rol.OPERADOR_UNIDAD])
 api.put(
     '/pedido-repartidor/',
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
@@ -433,7 +368,6 @@ api.put(
 *     HTTP/1.1 200 OK
 *     id
 */
-// rol.add('/unidad-calificacion/', 'PUT', [rol.USUSARIO])
 api.put(
     '/unidad-calificacion/',
     autentication.isAuth([rol.USUSARIO]),
@@ -467,7 +401,6 @@ api.get('/unidad-comentarios/', unidad.getComentarios);
 * @apiParam {number} id_unidad
 * @apiSuccess {Object} lista de pedidos
 */
-// rol.add('/pedido-grafica-semana/', 'GET', [rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_CLIENTE, rol.ADMIN_UNIDAD])
 api.get(
     '/pedido-grafica-semana/',
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_CLIENTE, rol.ADMIN_UNIDAD]),
@@ -481,7 +414,6 @@ api.get(
 * @apiParam {Number} id_repartidor
 * @apiSuccess {Pedido[]}
 */
-// rol.add('/pedido-repartidor/', 'GET', [rol.REPARTIDOR])
 api.get(
     '/pedido-repartidor/',
     autentication.isAuth([rol.REPARTIDOR]),
@@ -494,7 +426,6 @@ api.get(
 * @apiParam {number} id_usuario
 * @apiSuccess {Object[]} lista de pedidos
 */
-// rol.add('/pedido-usuario/', 'GET', [rol.USUSARIO])
 api.get(
     '/pedido-usuario/',
     autentication.isAuth([rol.USUSARIO]),
@@ -507,7 +438,6 @@ api.get(
 * @apiParam {string} id_device
 * @apiSuccess {number} 
 */
-// rol.add('/subscribe/', 'POST', [rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.USUSARIO])
 api.post(
     '/subscribe/', 
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD, rol.ADMIN_UNIDAD, rol.ADMIN_CLIENTE, rol.USUSARIO]), 
@@ -519,7 +449,6 @@ api.post(
 * @apiGroup suscribe-notification
 * @apiSuccess {Image[]}
 */
-// rol.add('/send-notification/', 'POST', [rol.CLIENTE])
 api.post(
     '/send-notification/',
     autentication.isAuth([rol.CLIENTE]),
