@@ -30,21 +30,13 @@ const columns = [
 
 var model = new Model(name, columns);
 
-model.update = function (id, idCliente, obj) {
+model.update = function (id, id_cliente, obj) {
     var columnsUpdate = [
         'nombre',
         'descripcion',
         'imagen',
     ];
-    var query = `UPDATE ${name} SET `;
-    for (let i = 0; i < columnsUpdate.length - 1; i++) {
-        if (obj[columnsUpdate[i]])
-            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
-    }
-    query = query.substring(0, query.length -2); // se quita coma
-    query += ` WHERE id = ${id} AND id_cliente = ${idCliente}`;
-    
-    return model.rawQuery(query);
+    return this.coreUpdate(obj, columnsUpdate, {id, id_cliente});
 }
 
 model.findAllByUnidad = function (id_unidad) {

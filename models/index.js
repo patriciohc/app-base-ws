@@ -30,7 +30,7 @@ async function createTables () {
         await pedido.sync();
         await unidadProducto.sync();
         await clienteOperador.createTable();
-        await imagen.sync();
+        await imagen.createTable();
         await categoriaUnidad.createTable();
         await unidadCalificacion.sync();
         createForeingKey();

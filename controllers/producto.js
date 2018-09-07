@@ -76,10 +76,10 @@ function create(req, res) {
     obj.id_cliente = req.usuario;
     producto.create(obj)
     .then(function(result) {
-        return res.status(200).send({id: result.insertId});
+        return res.status(200).send({code: 'SUCCESS', message: 'el producto fue registrado', data: result.insertId});
     })
     .catch(function(err) {
-        return res.status(500).send({err: err})
+        return res.status(500).send({code: 'ERROR', message: '', data: err})
     })
 }
 
@@ -89,10 +89,10 @@ function update(req, res) {
     var idCliente = req.usuario;
     producto.update(idProducto, idCliente, obj)
     .then(function(result) {
-        return res.status(200).send({code: 'OK', message:"success", affected: result.affectedRows});
+        return res.status(200).send({code: 'SUCCESS', message:"success", affected: result.affectedRows});
     })
     .catch(function(err) {
-        return res.status(500).send({err: err})
+        return res.status(500).send({code:'ERROR', message: '', data: err})
     })
 }
 

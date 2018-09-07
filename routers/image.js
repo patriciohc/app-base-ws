@@ -30,4 +30,14 @@ api.get(
     autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
     imagen.getUrlUploadImage);
 
+/**
+* @api {get} /imagen/ elimina imagen
+* @apiGroup image
+* @apiSuccess {}
+*/
+api.delete(
+    '/',
+    autentication.isAuth([rol.CLIENTE, rol.OPERADOR_UNIDAD]),
+    imagen.deleteImage);
+
 module.exports = api;

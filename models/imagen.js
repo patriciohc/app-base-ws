@@ -16,6 +16,9 @@ const columns = [
         name: "id_cliente",
         type: "INT"
     }, {
+        name: "key",
+        type: "VARCHAR(250)"
+    }, {
         name: "url",
         type: "VARCHAR(250)"
     }, {
@@ -24,37 +27,13 @@ const columns = [
     }, {
         name: "label",
         type: "VARCHAR(100)"
+    }, {
+        name: "date",
+        type: "DATE",
+        default: "now()"
     }
 ]
 
 var model = new Model(name, columns);
 
-function sync () {
-    return model.createTable();
-}
-
-function create (obj) {
-    return model.create(obj);
-}
-
-// obtiene un poligono con todas sus cordenadas
-function findOne(id_unidad) {
-
-}
-
-function findAll (query) {
-    return model.findAll(query);
-}
-
-function deleteR (idUnidad) {
-    return model.deleteR({id_unidad: idUnidad});
-}
-
-module.exports = {
-    sync,
-    create,
-    deleteR,
-    findOne,
-    findAll,
-    addRelation: model.addRelation,
-}
+module.exports = model;
