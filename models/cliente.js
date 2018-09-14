@@ -53,28 +53,13 @@ const columns = [
 
 var model = new Model(name, columns, uniques);
 
-function sync () {
-    return model.createTable();
-}
 
-function create (obj) {
+model.create = function (obj) {
   obj.password = SHA256(obj.password);
   return model.create(obj);
 }
 
-function findOne (query) {
-    return model.findOne(query);
-}
-
-function findAll (query) {
-    return model.findAll(query);
-}
-
-function findById (id) {
-    return model.findById(id);
-}
-
-function update(id, obj) {
+model.update = function (id, obj) {
     var columnsUpdate = [
         'razon_social',
         'representante_legal',
@@ -83,22 +68,7 @@ function update(id, obj) {
         'password',
         'id_device'
     ];
-    var query = `UPDATE ${name} SET `;
-    for (let i = 0; i < columnsUpdate.length; i++) {
-        if (obj[columnsUpdate[i]])
-            query += `${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}', `;
-    }
-    query = query.substring(0, query.length -2); // se quita coma
-    query += ` WHERE id = ${id}`;
-    
-    return model.rawQuery(query);
+    return model.coreUpdate(obj, columnsUpdate, {id});
 }
 
-module.exports = {
-    sync,
-    create,
-    findOne,
-    findById,
-    findAll,
-    update
-}
+module.exports = model;

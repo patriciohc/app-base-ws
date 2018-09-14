@@ -1,8 +1,8 @@
 "use strict";
 
 const config = require('../../settings').DATA_BASE;
-const mysql = require('mysql');
 const { Pool } = require('pg');
+const mysql = require('mysql');
 
 var isConected, conecction;
 
@@ -32,24 +32,40 @@ function executeMySQL(query, options) {
     })
 }
 
+/**
+ * si recibe returns = true en opciones retoras el registro insertado
+ * se puede especificar un valor de retorno si se le pasa el nombre de la columna
+ * @param {string} query - sentencia sql 
+ * @param {Obejct} options - {returns: [string || bolean]} 
+ */
 async function executePostgreSQL(query, options) {
+    var response;
     if (!isConected) connect();
     query = query.trim();
     var command = query.split(" ")[0];
     if (command.toUpperCase() === 'INSERT') {
         query = query.replace(";", "");
         if (options && options.returns) {
-            query = query  + ` RETURNING ${options.returns};`
-        } else if (!options || options.returns) {
-            query = query  + ' RETURNING id;'
+            if (options.returns === true) {
+                query = query  + ' RETURNING *;'
+            } else {
+                query = query  + ` RETURNING ${options.returns};`
+            }   
         }
     }
     try {
-        var res = await conecction.query(query);
-        if (res.command === 'INSERT' && res.rows.length === 1) {
-            return {insertId: res.rows[0].id};
+        response = await conecction.query(query);
+        if (response.command === 'INSERT') {
+            if (response.rows.length === 1) {
+                return response.rows[0];
+            } else  if (response.rows.length > 1) {
+                return response.rows;
+            } else {
+                return response;
+            }
+        } else {
+            return response.rows;
         }
-        return res.rows;
     } catch (err) {
         console.log(err);
         // throw err;

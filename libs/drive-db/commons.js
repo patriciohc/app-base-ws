@@ -204,7 +204,10 @@ function getSqlFindAll(model, query, table) {
     }
 }
 
-function getSqlInsertBulk(name, columns, values) {
+function getSqlInsertBulk(name, columns = '', values = []) {
+    if (Array.isArray(columns)) {
+        columns = columns.join(', ');
+    }
     var query = `INSERT INTO ${name} (${columns}) VALUES %L`;
     return format(query, values);
 }

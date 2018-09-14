@@ -15,10 +15,12 @@ var clienteOperador     = require('../models/cliente-operador');
 var imagen              = require('../models/imagen');
 var categoriaUnidad     = require('../models/categoria-unidad');
 var unidadCalificacion  = require('../models/unidad-calificacion');
+var Venta               = require('../models/venta-en-sitio');
+var ProductosVenta      = require('../models/productos-venta-sitio');
 
 async function createTables () {
     try {
-        await cliente.sync();
+        await cliente.createTable();
         await unidad.sync();
         await usuario.sync();
         await poligono.sync();
@@ -33,6 +35,8 @@ async function createTables () {
         await imagen.createTable();
         await categoriaUnidad.createTable();
         await unidadCalificacion.sync();
+        await Venta.createTable();
+        await ProductosVenta.createTable();
         createForeingKey();
     } catch(err) {
         console.log(err);
@@ -56,6 +60,7 @@ async function createForeingKey () {
         poligono.addRelation('poligono', 'id_unidad', 'unidad');
         imagen.addRelation('image', 'id_cliente', 'cliente');
         categoria.addRelation('categoria', 'id_cliente', 'cliente');
+        // Venta.addRelation();
     } catch (err) {
         console.log(err);
     }

@@ -25,19 +25,22 @@ class Model {
       return this.createTable();
     }
 
-    create(obj, returned) {
+    create(obj) {
+        this.coreCreate(obj, {returns: true})
+    }
+
+    coreCreate(obj, options) {
         obj = this.cleanObj(obj); 
         var sql = utils.getSqlInsert(obj, this.model, this.name);
         if (sql) {
-            return db.execute(sql);
+            return db.execute(sql, options);
         } else {
-            return Promise.resolve({affectedRows: 0});
+            return Promise.resolve(null);
         }
     }
 
     insertBulk(columns, values) {
         var sql = utils.getSqlInsertBulk(this.name, columns, values);
-        // var sql = `INSERT INTO ${this.name} (${columns}) VALUES ?`;
         return db.execute(sql, {returns: false});
     }
 

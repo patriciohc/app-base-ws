@@ -5,6 +5,7 @@ var cliente     = require('./cliente'),
     producto    = require('./producto'),
     operador    = require('./operador'),
     unidad      = require('./unidad'),
+    venta       = require('./venta'),
     all         = require('./routers');
 
 module.exports = function(app) {
@@ -15,5 +16,6 @@ module.exports = function(app) {
     app.use('/api/producto', producto);
     app.use('/api/operador', operador);
     app.use('/api/unidad', unidad);
+    app.use('/api/venta', venta);
     app.use('/api', all);
 }

@@ -22,10 +22,10 @@ const columns = [
         type: "INT"
     }, {
         name: "cantidad", 
-        type: "VARCHAR(200)"
+        type: "INT"
     }, {
         name: "descuento",
-        type: types.DATETIME
+        type: types.DECIMAL
     }, {
         name: "total",
         type: types.DECIMAL
@@ -34,7 +34,7 @@ const columns = [
 
 var model = new Model(name, columns);
 
-model.prototype.update = function (obj, where) {
+model.update = function (obj, where) {
     var columnsUpdate = [
     ];
     return this.coreUpdate(obj, columnsUpdate, where);
