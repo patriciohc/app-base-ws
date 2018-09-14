@@ -167,12 +167,12 @@ model.getVestasByWeek = function (dateInit, dateEnd) {
     // var dateInit = date.subtract(day, 'days').format('YYYY-MM-DD');
     // var dateEnd = date.add((7-day), 'days').format('YYYY-MM-DD');
     var sql = `
-        select COALESCE(sum(total), 0), to_char(fecha, 'YYYY-MM-DD') as fecha
+        select COALESCE(sum(total), 0) as total, to_char(fecha, 'YYYY-MM-DD') as fecha
         from venta_en_sitio 
         where fecha between '${dateInit}' and '${dateEnd}'
         group by to_char(fecha, 'YYYY-MM-DD')
         order by fecha asc`;
-    return model.rawQuery(query);
+    return model.rawQuery(sql);
 }
 
 module.exports = model;

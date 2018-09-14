@@ -77,10 +77,10 @@ async function createPedido(venta) {
 }
 
 async function getVestasByWeek(req, res) {
-    const { fechaIni, fechaFin} = req.query;
+    const { fecha_ini, fecha_fin} = req.query;
     try {
-        let response = Venta.getVestasByWeek(fechaIni, fechaFin);
-        res.status(500).send({code: "SUCCESS", message:"", data: response});
+        let response = await Venta.getVestasByWeek(fecha_ini, fecha_fin);
+        res.status(200).send({code: "SUCCESS", message:"", data: response});
     } catch(err) {
         res.status(500).send({code: "ERROR", message:"", data: error});
     }

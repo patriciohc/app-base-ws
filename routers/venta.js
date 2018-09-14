@@ -1,7 +1,7 @@
 'use strict'
 const express       = require('express');
 const api           = express.Router();
-const ROLES           = require('../config/roles');
+const ROLES         = require('../config/roles');
 const autentication = require('../middleware/autentication');
 
 const Venta = require('../controllers/venta-en-sitio');
@@ -14,11 +14,11 @@ const Venta = require('../controllers/venta-en-sitio');
 * @api {get} /venta agrega una nueva venta en sitio
 *
 * @apiGroup venta
-* @apiParam {string} - fechaIni
-* @apiParam {string} - fechaFin
+* @apiParam {string} - fecha_ini
+* @apiParam {string} - fecha_fin
 * @apiSuccess {Array}
 */
-api.post(
+api.get(
     '/grafica', 
     autentication.isAuth([ROLES.CLIENTE, ROLES.OPERADOR_UNIDAD]), 
     Venta.getVestasByWeek
