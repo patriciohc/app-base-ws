@@ -161,7 +161,7 @@ model.update = function (value, obj, keyUpdate = 'id') {
 // }
 
 
-model.getVestasByWeek = function (dateInit, dateEnd) {
+model.getVentasByRange = function (id_cliente, dateInit, dateEnd) {
     // var date = moment(stringDate)
     // var day = date.day();
     // var dateInit = date.subtract(day, 'days').format('YYYY-MM-DD');
@@ -169,9 +169,46 @@ model.getVestasByWeek = function (dateInit, dateEnd) {
     var sql = `
         select COALESCE(sum(total), 0) as total, to_char(fecha, 'YYYY-MM-DD') as fecha
         from venta_en_sitio 
-        where fecha between '${dateInit}' and '${dateEnd}'
+        where id_cliente = ${id_cliente} AND fecha::date >= '${dateInit}' and fecha::date <='${dateEnd}'
         group by to_char(fecha, 'YYYY-MM-DD')
         order by fecha asc`;
+    return model.rawQuery(sql);
+}
+
+model.getVentasByDay = function (id_cliente, date) {
+    var sql = `
+    select *
+    from venta_en_sitio 
+    where fecha::date = date '${date}' and id_cliente = ${id_cliente}
+    order by fecha asc`;
+    return model.rawQuery(sql);
+}
+
+model.getVentasByDayDetail = function (id_cliente, date) {
+
+}
+
+model.getVentasByProducts = function (id_cliente, date) {
+    var sql = `
+        select sum(pvs.cantidad) as total_vendidos, pt.nombre, pt.codigo, pt.descripcion, pt.precio_publico, pt.id from venta_en_sitio v
+        inner join productos_venta_sitio pvs on pvs.id_venta_en_sitio = v.id
+        inner join producto pt on pvs.id_producto = pt.id
+        where v.id_cliente = ${id_cliente} and fecha::date = date '${date}'
+        group by pt.id
+        order by total_vendidos desc`
+    return model.rawQuery(sql);
+}
+
+model.getTopProducts = function (id_cliente, dateInit, dateEnd) {
+    var sql = `
+        select sum(pvs.cantidad) total_vendidos, v.fecha::date as dia, pt.id, pt.nombre
+        from productos_venta_sitio pvs
+        inner join venta_en_sitio v on pvs.id_venta_en_sitio = v.id
+        inner join producto pt on pvs.id_producto = pt.id
+        where v.id_cliente = ${id_cliente} AND fecha::date >= '${dateInit}' and fecha::date <='${dateEnd}'
+        group by dia, pt.id
+        order by total_vendidos desc, pt.id asc, dia asc
+        limit 20`
     return model.rawQuery(sql);
 }
 

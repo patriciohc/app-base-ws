@@ -4,15 +4,36 @@ const Venta = require('../models/venta-en-sitio');
 
 
 async function getList(req, res) {
-    let id_cliente = req.usuario;
-    let query = req.query;
-    var where = Object.assign(query, {id_cliente});
-    try {
-        let response = await Venta.findAllWithDependencies({where, order_by: {value: 'fecha', order: 'DESC'}});
-        res.status(200).send({code: "SUCCESS", message:"", data: response});
-    } catch (error) {
-        res.status(500).send({code: "ERROR", message:"", data: error});
+    var id_cliente = req.usuario;
+    var { by, fecha1, fecha2 } = req.query;
+    if (!by || !fecha1) {
+        return res.status(400).send({code:"ERROR", message:'by y fecha1 son requeridos'});
     }
+    var response = null;
+    // 'range', 'day', 'detail-day', 'products-day'
+    switch (by) {
+        case 'range':
+            if (!fecha2) { 
+                return res.status(400).send({code:"ERROR", message:'fecha2 es requerido'});
+            }
+            response = await Venta.getVentasByRange(id_cliente, fecha1, fecha2);
+            break;
+        case 'day':
+            response = await Venta.getVentasByDay(id_cliente, fecha1);
+            break;
+        case 'detail-day':
+            response = await Venta.getVentasByDayDetail(id_cliente, fecha1);
+            break;
+        case 'products-day':
+            response = await Venta.getVentasByProducts(id_cliente, fecha1);
+            break;
+        case 'top-products':
+            response = await Venta.getTopProducts(id_cliente, fecha1, fecha2);
+            break;        
+        default: 
+            return res.status(404).send({code:'ERROR', message: 'by no valido'})
+    }
+    return res.status(200).send({code: 'SUCCESS', message: '', data: response})
 }
 
 async function get(req, res) {
@@ -76,21 +97,10 @@ async function createPedido(venta) {
     }
 }
 
-async function getVestasByWeek(req, res) {
-    const { fecha_ini, fecha_fin} = req.query;
-    try {
-        let response = await Venta.getVestasByWeek(fecha_ini, fecha_fin);
-        res.status(200).send({code: "SUCCESS", message:"", data: response});
-    } catch(err) {
-        res.status(500).send({code: "ERROR", message:"", data: error});
-    }
-}
-
 
 module.exports = {
     getList,
     del,
     create,
     get,
-    getVestasByWeek
 }

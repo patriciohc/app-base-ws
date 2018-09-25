@@ -7,24 +7,6 @@ const autentication = require('../middleware/autentication');
 const Venta = require('../controllers/venta-en-sitio');
 
 /**
- * path /venta/grafica
- */
-
-/**
-* @api {get} /venta agrega una nueva venta en sitio
-*
-* @apiGroup venta
-* @apiParam {string} - fecha_ini
-* @apiParam {string} - fecha_fin
-* @apiSuccess {Array}
-*/
-api.get(
-    '/grafica', 
-    autentication.isAuth([ROLES.CLIENTE, ROLES.OPERADOR_UNIDAD]), 
-    Venta.getVestasByWeek
-);
-
-/**
  * path /venta
  */
 
@@ -71,6 +53,9 @@ api.delete(
 * @api {get} /venta obtiene lista de ventas filtra segun datos pasados por query.
 *
 * @apiGroup venta
+* @apiParam {string} by - ['range', 'day', 'detail-day', 'products-day']
+* @apiParam {string} fecha1 - fecha para el caso de day, detail-day, products-day. fecha inicio para el caso de range
+* @apiParam {string} fecha2 fecha fin para el caso de range
 * @apiSuccess {Object[]} lista de ventas
 */
 api.get(
