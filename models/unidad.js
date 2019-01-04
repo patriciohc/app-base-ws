@@ -67,15 +67,7 @@ const columns = [
 
 var unidad = new Model(name, columns);
 
-function sync () {
-    return unidad.createTable();
-}
-
-function create (obj) {
-    return unidad.create(obj);
-}
-
-function update(idUnidad, idCliente, obj) {
+unidad.update = function (id, id_cliente, obj) {
     var columnsUpdate = [
         'nombre',
         'telefono',
@@ -88,39 +80,15 @@ function update(idUnidad, idCliente, obj) {
         'servicio_domicilio',
         'direccion'
     ];
-    var updates = [];
-    var query = `UPDATE ${name} SET `;
-    for (let i = 0; i < columnsUpdate.length ; i++) {
-        if (obj[columnsUpdate[i]] != undefined && obj[columnsUpdate[i]] != null)
-            updates.push(`${columnsUpdate[i]} = '${obj[columnsUpdate[i]]}'`);
-    }
-    query = query + updates.join(', ') // se quita coma
-    query += ` WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
-    
-    return unidad.rawQuery(query);
+    return unidad.coreUpdate(obj, columnsUpdate, {id, id_cliente});
 }
 
-function addPosition(idUnidad, idCliente, obj) {
+unidad.addPosition = function (idUnidad, idCliente, obj) {
     var query = `UPDATE ${name} 
     SET lat = ${obj.lat}, lng = ${obj.lng} 
     WHERE id = ${idUnidad} AND id_cliente = ${idCliente}`;
     return unidad.rawQuery(query);
 }
-
-// function findOne (query) {
-//     var unidad;
-//     unidad.findOne(query)
-//     .then(function (result) {
-//         unidad = result;
-//         return Poligono.findOne(result.id);
-//     })
-//     .then(function (result) {
-
-//     })
-//     .catch(function () {
-
-//     });
-// }
 
 /**
 * Regresa todas las unidades que se encuentran a una determinada distancia de lat, lng
@@ -129,7 +97,7 @@ function addPosition(idUnidad, idCliente, obj) {
 * @param {float} lng - longitud obligatorio
 * @return {array} array de tipo Unidad
 */
-function find (lat, lng, distancia, extraQuery) {
+unidad.findByPosition = function (lat, lng, distancia, extraQuery) {
     var latmin = parseFloat(lat) - parseFloat(distancia);
     var latmax = parseFloat(lat) + parseFloat(distancia);
     var lngmin = parseFloat(lng) - parseFloat(distancia);
@@ -149,26 +117,4 @@ function find (lat, lng, distancia, extraQuery) {
     return unidad.rawQuery(query)
 }
 
-function findAll (query) {
-    return unidad.findAll(query);
-}
-
-function findById (id) {
-    return unidad.findById(id);
-}
-
-function deleteR (id, id_cliente) {
-    return unidad.deleteR({id, id_cliente});
-}
-
-module.exports = {
-    sync,
-    create,
-    deleteR,
-    findById,
-    findAll,
-    find,
-    addRelation: unidad.addRelation,
-    addPosition,
-    update
-}
+module.exports = unidad;

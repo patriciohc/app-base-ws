@@ -21,7 +21,7 @@ var ProductosVenta      = require('../models/productos-venta-sitio');
 async function createTables () {
     try {
         await cliente.createTable();
-        await unidad.sync();
+        await unidad.createTable();
         await usuario.sync();
         await poligono.sync();
         await categoria.createTable();

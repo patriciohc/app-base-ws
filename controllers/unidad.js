@@ -1,13 +1,13 @@
 'use strict'
 
-const unidad        = require('../models').unidad;
+const Unidad        = require('../models').unidad;
 const poligono      = require('../models').poligono;
 const Pedido        = require('../models/').pedido;
 const unidadProducto        = require('../models').unidadProducto;
 const UnidadCalificacion    = require('../models/').unidadCalificacion;
 
 function get(req, res) {
-    unidad.findById(req.params.id)
+    Unidad.findById(req.params.id)
     .then(function(result) {
         if (!result) {
             return res.status(404).send({err: "not found"});
@@ -59,44 +59,35 @@ function get(req, res) {
 // }
 
 
-function findUnidades(req, res) {
+async function findUnidades(req, res) {
     var key = req.query.key;
     var lng = req.query.lng;
     var lat = req.query.lat;
     var categoria = req.query.categoria;
     var texto = req.query.texto;
     var distancia = 2.25;
-    if (key) {
-        unidad.findAll({where: {prefix: key}})
-        .then(function(result) {
-            return res.status(200).send({code:'SUCCESS', message: '', data: result});
-        })
-        .catch(function(err) {
-            return res.status(500).send({code: 'ERROR', message:'', data: err});
-        })
-    } else if (lng && lat) {
-        unidad.find(lat, lng, distancia, {texto, categoria})
-        .then(function(result) {
-            if (!result) {
-                return res.status(404).send({code: "ERROR", message: "no se encontraron datos"});
-            } else {
-                return res.status(200).send({code: "SUCCESS", message: "", data: result});
-            }
-        })
-        .catch(function(err) {
-            return res.status(500).send({code:"ERROR", message: "ocurrio algun error", data: err});
-        })
-    } else {
-        return res.status(400).send({code: "ERROR", message: "Faltan parametros"});
+    try {
+        if (key) {
+            let unidad = await Unidad.findOne({where: {prefix: key}});
+            return res.status(200).send({code:'SUCCESS', message: '', data: unidad});
+        } else if (lng && lat) {
+            let unidades = await Unidad.findByPosition(lat, lng, distancia, {texto, categoria});
+            return res.status(200).send({code: "SUCCESS", message: "", list: unidades});
+        } else {
+            return res.status(400).send({code: "ERROR", message: "Faltan parametros"});
+        }
+    } catch (error) {
+        return res.status(500).send({code: 'ERROR', message:'', data: err});
     }
 }
+
 
 async function getList(req, res) {
     if (!req.query.id_cliente) return res.status(200).send("se requiere id de usuario");
     var select = ['id', 'nombre', 'direccion', 'telefono', 'hora_apetura', 'hora_cierre', 'descripcion'];
     var where = {id_cliente: req.query.id_cliente}
     try {
-        var response = await unidad.findAll({select, where});
+        var response = await Unidad.findAll({select, where});
         return res.status(200).send({code:"SUCCESS", message:"", data: response});
     } catch(err) {
         return res.status(500).send({code: "ERROR", message: "", data: err});
@@ -106,7 +97,7 @@ async function getList(req, res) {
 function create(req, res) {
     var u = req.body, idUnidad;
     u.id_cliente = req.usuario;
-    unidad.create(u)
+    Unidad.create(u)
     .then(function(result) {
         return res.status(200).send({id: result.insertId});
     })
@@ -124,7 +115,7 @@ function updateInfoBasic(req, res) {
     } else {
         infoUnidad.categoria = '{}';
     }
-    unidad.update(idUnidad, idCliente, infoUnidad)
+    Unidad.update(idUnidad, idCliente, infoUnidad)
     .then(function(result) {
         return res.status(200).send({code: 'SUCCESS', message:"success", affected: result.affectedRows});
     })
@@ -139,7 +130,7 @@ function addPosition(req, res) {
     if (!idUnidad || !idCliente) return res.status(400).send({message: 'falta id_unidad en query o id en token'})
     var pos = req.body;
     if (!pos.lat || !pos.lng)  return res.status(400).send({message: 'falta lat o lng'})
-    unidad.addPosition(idUnidad, idCliente, pos)
+    Unidad.addPosition(idUnidad, idCliente, pos)
     .then(resutl => {
         return res.status(200).send({message: "succes"});
     })
@@ -178,7 +169,7 @@ function getPoligono (req, res) {
 function deleteR(req, res) {
     var idUnidad = req.query.id_unidad;
     var idUsuario = req.usuario;
-    unidad.deleteR(idUnidad, idUsuario)
+    Unidad.deleteR(idUnidad, idUsuario)
     .then(result => {
         res.status(200).send(result);
     })
